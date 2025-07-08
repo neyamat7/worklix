@@ -7,21 +7,29 @@
   box-sizing: border-box;
 } */
 
-* {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
+/* * {
+  transition-property: background-color, color, border-color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+} */
 
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   /* background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%); */
+  /* background: linear-gradient(135deg, #dbd1f1, #debccc); */
+  background-image: linear-gradient(135deg, #eff6ff, #ffffff, #f5f3ff);
   /* color: #ffffff; */
   line-height: 1.6;
   /* overflow-x: hidden; */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+html.dark body {
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
 }
 
 .dark input:-webkit-autofill {
-  box-shadow: 0 0 0px 1000px #171010 inset !important;
-  -webkit-box-shadow: 0 0 0px 1000px #171010 inset !important;
+  box-shadow: 0 0 0px 1000px #2f2626 inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px #1f2937 inset !important;
   -webkit-text-fill-color: #e5e7eb !important;
 }
 

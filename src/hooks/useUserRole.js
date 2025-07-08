@@ -1,11 +1,13 @@
 // hooks/useUserRole.js
 import { useQuery } from "@tanstack/react-query";
-import useAuth from "../context/AuthContext";
+import { useSelector } from "react-redux";
 import useAxiosSecure from "./useAxiosSecure";
 
 export function useUserRole() {
   const axiosSecure = useAxiosSecure();
-  const { user } = useAuth();
+
+  const { user } = useSelector((state) => state.auth);
+
   //   console.log(user);
   const { data: role, isLoading: roleLoading } = useQuery({
     queryKey: ["userRole", user?.email],
@@ -15,7 +17,7 @@ export function useUserRole() {
         `/users/role?email=${encodeURIComponent(user?.email)}`
       );
       //   console.log(data.role);
-
+      console.log(data.role);
       return data.role; // { role: "user" }
     },
     enabled: !!user?.email, // only run when email is truthy

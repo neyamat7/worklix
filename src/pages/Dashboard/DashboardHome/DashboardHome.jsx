@@ -5,14 +5,15 @@ import RiderDashboard from "./RiderDashboard";
 import UserDashboard from "./UserDashboard";
 
 const DashboardHome = () => {
-  const { role, roleLoading } = useUserRole();
+  // const { role, roleLoading } = useUserRole();
 
-  if (roleLoading) return <div>Loading...</div>;
-  if (role === "admin") return <AdminDashboard />;
-  if (role === "user") return <UserDashboard />;
-  if (role === "rider") return <RiderDashboard />;
+  // if (roleLoading) return <div>Loading...</div>;
+  // if (role === "admin") return <AdminDashboard />;
+  // if (role === "user") return <UserDashboard />;
+  // if (role === "rider") return <RiderDashboard />;
 
-  return <Unauthorized />;
+  // return <Unauthorized />;
+  return <h1>Dashboard</h1>
 };
 
 export default DashboardHome;

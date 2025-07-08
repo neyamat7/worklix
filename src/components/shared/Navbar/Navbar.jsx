@@ -1,304 +1,358 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router";
-import { slideInFromTop } from "../../../animations/motion";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router";
+import { signOutUser } from "../../../features/auth/authSlice";
+import { useTheme } from "../../../hooks/useTheme";
 import ThemeToggle from "../../ThemeToggle/ThemeToggle";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const { theme } = useTheme();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const profileDropdownRef = useRef(null);
+  const dispatch = useDispatch();
 
-  const [showUserMenu, setShowUserMenu] = useState(false);
+  // get user from redux store
+  const { user } = useSelector((state) => state.auth);
 
-  const { user, signOutUser } = useState(false);
-  // console.log(user);
+  // Mock user data
+  const userData = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    avatar: "/placeholder.svg?height=40&width=40",
+    coins: 1250,
+  };
 
+  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+    const handleClickOutside = (event) => {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
+        setIsProfileDropdownOpen(false);
+      }
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navLinks = [
-    { id: 1, label: "Home", link: "/" },
-    { id: 2, label: "Services", link: "/services" },
-    { id: 6, label: "Dashboard", link: "/dashboard" },
-  ];
+  const handleLogout = () => {
+    dispatch(signOutUser());
+    setIsProfileDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+  };
 
   return (
-    <>
-      <motion.nav
-        initial="hidden"
-        animate="visible"
-        variants={slideInFromTop}
-        className={`sticky top-0 w-full z-50 transition-all duration-500 ${
-          scrolled ? "glass backdrop-blur-xl shadow-2xl" : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            {/* Logo */}
-            <motion.div
-              className="flex items-center space-x-3"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
+    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-400">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo/Brand */}
+          <Link to="/" className="flex-shrink-0">
+            <button
+              className={`text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-purple-700 transition-all duration-300 ${
+                user ? "cursor-pointer" : "cursor-default"
+              }`}
             >
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 rounded-2xl flex items-center justify-center glow-red">
-                  <span className="text-white font-bold text-xl">🚚</span>
-                </div>
-              </div>
-              <span className="text-3xl font-black gradient-text">
-                ParcelPilot
-              </span>
-            </motion.div>
+              {theme === "dark" ? (
+                <img className="h-18 w-17 mt-2" src="/light-logo.png" alt="" />
+              ) : (
+                <img className="h-18 w-17 mt-2" src="/dark-logo.png" alt="" />
+              )}
+            </button>
+          </Link>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-8">
-              <ThemeToggle />
-              {navLinks.map((item, index) => (
-                <NavLink
-                  key={item.id}
-                  to={item.link}
-                  className="text-gray-300 dark:text-red-500 hover:text-red-400 transition-all duration-300 font-medium relative group"
-                >
-                  {item?.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-400 to-pink-500 group-hover:w-full transition-all duration-300"></span>
-                </NavLink>
-              ))}
-            </div>
-
-            {/* Auth Section */}
-            <div className="hidden md:flex items-center space-x-4">
+          {/* Desktop Navigation */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-center space-x-4">
               {!user ? (
                 <>
                   <Link to="/login">
-                    <motion.button
-                      className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
+                    <button className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
                       Login
-                    </motion.button>
+                    </button>
                   </Link>
 
                   <Link to="/register">
-                    <motion.button
-                      className="px-6 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold rounded-full"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
                       Register
-                    </motion.button>
+                    </button>
                   </Link>
+                  <a href="https://github.com/neyamat7" target="_blank">
+                    <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105">
+                      Join as Developer
+                    </button>
+                  </a>
                 </>
               ) : (
-                <div className="relative">
-                  <motion.button
-                    onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="w-10 h-10 rounded-full overflow-hidden border-2 border-red-400 glow-red"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
+                <>
+                  <a
+                    href="/dashboard"
+                    className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                   >
-                    <img
-                      src={user?.photoURL || "/placeholder.svg"}
-                      alt={user?.displayName}
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.button>
+                    Dashboard
+                  </a>
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-2 rounded-lg">
+                    <svg
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-sm font-semibold">
+                      {userData.coins}
+                    </span>
+                  </div>
+                  <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105">
+                    Join as Developer
+                  </button>
 
-                  <AnimatePresence>
-                    {showUserMenu && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.8, y: -10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.8, y: -10 }}
-                        className="absolute right-0 top-12 w-64 bg-white rounded-2xl p-4 shadow-2xl"
-                      >
-                        <div className="flex items-center space-x-3 mb-4">
+                  {/* User Profile */}
+                  <div className="relative" ref={profileDropdownRef}>
+                    <button
+                      onClick={() =>
+                        setIsProfileDropdownOpen(!isProfileDropdownOpen)
+                      }
+                      className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full"
+                    >
+                      <img
+                        src={userData.avatar || "/placeholder.svg"}
+                        alt="Profile"
+                        className="w-10 h-10 rounded-full border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 transition-colors duration-200"
+                      />
+                    </button>
+
+                    {/* Profile Dropdown */}
+                    {isProfileDropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-4 px-6 z-50 transform transition-all duration-200 ease-out">
+                        <div className="flex items-center space-x-4 mb-4">
                           <img
-                            src={user?.photoURL || "/placeholder.svg"}
-                            alt={user?.displayName}
-                            className="w-12 h-12 rounded-full"
+                            src={userData.avatar || "/placeholder.svg"}
+                            alt="Profile"
+                            className="w-16 h-16 rounded-full border-2 border-gray-300 dark:border-gray-600"
                           />
                           <div>
-                            <div className="font-bold text-black">
-                              {user?.displayName}
-                            </div>
-                            <div className="text-sm text-gray-400">
-                              {user?.email}
-                            </div>
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                              {userData.name}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              {userData.email}
+                            </p>
                           </div>
                         </div>
-                        <hr className="border-gray-600 mb-4" />
-                        <motion.button
-                          onClick={() => signOutUser()}
-                          className="w-full text-left px-3 py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors duration-300"
-                          whileHover={{ x: 5 }}
-                        >
-                          Logout
-                        </motion.button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
-            </div>
 
-            {/* Mobile Menu Button */}
+                        <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                          <button
+                            onClick={handleLogout}
+                            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                              />
+                            </svg>
+                            <span>Logout</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {/* Dark Mode Toggle button*/}
+              <ThemeToggle />
+            </div>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center space-x-2">
+            {/* Dark Mode Toggle Mobile */}
+            <ThemeToggle />
+
             <button
-              className="md:hidden p-2 text-white"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
             >
-              <div className="w-6 h-6 flex flex-col justify-center items-center">
-                <span
-                  className={`block w-6 h-0.5 bg-white transition-all duration-300 ${
-                    isOpen ? "rotate-45 translate-y-1" : ""
-                  }`}
-                ></span>
-                <span
-                  className={`block w-6 h-0.5 bg-white mt-1 transition-all duration-300 ${
-                    isOpen ? "opacity-0" : ""
-                  }`}
-                ></span>
-                <span
-                  className={`block w-6 h-0.5 bg-white mt-1 transition-all duration-300 ${
-                    isOpen ? "-rotate-45 -translate-y-1" : ""
-                  }`}
-                ></span>
-              </div>
+              <svg
+                className={`${isMobileMenuOpen ? "hidden" : "block"} h-6 w-6`}
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+              <svg
+                className={`${isMobileMenuOpen ? "block" : "hidden"} h-6 w-6`}
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Side Navigation */}
+      <div className="fixed inset-0 z-50 md:hidden pointer-events-none">
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          className={`
+    fixed inset-0 bg-black bg-opacity-10 transition-opacity duration-500
+    ${isMobileMenuOpen ? "opacity-30 pointer-events-auto" : "opacity-0"}
+  `}
+        ></div>
+
+        <div
+          className={`
+    fixed top-0 right-0 h-fit w-80 bg-white dark:bg-gray-900 shadow-xl
+    transform transition-transform duration-500 ease-in-out
+    ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"}
+    pointer-events-auto
+  `}
+        >
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              Menu
+            </h2>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <svg
+                className="h-6 w-6"
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
           </div>
 
-          {/* Mobile Menu */}
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="md:hidden"
-              >
-                <div className="px-2 pt-2 pb-3 space-y-1 glass rounded-2xl mt-2">
-                  {[
-                    "Home",
-                    "Services",
-                    "Tracking",
-                    "Pricing",
-                    "About",
-                    "Contact",
-                  ].map((item) => (
-                    <a
-                      key={item}
-                      href={`#${item.toLowerCase()}`}
-                      className="block px-3 py-2 text-gray-300 hover:text-red-400 transition-colors duration-300"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {item}
-                    </a>
-                  ))}
-                  {!user ? (
-                    <div className="pt-4 space-y-2">
-                      <button className="w-full text-left px-3 py-2 text-gray-300 hover:text-white">
-                        Login
-                      </button>
-                      <button className="w-full px-3 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold rounded-full">
-                        Register
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="pt-4">
-                      <div className="flex items-center space-x-3 px-3 py-2">
-                        <img
-                          src={user.avatar || "/placeholder.svg"}
-                          alt={user.name}
-                          className="w-8 h-8 rounded-full"
-                        />
-                        <span className="text-white">{user.name}</span>
-                      </div>
-                      <button className="w-full text-left px-3 py-2 text-red-400">
-                        Logout
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.nav>
-
-      {/* Auth Modal */}
-      {/* <AnimatePresence>
-        {showAuthModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-            onClick={() => setShowAuthModal(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="glass rounded-3xl p-8 w-full max-w-md mx-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h2 className="text-3xl font-bold gradient-text mb-6 text-center">
-                {authMode === "login" ? "Welcome Back" : "Join SwiftFlow"}
-              </h2>
-
-              <form className="space-y-4">
-                {authMode === "register" && (
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    className="w-full px-4 py-3 glass-dark rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-400"
-                  />
-                )}
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  className="w-full px-4 py-3 glass-dark rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-400"
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  className="w-full px-4 py-3 glass-dark rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-400"
-                />
-
-                <motion.button
-                  type="button"
-                  onClick={handleLogin}
-                  className="w-full py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold rounded-xl"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {authMode === "login" ? "Sign In" : "Create Account"}
-                </motion.button>
-              </form>
-
-              <div className="mt-6 text-center">
-                <button
-                  onClick={() =>
-                    setAuthMode(authMode === "login" ? "register" : "login")
-                  }
-                  className="text-gray-400 hover:text-white transition-colors duration-300"
-                >
-                  {authMode === "login"
-                    ? "Don't have an account? Sign up"
-                    : "Already have an account? Sign in"}
+          <div className="p-4 space-y-4">
+            {!user ? (
+              <>
+                <button className="w-full text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
+                  Login
                 </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence> */}
-    </>
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200">
+                  Register
+                </button>
+
+                <a href="https://github.com/neyamat7" target="_blank">
+                  <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200">
+                    Join as Developer
+                  </button>
+                </a>
+              </>
+            ) : (
+              <>
+                {/* User Profile Section */}
+                <div className="flex items-center space-x-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <img
+                    src={userData.avatar || "/placeholder.svg"}
+                    alt="Profile"
+                    className="w-12 h-12 rounded-full border-2 border-gray-300 dark:border-gray-600"
+                  />
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                      {userData.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {userData.email}
+                    </p>
+                  </div>
+                </div>
+
+                <a
+                  href="/dashboard"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Dashboard
+                </a>
+
+                <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg">
+                  <span className="font-medium">Available Coins</span>
+                  <div className="flex items-center space-x-2">
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="font-bold">{userData.coins}</span>
+                  </div>
+                </div>
+
+                <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200">
+                  Join as Developer
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                  <span>Logout</span>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
   );
 };
 

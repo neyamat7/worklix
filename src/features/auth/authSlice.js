@@ -9,18 +9,18 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+
 import { auth } from "../../firebase/firebase";
-import useAxiosPublic from "../../hooks/userAxiosPublic";
+import { axiosPublic } from "../../hooks/userAxiosPublic";
 import { serializeUser } from "../../utils/serializeUser";
 
 const provider = new GoogleAuthProvider();
 provider.addScope("email");
 
 // Async Thunks
-
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
-  async ({ name, email, password, photoURL }, thunkAPI) => {
+  async ({ name, email, password, photoURL, role, coins }, thunkAPI) => {
     try {
       // 1) Create user
       const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -31,14 +31,13 @@ export const registerUser = createAsyncThunk(
         photoURL,
       });
 
-      const axiosPublic = useAxiosPublic();
-
       // 3) Post to your backend
       await axiosPublic.post("/users", {
         name,
         email,
-        role: "user",
         photoURL,
+        role,
+        coins,
       });
 
       // 4) Re-fetch the user
@@ -114,6 +113,18 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.loading = false;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.error = action.payload || action.error.message;
+        state.loading = false;
+      })
       .addCase(signInUser.pending, (state) => {
         state.loading = true;
       })
@@ -138,18 +149,6 @@ const authSlice = createSlice({
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.loading = false;
-      })
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.loading = false;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.error = action.payload || action.error.message;
         state.loading = false;
       });
   },
