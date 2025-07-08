@@ -9,31 +9,34 @@ import { ToastContainer } from "react-toastify";
 import { store } from "./app/store";
 import AuthListener from "./features/auth/AuthListener.js";
 import "./index.css";
+import { ThemeProvider } from "./providers/ThemeProvider.jsx";
 import router from "./routes/router";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <AuthListener />
-        <RouterProvider router={router} />
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
+    <ThemeProvider>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <AuthListener />
+          <RouterProvider router={router} />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
 
-        <ReactQueryDevtools initialIsOpen={false} />
-        <Toaster />
-      </QueryClientProvider>
-    </Provider>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <Toaster />
+        </QueryClientProvider>
+      </Provider>
+    </ThemeProvider>
   </StrictMode>
 );

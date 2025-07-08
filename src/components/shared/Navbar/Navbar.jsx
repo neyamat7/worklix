@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import { slideInFromTop } from "../../../animations/motion";
-import useAuth from "../../../context/AuthContext";
+import ThemeToggle from "../../ThemeToggle/ThemeToggle";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const [showUserMenu, setShowUserMenu] = useState(false);
 
-  const { user, signOutUser } = useAuth();
+  const { user, signOutUser } = useState(false);
   // console.log(user);
 
   useEffect(() => {
@@ -24,11 +24,7 @@ const Navbar = () => {
   const navLinks = [
     { id: 1, label: "Home", link: "/" },
     { id: 2, label: "Services", link: "/services" },
-    { id: 3, label: "Tracking", link: "/tracking" },
-    { id: 4, label: "Be a Rider", link: "/be-a-rider" },
-    { id: 5, label: "Send Parcel", link: "/sendparcel" },
     { id: 6, label: "Dashboard", link: "/dashboard" },
-    { id: 7, label: "Coverage", link: "/coverage" },
   ];
 
   return (
@@ -61,11 +57,12 @@ const Navbar = () => {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
+              <ThemeToggle />
               {navLinks.map((item, index) => (
                 <NavLink
                   key={item.id}
                   to={item.link}
-                  className="text-gray-300 hover:text-red-400 transition-all duration-300 font-medium relative group"
+                  className="text-gray-300 dark:text-red-500 hover:text-red-400 transition-all duration-300 font-medium relative group"
                 >
                   {item?.label}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-400 to-pink-500 group-hover:w-full transition-all duration-300"></span>
