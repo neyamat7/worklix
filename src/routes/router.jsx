@@ -6,6 +6,7 @@ import RegisterPage from "../components/auth/RegisterPage";
 import DashboardLayouts from "../layouts/DashboardLayouts";
 import RootLayout from "../layouts/RootLayout";
 import AddNewTask from "../pages/Dashboard/DashboardHome/BuyerDashboard/AddNewTask";
+import MyTask from "../pages/Dashboard/DashboardHome/BuyerDashboard/MyTask";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 import Home from "../pages/Home/Home/Home";
 import PrivateRoutes from "./PrivateRoutes";
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "add-new-task",
         element: <AddNewTask />,
+      },
+      {
+        path: "my-tasks",
+        element: <MyTask />,
       },
     ],
   },

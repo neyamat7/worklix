@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router";
+import ThemeToggle from "../components/ThemeToggle/ThemeToggle";
 import { useUserRole } from "../hooks/useUserRole";
 
 const DashboardLayouts = () => {
@@ -128,9 +129,17 @@ const DashboardLayouts = () => {
       ],
       buyer: [
         { name: "Add New Tasks", icon: "➕", path: "/dashboard/add-new-task" },
-        { name: "My Tasks", icon: "📊", path: "/my-tasks" },
-        { name: "Purchase Coins", icon: "🪙", path: "/purchase-coins" },
-        { name: "Payment History", icon: "💳", path: "/payment-history" },
+        { name: "My Tasks", icon: "📊", path: "/dashboard/my-tasks" },
+        {
+          name: "Purchase Coins",
+          icon: "🪙",
+          path: "/dashboard/purchase-coins",
+        },
+        {
+          name: "Payment History",
+          icon: "💳",
+          path: "/dashboard/payment-history",
+        },
       ],
       worker: [
         { name: "Task List", icon: "📋", path: "/task-list" },
@@ -550,12 +559,13 @@ const DashboardLayouts = () => {
   if (roleLoading) return <div>Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+    <div className="h-screen bg-gray-50 dark:bg-gray-900 flex overflow-hidden">
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white min-h-screen dark:bg-gray-800 shadow-lg transform ${
+        className={`fixed top-0 left-0 z-50 w-64 h-screen bg-white dark:bg-gray-800 shadow-lg transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+        style={{ height: "100vh" }} // Ensures sidebar is always full height
       >
         <div className="flex items-center justify-center h-17 px-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-2">
@@ -587,9 +597,9 @@ const DashboardLayouts = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex-1 overflow-y-auto">
         {/* Navbar */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <header className="bg-white sticky top-0 dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between px-4 py-4">
             <div className="flex items-center space-x-4">
               <button
@@ -657,22 +667,14 @@ const DashboardLayouts = () => {
                 </svg>
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
               </button>
+              <ThemeToggle />
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="p-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Buyer
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              This is the {activeRoute} page content. Implementation coming
-              soon...
-            </p>
-            <Outlet />
-          </div>
+        <main className="">
+          <Outlet />
         </main>
       </div>
 
