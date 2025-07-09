@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, Outlet } from "react-router";
+import { NavLink, Outlet } from "react-router";
 import ThemeToggle from "../components/ThemeToggle/ThemeToggle";
 import { useUserRole } from "../hooks/useUserRole";
 
@@ -120,7 +120,7 @@ const DashboardLayouts = () => {
 
   // Navigation items based on role
   const getNavigationItems = () => {
-    const commonItems = [{ name: "Home", icon: "🏠" }];
+    const commonItems = [{ name: "Home", icon: "🏠", path: "/dashboard"  }];
 
     const roleSpecificItems = {
       admin: [
@@ -580,18 +580,22 @@ const DashboardLayouts = () => {
 
         <nav className="mt-8 px-4 space-y-2">
           {getNavigationItems().map((item) => (
-            <Link
+            <NavLink
+              onClick={() => setIsSidebarOpen(false)}
               to={item.path}
+              end
               key={item.name}
-              className={`w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors duration-200 ${
-                activeRoute === item.name
-                  ? "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
+              className={({ isActive }) =>
+                `w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors duration-200 ${
+                  isActive
+                    ? "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`
+              }
             >
               <span className="text-lg">{item.icon}</span>
               <span className="font-medium">{item.name}</span>
-            </Link>
+            </NavLink>
           ))}
         </nav>
       </div>

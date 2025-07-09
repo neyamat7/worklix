@@ -11,6 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import TaskEditModal from "./TaskEditModal";
 
 const MyTask = () => {
   const queryClient = useQueryClient();
@@ -18,6 +19,7 @@ const MyTask = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const axiosSecure = useAxiosSecure();
   const { user } = useSelector((state) => state.auth);
+  const [editTask, setEditTask] = useState();
 
   // Fetch tasks using TanStack Query
   const { data: tasks, isLoading } = useQuery({
@@ -69,6 +71,26 @@ const MyTask = () => {
     }
   };
 
+  const { mutate: updateTask, isLoading: isUpdating } = useMutation({
+    mutationFn: async ({ taskId, updateData }) => {
+      await axiosSecure.patch(`/buyer/tasks/${taskId}`, updateData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["tasks"]);
+      Swal.fire("Updated!", "Task updated successfully.", "success");
+    },
+    onError: (error) => {
+      Swal.fire("Error!", error.message || "Something went wrong.", "error");
+    },
+    onSettled: () => {
+      setEditTask(null);
+    },
+  });
+
+  const handleUpdate = (updatedTask) => {
+    updateTask({ taskId: updatedTask._id, updateData: updatedTask });
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -107,10 +129,10 @@ const MyTask = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ">
+                  <th className="hidden lg:table-cell px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ">
                     Total Workers
                   </th>
-                  <th className=" px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="hidden lg:table-cell px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     Paid Workers
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -141,13 +163,13 @@ const MyTask = () => {
                         {task.status}
                       </span>
                     </td>
-                    <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                    <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                       <div className="flex items-center justify-center">
                         <FiUsers className="mr-1" />
                         {task.required_workers}
                       </div>
                     </td>
-                    <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                    <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                       <div className="flex items-center justify-center">
                         <FiDollarSign className="mr-1" />
                         {task.total_paid_workers}
@@ -163,7 +185,10 @@ const MyTask = () => {
                       >
                         <FiEye className="inline mr-1" /> View
                       </button>
-                      <button className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-3">
+                      <button
+                        onClick={() => setEditTask(task)}
+                        className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-3"
+                      >
                         <FiEdit2 className="inline mr-1" /> Edit
                       </button>
                       <button
@@ -226,7 +251,10 @@ const MyTask = () => {
                     >
                       <FiEye />
                     </button>
-                    <button className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full">
+                    <button
+                      onClick={() => setEditTask(task)}
+                      className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full"
+                    >
                       <FiEdit2 />
                     </button>
                     <button
@@ -366,6 +394,15 @@ const MyTask = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {editTask && (
+          <TaskEditModal
+            task={editTask}
+            onClose={() => setEditTask(null)}
+            onSave={handleUpdate}
+            isUpdating={isUpdating}
+          />
         )}
       </div>
     </div>
