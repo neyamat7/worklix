@@ -8,7 +8,6 @@ export function useUserRole() {
 
   const { user } = useSelector((state) => state.auth);
 
-  //   console.log(user);
   const { data: role, isLoading: roleLoading } = useQuery({
     queryKey: ["userRole", user?.email],
     queryFn: async () => {
@@ -16,9 +15,9 @@ export function useUserRole() {
       const { data } = await axiosSecure.get(
         `/users/role?email=${encodeURIComponent(user?.email)}`
       );
-      //   console.log(data.role);
+
       console.log(data.role);
-      return data.role; // { role: "user" }
+      return data.role;
     },
     enabled: !!user?.email, // only run when email is truthy
   });

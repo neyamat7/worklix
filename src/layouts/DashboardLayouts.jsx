@@ -1,14 +1,18 @@
 import { useState } from "react";
+import { Link, Outlet } from "react-router";
+import { useUserRole } from "../hooks/useUserRole";
 
 const DashboardLayouts = () => {
   const [currentUser] = useState({
     id: "1",
     name: "John Doe",
     email: "john@example.com",
-    role: "worker", // Change this to "admin", "buyer", or "worker" to test different views
+    role: "buyer", // Change this to "admin", "buyer", or "worker" to test different views
     coins: 1250,
     avatar: "/placeholder.svg?height=40&width=40",
   });
+
+  const { role, roleLoading } = useUserRole();
 
   const [activeRoute, setActiveRoute] = useState("Home");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -115,31 +119,28 @@ const DashboardLayouts = () => {
 
   // Navigation items based on role
   const getNavigationItems = () => {
-    const commonItems = [
-      { name: "Home", icon: "🏠" },
-      { name: "Task List", icon: "📋" },
-      { name: "My Submissions", icon: "📝" },
-      { name: "Withdrawals", icon: "💰" },
-    ];
+    const commonItems = [{ name: "Home", icon: "🏠" }];
 
     const roleSpecificItems = {
       admin: [
         { name: "Manage Users", icon: "👥" },
         { name: "Manage Tasks", icon: "⚙️" },
-        { name: "Payment History", icon: "💳" },
       ],
       buyer: [
-        { name: "Add New Tasks", icon: "➕" },
-        { name: "My Tasks", icon: "📊" },
-        { name: "Purchase Coins", icon: "🪙" },
+        { name: "Add New Tasks", icon: "➕", path: "/dashboard/add-new-task" },
+        { name: "My Tasks", icon: "📊", path: "/my-tasks" },
+        { name: "Purchase Coins", icon: "🪙", path: "/purchase-coins" },
+        { name: "Payment History", icon: "💳", path: "/payment-history" },
       ],
       worker: [
-        { name: "Purchase Coins", icon: "🪙" },
-        { name: "Payment History", icon: "💳" },
+        { name: "Task List", icon: "📋", path: "/task-list" },
+        { name: "My Submissions", icon: "📝", path: "/my-submissions" },
+        { name: "Withdrawals", icon: "💰", path: "/withdrawals" },
+        { name: "Payment History", icon: "💳", path: "/payment-history" },
       ],
     };
 
-    return [...commonItems, ...roleSpecificItems[currentUser.role]];
+    return [...commonItems, ...roleSpecificItems[role]];
   };
 
   // Handle submission actions
@@ -546,6 +547,8 @@ const DashboardLayouts = () => {
     }
   };
 
+  if (roleLoading) return <div>Loading...</div>;
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
       {/* Sidebar */}
@@ -567,12 +570,9 @@ const DashboardLayouts = () => {
 
         <nav className="mt-8 px-4 space-y-2">
           {getNavigationItems().map((item) => (
-            <button
+            <Link
+              to={item.path}
               key={item.name}
-              onClick={() => {
-                setActiveRoute(item.name);
-                setIsSidebarOpen(false);
-              }}
               className={`w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors duration-200 ${
                 activeRoute === item.name
                   ? "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
@@ -581,7 +581,7 @@ const DashboardLayouts = () => {
             >
               <span className="text-lg">{item.icon}</span>
               <span className="font-medium">{item.name}</span>
-            </button>
+            </Link>
           ))}
         </nav>
       </div>
@@ -663,19 +663,16 @@ const DashboardLayouts = () => {
 
         {/* Page Content */}
         <main className="p-6">
-          {activeRoute === "Home" ? (
-            renderHomeContent()
-          ) : (
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                {activeRoute}
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                This is the {activeRoute} page content. Implementation coming
-                soon...
-              </p>
-            </div>
-          )}
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              Buyer
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400">
+              This is the {activeRoute} page content. Implementation coming
+              soon...
+            </p>
+            <Outlet />
+          </div>
         </main>
       </div>
 
@@ -685,101 +682,6 @@ const DashboardLayouts = () => {
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
-      )}
-
-      {/* Submission Detail Modal */}
-      {isModalOpen && selectedSubmission && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Submission Details
-                </h3>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
-                >
-                  <svg
-                    className="w-5 h-5 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Task Title
-                </label>
-                <p className="text-gray-900 dark:text-white">
-                  {selectedSubmission.task_title}
-                </p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Worker Name
-                </label>
-                <p className="text-gray-900 dark:text-white">
-                  {selectedSubmission.worker_name}
-                </p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Payable Amount
-                </label>
-                <p className="text-gray-900 dark:text-white">
-                  ${selectedSubmission.payable_amount}
-                </p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Submission Details
-                </label>
-                <p className="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                  {selectedSubmission.submission_details}
-                </p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Submitted Date
-                </label>
-                <p className="text-gray-900 dark:text-white">
-                  {selectedSubmission.submitted_at}
-                </p>
-              </div>
-            </div>
-            <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3">
-              <button
-                onClick={() => {
-                  handleRejectSubmission(selectedSubmission.id);
-                  setIsModalOpen(false);
-                }}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors duration-200"
-              >
-                Reject
-              </button>
-              <button
-                onClick={() => {
-                  handleApproveSubmission(selectedSubmission.id);
-                  setIsModalOpen(false);
-                }}
-                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors duration-200"
-              >
-                Approve
-              </button>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );
