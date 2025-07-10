@@ -3,7 +3,9 @@ import { useState } from "react";
 import { FiCalendar, FiUser } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
+import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { useHasSubmitted } from "../../../../hooks/useHasSubmitted";
 
 const TaskDetails = () => {
   const queryClient = useQueryClient();
@@ -27,13 +29,30 @@ const TaskDetails = () => {
     },
   });
 
+  const { data } = useHasSubmitted(user?.email, task?._id);
+  const alreadySubmitted = data?.alreadySubmitted;
+
   const mutation = useMutation({
     mutationFn: async (submissionData) => {
       const res = await axiosSecure.post("/submissions", submissionData);
       return res.data;
     },
     onSuccess: () => {
-      // Optional: refetch submissions list if you have it cached
+      Swal.fire({
+        title: "Success!",
+        text: "Your task has been submitted successfully.",
+        icon: "success",
+        timer: 3400, // Auto-close after 2.5 seconds
+        showConfirmButton: false,
+        background: "#f8fafc",
+        position: "center",
+        toast: true,
+        width: "400px",
+        customClass: {
+          title: "text-lg font-semibold text-gray-900",
+          popup: "shadow-lg border border-gray-200",
+        },
+      });
       refetch();
       queryClient.invalidateQueries(["submissions"]);
     },
@@ -44,6 +63,33 @@ const TaskDetails = () => {
       setShowSubmissionModal(false);
     },
   });
+
+  const handleClickSubmitTask = () => {
+    if (alreadySubmitted) {
+      Swal.fire({
+        title: "Already Submitted",
+        text: "You have already submitted this task.",
+        icon: "info",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#3B82F6", // blue-500
+        background: "#ffffff",
+        backdrop: `
+      rgba(0,0,0,0.4)
+      url("/images/nyan-cat.gif")
+      left top
+      no-repeat
+    `,
+        showClass: {
+          popup: "animate__animated animate__fadeInDown",
+        },
+        hideClass: {
+          popup: "animate__animated animate__fadeOutUp",
+        },
+      });
+      return;
+    }
+    setShowSubmissionModal(true);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -241,7 +287,7 @@ const TaskDetails = () => {
                   {/* Submit Task Button */}
                   <div className="pt-6 border-t border-gray-200/50 dark:border-gray-700/50">
                     <button
-                      onClick={() => setShowSubmissionModal(true)}
+                      onClick={handleClickSubmitTask}
                       className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-lg text-lg"
                     >
                       Submit Task
@@ -274,6 +320,7 @@ const SubmissionModal = ({ task, onClose, worker, mutation }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!submissionDetails.trim()) return;
 
     const finalSubmission = {
