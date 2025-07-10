@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Outlet } from "react-router";
+import { Link, NavLink, Outlet } from "react-router";
 import ThemeToggle from "../components/ThemeToggle/ThemeToggle";
 import { useUserRole } from "../hooks/useUserRole";
 
@@ -149,11 +149,6 @@ const DashboardLayouts = () => {
           path: "/dashboard/my-submissions",
         },
         { name: "Withdrawals", icon: "💰", path: "/dashboard/withdrawals" },
-        {
-          name: "Payment History",
-          icon: "💳",
-          path: "/dashboard/payment-history",
-        },
       ],
     };
 
@@ -575,16 +570,15 @@ const DashboardLayouts = () => {
         } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
         style={{ height: "100vh" }} // Ensures sidebar is always full height
       >
-        <div className="flex items-center justify-center h-17 px-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">FL</span>
+        <Link to="/">
+          <div className="flex items-center justify-center h-17 px-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center space-x-2">
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Worklix
+              </span>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Worklix
-            </span>
           </div>
-        </div>
+        </Link>
 
         <nav className="mt-8 px-4 space-y-2">
           {getNavigationItems().map((item) => (
