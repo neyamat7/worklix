@@ -1,25 +1,47 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FiCalendar, FiUser } from "react-icons/fi";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const TaskDetails = () => {
+  const queryClient = useQueryClient();
   const [showSubmissionModal, setShowSubmissionModal] = useState(false);
   const { taskId } = useParams();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
 
   const {
     data: task,
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["task", taskId],
     enabled: !!taskId, // Only fetch if id exists
     queryFn: async () => {
       const res = await axiosSecure.get(`/worker/task/${taskId}`);
       return res.data;
+    },
+  });
+
+  const mutation = useMutation({
+    mutationFn: async (submissionData) => {
+      const res = await axiosSecure.post("/submissions", submissionData);
+      return res.data;
+    },
+    onSuccess: () => {
+      // Optional: refetch submissions list if you have it cached
+      refetch();
+      queryClient.invalidateQueries(["submissions"]);
+    },
+    onError: (error) => {
+      console.error("Submission error:", error);
+    },
+    onSettled: () => {
+      setShowSubmissionModal(false);
     },
   });
 
@@ -112,7 +134,7 @@ const TaskDetails = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                      ${task.payable_amount}
+                      {task.payable_amount} coins
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
                       Payment per worker
@@ -128,7 +150,7 @@ const TaskDetails = () => {
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                      ${task.total_payable_amount}
+                      {task.total_payable_amount} coins
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
                       Total budget
@@ -236,7 +258,8 @@ const TaskDetails = () => {
           <SubmissionModal
             task={task}
             onClose={() => setShowSubmissionModal(false)}
-            onSubmit={() => setShowSubmissionModal(false)}
+            worker={user}
+            mutation={mutation}
           />
         )}
       </div>
@@ -246,23 +269,28 @@ const TaskDetails = () => {
 
 export default TaskDetails;
 
-const SubmissionModal = ({ task, onClose, onSubmit }) => {
+const SubmissionModal = ({ task, onClose, worker, mutation }) => {
   const [submissionDetails, setSubmissionDetails] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!submissionDetails.trim()) return;
 
-    setIsSubmitting(true);
-    // Simulate API call
-    // save submission data in database
-    // Todo
+    const finalSubmission = {
+      task_id: task._id,
+      task_title: task.task_title,
+      payable_amount: task.payable_amount,
+      submission_details: submissionDetails,
+      worker_email: worker?.email,
+      worker_name: worker?.displayName,
+      buyer_email: task.buyer_email,
+      buyer_name: task.buyer_name,
+      submission_date: new Date().toISOString(),
+      status: "pending",
+    };
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    onSubmit();
-    setIsSubmitting(false);
+    mutation.mutate(finalSubmission);
   };
 
   return (
@@ -348,14 +376,14 @@ const SubmissionModal = ({ task, onClose, onSubmit }) => {
             </button>
             <button
               type="submit"
-              disabled={isSubmitting || !submissionDetails.trim()}
+              disabled={mutation.isPending || !submissionDetails.trim()}
               className={`flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-lg flex items-center justify-center space-x-2 ${
-                isSubmitting || !submissionDetails.trim()
+                mutation.isPending || !submissionDetails.trim()
                   ? "opacity-50 cursor-not-allowed transform-none"
                   : ""
               }`}
             >
-              {isSubmitting ? (
+              {mutation.isPending ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                   <span>Submitting...</span>
