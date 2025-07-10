@@ -603,7 +603,7 @@ const DashboardLayouts = () => {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
         {/* Navbar */}
-        <header className="bg-white sticky top-0 dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <header className="bg-white z-50 sticky top-0 dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between px-4 py-4">
             <div className="flex items-center space-x-4">
               <button

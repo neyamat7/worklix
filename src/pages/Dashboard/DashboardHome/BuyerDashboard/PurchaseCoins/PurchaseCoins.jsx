@@ -1,25 +1,19 @@
-"use client";
-
-import {
-  CardElement,
-  Elements,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
 import {
   FiAward,
   FiCheck,
   FiCreditCard,
-  FiLoader,
-  FiMoon,
   FiShield,
   FiStar,
-  FiSun,
   FiTrendingUp,
   FiZap,
 } from "react-icons/fi";
+import { useSelector } from "react-redux";
+import { useRecordPayment } from "../../../../../hooks/useRecordPayment";
+import { useUserData } from "../../../../../hooks/useUserData";
+import CheckoutForm from "./CheckoutForm";
 
 // Initialize Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_payment_key);
@@ -62,281 +56,38 @@ const coinPackages = [
   },
 ];
 
-const CheckoutForm = ({ selectedPackage, onSuccess, onCancel }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [paymentError, setPaymentError] = useState(null);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    setIsProcessing(true);
-    setPaymentError(null);
-
-    const cardElement = elements.getElement(CardElement);
-
-    if (!cardElement) {
-      setIsProcessing(false);
-      return;
-    }
-
-    try {
-      // Create payment method
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
-        type: "card",
-        card: cardElement,
-        billing_details: {
-          name: "John Doe", // In real app, get from user context
-          email: "john@example.com",
-        },
-      });
-
-      if (error) {
-        setPaymentError(error.message || "An error occurred");
-        setIsProcessing(false);
-        return;
-      }
-
-      // Simulate API call to your backend
-      const response = await fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: selectedPackage.price * 100, // Convert to cents
-          currency: "usd",
-          payment_method_id: paymentMethod.id,
-          coins: selectedPackage.coins,
-        }),
-      });
-
-      const paymentIntent = await response.json();
-
-      // Confirm payment
-      const { error: confirmError } = await stripe.confirmCardPayment(
-        paymentIntent.client_secret
-      );
-
-      if (confirmError) {
-        setPaymentError(confirmError.message || "Payment failed");
-      } else {
-        onSuccess();
-      }
-    } catch (error) {
-      setPaymentError("Payment failed. Please try again.");
-      console.error("Payment error:", error);
-    }
-
-    setIsProcessing(false);
-  };
-
-  const cardElementOptions = {
-    style: {
-      base: {
-        fontSize: "16px",
-        color: "#424770",
-        "::placeholder": {
-          color: "#aab7c4",
-        },
-        fontFamily: "system-ui, -apple-system, sans-serif",
-      },
-      invalid: {
-        color: "#9e2146",
-      },
-    },
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-        {/* Header */}
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Complete Payment
-            </h3>
-            <button
-              onClick={onCancel}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
-            >
-              <svg
-                className="w-5 h-5 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Package Summary */}
-        <div className="p-6 bg-gray-50 dark:bg-gray-700/50">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white">
-                {selectedPackage.coins} Coins
-              </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Digital Currency
-              </p>
-            </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                ${selectedPackage.price}
-              </div>
-              {selectedPackage.savings && (
-                <div className="text-sm text-green-600 dark:text-green-400">
-                  {selectedPackage.savings}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Payment Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Card Element Container */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-              Card Information
-            </label>
-            <div className="relative">
-              {/* Credit Card Visual */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 mb-4 text-white shadow-lg">
-                <div className="flex justify-between items-start mb-8">
-                  <div className="w-12 h-8 bg-yellow-400 rounded-md flex items-center justify-center">
-                    <div className="w-6 h-4 bg-yellow-300 rounded-sm"></div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs opacity-80">VALID THRU</div>
-                    <div className="text-sm font-mono">12/28</div>
-                  </div>
-                </div>
-                <div className="font-mono text-lg tracking-wider mb-4">
-                  •••• •••• •••• ••••
-                </div>
-                <div className="flex justify-between items-end">
-                  <div>
-                    <div className="text-xs opacity-80">CARDHOLDER NAME</div>
-                    <div className="text-sm font-medium">JOHN DOE</div>
-                  </div>
-                  <div className="flex space-x-1">
-                    <div className="w-8 h-5 bg-red-500 rounded-sm flex items-center justify-center">
-                      <div className="w-6 h-3 bg-red-400 rounded-full"></div>
-                    </div>
-                    <div className="w-8 h-5 bg-orange-500 rounded-sm flex items-center justify-center">
-                      <div className="w-6 h-3 bg-orange-400 rounded-full"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stripe Card Element */}
-              <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-700">
-                <CardElement options={cardElementOptions} />
-              </div>
-            </div>
-          </div>
-
-          {/* Security Features */}
-          <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
-            <div className="flex items-center space-x-2 text-green-700 dark:text-green-400">
-              <FiShield className="w-5 h-5" />
-              <span className="text-sm font-medium">Secured by Stripe</span>
-            </div>
-            <p className="text-xs text-green-600 dark:text-green-400 mt-1">
-              Your payment information is encrypted and secure
-            </p>
-          </div>
-
-          {/* Error Message */}
-          {paymentError && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-              <p className="text-red-700 dark:text-red-400 text-sm">
-                {paymentError}
-              </p>
-            </div>
-          )}
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={!stripe || isProcessing}
-            className={`w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-lg flex items-center justify-center space-x-2 ${
-              isProcessing || !stripe
-                ? "opacity-50 cursor-not-allowed transform-none"
-                : ""
-            }`}
-          >
-            {isProcessing ? (
-              <>
-                <FiLoader className="animate-spin h-5 w-5" />
-                <span>Processing...</span>
-              </>
-            ) : (
-              <>
-                <FiCreditCard className="w-5 h-5" />
-                <span>Pay ${selectedPackage.price}</span>
-              </>
-            )}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-};
-
 const PurchaseCoins = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { mutate: recordPayment, isLoading: recordPaymentLoading } =
+    useRecordPayment();
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [showCheckout, setShowCheckout] = useState(false);
-
-  // Mock user data
-  const [currentUser, setCurrentUser] = useState({
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    coins: 250,
-  });
+  const { user: authUser } = useSelector((state) => state.auth);
+  const { data: user, isLoading, error } = useUserData(authUser?.email);
 
   const handlePackageSelect = (pkg) => {
     setSelectedPackage(pkg);
     setShowCheckout(true);
   };
 
-  const handlePaymentSuccess = () => {
-    if (selectedPackage) {
-      setCurrentUser((prev) => ({
-        ...prev,
-        coins: prev.coins + selectedPackage.coins,
-      }));
+  const handlePaymentSuccess = (paymentIntent, selectedPackage) => {
+    // save payment info and update user coins
 
+    if ((paymentIntent, selectedPackage)) {
+      // update user coins and save payment info
       const paymentInfo = {
-        user_id: currentUser.id,
+        user_email: authUser?.email,
         package_id: selectedPackage.id,
         coins_purchased: selectedPackage.coins,
-        amount_paid: selectedPackage.price,
+        amount_paid: paymentIntent.amount,
+        currency: paymentIntent.currency,
         payment_date: new Date().toISOString(),
-        status: "completed",
+        status: paymentIntent.status,
+        payment_intent_id: paymentIntent.id,
+        payment_method_id: paymentIntent.payment_method,
+        payment_method_types: paymentIntent.payment_method_types,
       };
 
-      console.log("Payment successful:", paymentInfo);
-      alert(
-        `Payment successful! ${selectedPackage.coins} coins added to your account.`
-      );
+      recordPayment(paymentInfo);
     }
 
     setShowCheckout(false);
@@ -350,19 +101,19 @@ const PurchaseCoins = () => {
 
   return (
     <Elements stripe={stripePromise}>
-      <div className={isDarkMode ? "dark" : ""}>
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div>
+        <div className="min-h-[calc(100vh-68px)] bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
           {/* Decorative background elements */}
-          <div className="absolute inset-0 overflow-hidden">
+          {/* <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
             <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-400 to-red-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
             <div className="absolute top-40 left-40 w-60 h-60 bg-gradient-to-br from-yellow-400 to-orange-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-          </div>
+          </div> */}
 
-          <div className="relative z-10 min-h-screen p-4">
+          <div className="relative z-10 min-h-[calc(100vh-68px)] p-4">
             {/* Header */}
             <div className="max-w-6xl mx-auto">
-              <div className="flex justify-between items-center mb-8 pt-8">
+              {/* <div className="flex justify-between items-center mb-8 pt-8">
                 <div></div>
                 <button
                   onClick={() => setIsDarkMode(!isDarkMode)}
@@ -374,9 +125,9 @@ const PurchaseCoins = () => {
                     <FiMoon className="w-5 h-5 text-gray-700" />
                   )}
                 </button>
-              </div>
+              </div> */}
 
-              <div className="text-center mb-12">
+              <div className="text-center my-10">
                 <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
                   Purchase Coins
                 </h1>
@@ -386,13 +137,11 @@ const PurchaseCoins = () => {
 
                 {/* Current Balance */}
                 <div className="inline-flex items-center space-x-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl px-6 py-3 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Current Balance:
+                  <span className="text-lg font-semibold text-gray-600 dark:text-gray-400">
+                    Your Current Balance:
                   </span>
-                  <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-lg">
-                    <span className="text-lg font-bold">
-                      {currentUser.coins}
-                    </span>
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-500 to-orange-600 text-white px-4 py-2 rounded-md">
+                    <span className="text-lg font-bold">{user?.coins}</span>
                     <span className="text-sm">coins</span>
                   </div>
                 </div>
