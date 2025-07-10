@@ -142,10 +142,18 @@ const DashboardLayouts = () => {
         },
       ],
       worker: [
-        { name: "Task List", icon: "📋", path: "/task-list" },
-        { name: "My Submissions", icon: "📝", path: "/my-submissions" },
-        { name: "Withdrawals", icon: "💰", path: "/withdrawals" },
-        { name: "Payment History", icon: "💳", path: "/payment-history" },
+        { name: "Task List", icon: "📋", path: "/dashboard/task-list" },
+        {
+          name: "My Submissions",
+          icon: "📝",
+          path: "/dashboard/my-submissions",
+        },
+        { name: "Withdrawals", icon: "💰", path: "/dashboard/withdrawals" },
+        {
+          name: "Payment History",
+          icon: "💳",
+          path: "/dashboard/payment-history",
+        },
       ],
     };
 

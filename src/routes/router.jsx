@@ -10,6 +10,8 @@ import MyTask from "../pages/Dashboard/DashboardHome/BuyerDashboard/MyTask";
 import PaymentRecords from "../pages/Dashboard/DashboardHome/BuyerDashboard/PaymentRecords";
 import PurchaseCoins from "../pages/Dashboard/DashboardHome/BuyerDashboard/PurchaseCoins/PurchaseCoins";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
+import TaskDetails from "../pages/Dashboard/DashboardHome/WorkerDashboard/TaskDetails";
+import TaskList from "../pages/Dashboard/DashboardHome/WorkerDashboard/TaskList";
 import Home from "../pages/Home/Home/Home";
 import PrivateRoutes from "./PrivateRoutes";
 
@@ -67,6 +69,11 @@ const router = createBrowserRouter([
         path: "payment-records",
         element: <PaymentRecords />,
       },
+      {
+        path: "task-list",
+        element: <TaskList />,
+      },
+     
     ],
   },
 ]);

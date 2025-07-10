@@ -17,7 +17,6 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const AddNewTask = ({ userCoins = 1000 }) => {
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
   const axiosSecure = useAxiosSecure();
 
   const navigate = useNavigate();
@@ -123,6 +122,7 @@ const AddNewTask = ({ userCoins = 1000 }) => {
 
     const newTask = {
       buyer_email: user.email,
+      buyer_name: user?.displayName,
       task_title: data.task_title,
       task_detail: data.task_detail,
       required_workers: Number(data.required_workers),

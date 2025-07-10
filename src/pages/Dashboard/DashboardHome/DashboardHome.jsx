@@ -1,6 +1,7 @@
 import { useUserRole } from "../../../hooks/useUserRole";
 import Unauthorized from "../../UnAuthorized/UnAuthorized";
 import BuyerDashboard from "./BuyerDashboard/BuyerDashboard";
+import { WorkerDashboard } from "./WorkerDashboard/WorkerDashboard";
 
 const DashboardHome = () => {
   const { role, roleLoading } = useUserRole();
@@ -8,7 +9,7 @@ const DashboardHome = () => {
   if (roleLoading) return <div>Loading...</div>;
   // if (role === "admin") return <AdminDashboard />;
   if (role === "buyer") return <BuyerDashboard />;
-  // if (role === "rider") return <RiderDashboard />;
+  if (role === "worker") return <WorkerDashboard />;
 
   return <Unauthorized />;
 };
