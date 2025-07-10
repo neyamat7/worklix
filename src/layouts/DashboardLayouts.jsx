@@ -120,7 +120,7 @@ const DashboardLayouts = () => {
 
   // Navigation items based on role
   const getNavigationItems = () => {
-    const commonItems = [{ name: "Home", icon: "🏠", path: "/dashboard"  }];
+    const commonItems = [{ name: "Home", icon: "🏠", path: "/dashboard" }];
 
     const roleSpecificItems = {
       admin: [
@@ -138,7 +138,7 @@ const DashboardLayouts = () => {
         {
           name: "Payment History",
           icon: "💳",
-          path: "/dashboard/payment-history",
+          path: "/dashboard/payment-records",
         },
       ],
       worker: [

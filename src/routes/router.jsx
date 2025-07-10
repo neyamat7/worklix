@@ -7,6 +7,7 @@ import DashboardLayouts from "../layouts/DashboardLayouts";
 import RootLayout from "../layouts/RootLayout";
 import AddNewTask from "../pages/Dashboard/DashboardHome/BuyerDashboard/AddNewTask";
 import MyTask from "../pages/Dashboard/DashboardHome/BuyerDashboard/MyTask";
+import PaymentRecords from "../pages/Dashboard/DashboardHome/BuyerDashboard/PaymentRecords";
 import PurchaseCoins from "../pages/Dashboard/DashboardHome/BuyerDashboard/PurchaseCoins/PurchaseCoins";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 import Home from "../pages/Home/Home/Home";
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "purchase-coins",
         element: <PurchaseCoins />,
+      },
+      {
+        path: "payment-records",
+        element: <PaymentRecords />,
       },
     ],
   },

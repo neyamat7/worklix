@@ -51,6 +51,12 @@ button {
   transform: scale(1.2);
 }
 
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
 /* Custom scrollbar */
 /* ::-webkit-scrollbar {
   width: 8px;
