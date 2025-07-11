@@ -84,13 +84,13 @@ const ManageUsers = () => {
       "px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1";
     switch (role) {
       case "admin":
-        return `${baseClasses} bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400`;
+        return `${baseClasses} bg-blue-100 text-blue-800 dark:bg-blue-900/70 dark:text-white`;
       case "buyer":
-        return `${baseClasses} bg-red-100 text-orange-500 dark:bg-orange-900/30 dark:text-orange-400`;
+        return `${baseClasses} bg-red-100 text-orange-500 dark:bg-orange-900/70 dark:text-white`;
       case "worker":
-        return `${baseClasses} bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400`;
+        return `${baseClasses} bg-green-100 text-green-800 dark:bg-green-900/80 dark:text-white`;
       default:
-        return `${baseClasses} bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400`;
+        return `${baseClasses} bg-gray-100 text-gray-800 dark:bg-gray-900/70 dark:text-gray-400`;
     }
   };
 

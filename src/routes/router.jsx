@@ -5,6 +5,7 @@ import LoginPage from "../components/auth/LoginPage";
 import RegisterPage from "../components/auth/RegisterPage";
 import DashboardLayouts from "../layouts/DashboardLayouts";
 import RootLayout from "../layouts/RootLayout";
+import ManageTasks from "../pages/Dashboard/DashboardHome/AdminDashboard/ManageTasks";
 import ManageUsers from "../pages/Dashboard/DashboardHome/AdminDashboard/ManageUsers";
 import AddNewTask from "../pages/Dashboard/DashboardHome/BuyerDashboard/AddNewTask";
 import MyTask from "../pages/Dashboard/DashboardHome/BuyerDashboard/MyTask";
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
       {
         path: "manage-users",
         element: <ManageUsers />,
+      },
+      {
+        path: "manage-tasks",
+        element: <ManageTasks />,
       },
     ],
   },
