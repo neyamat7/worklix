@@ -13,6 +13,7 @@ import {
   FiUsers,
   FiX,
 } from "react-icons/fi";
+import { useUpdateUserRole } from "../../../../hooks/useUpdateUserRole";
 import { useAllUsers } from "../../../../hooks/useUserData";
 
 const ManageUsers = () => {
@@ -22,90 +23,8 @@ const ManageUsers = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
-  //   const [users, setUsers] = useState([
-  //     {
-  //       _id: "686d3a4445185c3623a16010",
-  //       name: "saiful",
-  //       photoURL: "https://i.ibb.co/XkbfpMp6/Screenshot-2025-06-03-225833.png",
-  //       email: "saiful@gmail.com",
-  //       role: "buyer",
-  //       coins: 10464,
-  //     },
-  //     {
-  //       _id: "686d3a4445185c3623a16011",
-  //       name: "John Doe",
-  //       photoURL: "/placeholder.svg?height=40&width=40",
-  //       email: "john.doe@gmail.com",
-  //       role: "admin",
-  //       coins: 25000,
-  //     },
-  //     {
-  //       _id: "686d3a4445185c3623a16012",
-  //       name: "Alice Smith",
-  //       photoURL: "/placeholder.svg?height=40&width=40",
-  //       email: "alice.smith@gmail.com",
-  //       role: "worker",
-  //       coins: 5420,
-  //     },
-  //     {
-  //       _id: "686d3a4445185c3623a16013",
-  //       name: "Bob Johnson",
-  //       photoURL: "/placeholder.svg?height=40&width=40",
-  //       email: "bob.johnson@gmail.com",
-  //       role: "buyer",
-  //       coins: 8750,
-  //     },
-  //     {
-  //       _id: "686d3a4445185c3623a16014",
-  //       name: "Emma Wilson",
-  //       photoURL: "/placeholder.svg?height=40&width=40",
-  //       email: "emma.wilson@gmail.com",
-  //       role: "worker",
-  //       coins: 3200,
-  //     },
-  //     {
-  //       _id: "686d3a4445185c3623a16015",
-  //       name: "Michael Brown",
-  //       photoURL: "/placeholder.svg?height=40&width=40",
-  //       email: "michael.brown@gmail.com",
-  //       role: "admin",
-  //       coins: 15000,
-  //     },
-  //     {
-  //       _id: "686d3a4445185c3623a16016",
-  //       name: "Sarah Davis",
-  //       photoURL: "/placeholder.svg?height=40&width=40",
-  //       email: "sarah.davis@gmail.com",
-  //       role: "worker",
-  //       coins: 7890,
-  //     },
-  //     {
-  //       _id: "686d3a4445185c3623a16017",
-  //       name: "David Miller",
-  //       photoURL: "/placeholder.svg?height=40&width=40",
-  //       email: "david.miller@gmail.com",
-  //       role: "buyer",
-  //       coins: 12300,
-  //     },
-  //     {
-  //       _id: "686d3a4445185c3623a16018",
-  //       name: "Lisa Anderson",
-  //       photoURL: "/placeholder.svg?height=40&width=40",
-  //       email: "lisa.anderson@gmail.com",
-  //       role: "worker",
-  //       coins: 4560,
-  //     },
-  //     {
-  //       _id: "686d3a4445185c3623a16019",
-  //       name: "James Taylor",
-  //       photoURL: "/placeholder.svg?height=40&width=40",
-  //       email: "james.taylor@gmail.com",
-  //       role: "buyer",
-  //       coins: 9870,
-  //     },
-  //   ]);
-
   const { data: users, isLoading, error } = useAllUsers();
+  const updateRoleMuation = useUpdateUserRole();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading users: {error.message}</div>;
@@ -121,11 +40,8 @@ const ManageUsers = () => {
   });
 
   const handleRoleChange = (userId, newRole) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user._id === userId ? { ...user, role: newRole } : user
-      )
-    );
+    // update user role using mutation
+    updateRoleMuation.mutate({ userId, newRole });
     // In real app, this would call your API
     console.log(`Updated user ${userId} role to ${newRole}`);
   };
@@ -137,9 +53,9 @@ const ManageUsers = () => {
 
   const confirmDeleteUser = () => {
     if (userToDelete) {
-    //   setUsers((prevUsers) =>
-    //     prevUsers.filter((user) => user._id !== userToDelete._id)
-    //   );
+      //   setUsers((prevUsers) =>
+      //     prevUsers.filter((user) => user._id !== userToDelete._id)
+      //   );
       // In real app, this would call your API
       console.log(`Deleted user ${userToDelete._id}`);
     }
@@ -165,9 +81,9 @@ const ManageUsers = () => {
       "px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1";
     switch (role) {
       case "admin":
-        return `${baseClasses} bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400`;
-      case "buyer":
         return `${baseClasses} bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400`;
+      case "buyer":
+        return `${baseClasses} bg-red-100 text-orange-500 dark:bg-orange-900/30 dark:text-orange-400`;
       case "worker":
         return `${baseClasses} bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400`;
       default:
@@ -178,9 +94,9 @@ const ManageUsers = () => {
   const getRoleGradient = (role) => {
     switch (role) {
       case "admin":
-        return "from-red-500 to-pink-500";
-      case "buyer":
         return "from-blue-500 to-purple-500";
+      case "buyer":
+        return "from-red-500 to-pink-500";
       case "worker":
         return "from-green-500 to-emerald-500";
       default:
