@@ -55,6 +55,7 @@ const TaskDetails = () => {
       });
       refetch();
       queryClient.invalidateQueries(["submissions"]);
+      queryClient.invalidateQueries(["tasks"]);
     },
     onError: (error) => {
       console.error("Submission error:", error);

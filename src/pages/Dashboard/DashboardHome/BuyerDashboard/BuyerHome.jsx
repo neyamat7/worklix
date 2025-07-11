@@ -13,6 +13,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import { useApproveSubmission } from "../../../../hooks/useApproveSubmission";
 import { usePendingSubmissions } from "../../../../hooks/useBuyerPendingSubmissions";
 import { useBuyerTasks } from "../../../../hooks/useBuyerTasks";
 
@@ -22,6 +23,7 @@ const BuyerHome = () => {
   const { user } = useSelector((state) => state.auth);
   // Fetch buyer tasks using custom hook
   const { data: buyerTasks, isLoading } = useBuyerTasks(user?.email);
+  const approveSubmission = useApproveSubmission();
 
   // Fetch pending submissions using custom hook
   const {
@@ -71,10 +73,15 @@ const BuyerHome = () => {
     setIsModalOpen(true);
   };
 
-  const handleApproveSubmission = (submissionId) => {
-    // In real app, this would call your API
-    console.log("Approving submission:", submissionId);
-    alert("Submission approved! Worker's coins have been increased.");
+  const handleApproveSubmission = (submission) => {
+    const { _id, worker_email, payable_amount } = submission;
+
+    approveSubmission.mutate({
+      submissionId: _id,
+      worker_email,
+      payable_amount,
+      task_id: submission.task_id,
+    });
   };
 
   const handleRejectSubmission = (submissionId) => {
@@ -330,7 +337,7 @@ const BuyerHome = () => {
                                 </button>
                                 <button
                                   onClick={() =>
-                                    handleApproveSubmission(submission._id)
+                                    handleApproveSubmission(submission)
                                   }
                                   className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-1"
                                 >
@@ -396,9 +403,7 @@ const BuyerHome = () => {
                             <span>View Submission</span>
                           </button>
                           <button
-                            onClick={() =>
-                              handleApproveSubmission(submission._id)
-                            }
+                            onClick={() => handleApproveSubmission(submission)}
                             className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
                           >
                             <FiCheck className="w-4 h-4" />
@@ -532,7 +537,7 @@ const BuyerHome = () => {
                 </button>
                 <button
                   onClick={() => {
-                    handleApproveSubmission(selectedSubmission._id);
+                    handleApproveSubmission(selectedSubmission);
                     setIsModalOpen(false);
                   }}
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2"
