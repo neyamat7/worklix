@@ -426,7 +426,7 @@ const RegisterPage = () => {
               type="button"
               className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
             >
-              {isSubmitting ? "Creating Account... " : "Create Account"}
+              {isSubmitting ? "Creating... " : "Create Account"}
             </button>
 
             <div className="text-center text-sm text-gray-600 dark:text-gray-400">

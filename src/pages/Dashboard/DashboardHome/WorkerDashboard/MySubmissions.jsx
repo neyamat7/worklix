@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaCoins } from "react-icons/fa";
 import {
   FiCalendar,
   FiCheck,
@@ -14,23 +15,23 @@ import {
   FiUser,
   FiX,
 } from "react-icons/fi";
-import { FaCoins } from 'react-icons/fa';
+import { useSelector } from "react-redux";
 import { usePaginatedSubmissions } from "../../../../hooks/usePaginatedSubmissions";
 
 const MySubmissions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState("table");
+  const { user } = useSelector((state) => state.auth);
 
   const [searchTerm, setSearchTerm] = useState("");
 
   // Mock worker email - replace with actual user data
-  const worker_email = "neyamat7.ullah@gmail.com";
+  const worker_email = user?.email;
 
   const { data, isLoading, error, isFetching } = usePaginatedSubmissions(
     worker_email,
     currentPage
   );
-  console.log(data);
 
   // Filter submissions based on status and search term
   const filteredSubmissions =

@@ -38,6 +38,7 @@ export const registerUser = createAsyncThunk(
         photoURL,
         role,
         coins,
+        uid: res.user.uid,
       });
 
       // 4) Re-fetch the user

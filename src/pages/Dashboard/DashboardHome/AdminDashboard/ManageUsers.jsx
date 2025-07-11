@@ -13,6 +13,7 @@ import {
   FiUsers,
   FiX,
 } from "react-icons/fi";
+import { useDeleteUser } from "../../../../hooks/useDeleteUser";
 import { useUpdateUserRole } from "../../../../hooks/useUpdateUserRole";
 import { useAllUsers } from "../../../../hooks/useUserData";
 
@@ -25,6 +26,9 @@ const ManageUsers = () => {
 
   const { data: users, isLoading, error } = useAllUsers();
   const updateRoleMuation = useUpdateUserRole();
+
+  // delete user mutation
+  const deleteUserMutation = useDeleteUser();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading users: {error.message}</div>;
@@ -53,14 +57,13 @@ const ManageUsers = () => {
 
   const confirmDeleteUser = () => {
     if (userToDelete) {
-      //   setUsers((prevUsers) =>
-      //     prevUsers.filter((user) => user._id !== userToDelete._id)
-      //   );
-      // In real app, this would call your API
-      console.log(`Deleted user ${userToDelete._id}`);
+      deleteUserMutation.mutate(userToDelete._id, {
+        onSettled: () => {
+          setShowDeleteModal(false);
+          setUserToDelete(null);
+        },
+      });
     }
-    setShowDeleteModal(false);
-    setUserToDelete(null);
   };
 
   const getRoleIcon = (role) => {
@@ -624,7 +627,11 @@ const ManageUsers = () => {
                   className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2"
                 >
                   <FiTrash2 className="w-4 h-4" />
-                  <span>Delete User</span>
+                  <span>
+                    {deleteUserMutation.isPending
+                      ? "Deleting..."
+                      : "Delete User"}
+                  </span>
                 </button>
               </div>
             </div>
