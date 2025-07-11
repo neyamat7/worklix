@@ -14,6 +14,7 @@ import {
   FiUser,
   FiX,
 } from "react-icons/fi";
+import { FaCoins } from 'react-icons/fa';
 import { usePaginatedSubmissions } from "../../../../hooks/usePaginatedSubmissions";
 
 const MySubmissions = () => {
@@ -121,7 +122,7 @@ const MySubmissions = () => {
   // Calculate stats
   const totalEarnings = filteredSubmissions
     .filter((s) => s.status === "approved")
-    .reduce((sum, s) => sum + Number.parseInt(s.payable_amount.$numberInt), 0);
+    .reduce((sum, s) => sum + Number.parseInt(s.payable_amount), 0);
 
   const pendingCount = filteredSubmissions.filter(
     (s) => s.status === "pending"
@@ -229,11 +230,11 @@ const MySubmissions = () => {
                     Total Earnings
                   </p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    ${totalEarnings}
+                    {totalEarnings} coins
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
-                  <FiDollarSign className="w-6 h-6 text-white" />
+                  <FaCoins className="w-6 h-6 text-yellow-400" />
                 </div>
               </div>
             </div>

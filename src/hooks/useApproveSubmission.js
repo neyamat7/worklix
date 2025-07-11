@@ -12,6 +12,7 @@ export const useApproveSubmission = () => {
       worker_email,
       payable_amount,
       task_id,
+      buyer_email,
     }) => {
       const res = await axiosSecure.patch(
         `/submissions/${submissionId}/approve`,
@@ -19,6 +20,7 @@ export const useApproveSubmission = () => {
           worker_email,
           payable_amount,
           task_id,
+          buyer_email,
         }
       );
       return res.data;

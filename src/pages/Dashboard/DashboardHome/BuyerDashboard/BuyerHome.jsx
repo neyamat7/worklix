@@ -81,6 +81,7 @@ const BuyerHome = () => {
       worker_email,
       payable_amount,
       task_id: submission.task_id,
+      buyer_email: submission.buyer_email,
     });
   };
 
@@ -342,7 +343,11 @@ const BuyerHome = () => {
                                   className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-1"
                                 >
                                   <FiCheck className="w-3 h-3" />
-                                  <span>Approve</span>
+                                  <span>
+                                    {approveSubmission.isPending
+                                      ? "Approving..."
+                                      : "Approve"}
+                                  </span>
                                 </button>
                                 <button
                                   onClick={() =>
@@ -407,7 +412,11 @@ const BuyerHome = () => {
                             className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
                           >
                             <FiCheck className="w-4 h-4" />
-                            <span>Approve</span>
+                            <span>
+                              {approveSubmission.isPending
+                                ? "Approving..."
+                                : "Approve"}
+                            </span>
                           </button>
                           <button
                             onClick={() =>
@@ -543,7 +552,12 @@ const BuyerHome = () => {
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2"
                 >
                   <FiCheck className="w-4 h-4" />
-                  <span>Approve Submission</span>
+                  <span>
+                    {" "}
+                    {approveSubmission.isPending
+                      ? "Approving..."
+                      : "Approve Submission"}
+                  </span>
                 </button>
               </div>
             </div>
