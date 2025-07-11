@@ -12,204 +12,38 @@ import {
   FiUsers,
   FiX,
 } from "react-icons/fi";
+import { useSelector } from "react-redux";
+import { usePendingSubmissions } from "../../../../hooks/useBuyerPendingSubmissions";
+import { useBuyerTasks } from "../../../../hooks/useBuyerTasks";
 
 const BuyerHome = () => {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useSelector((state) => state.auth);
+  // Fetch buyer tasks using custom hook
+  const { data: buyerTasks, isLoading } = useBuyerTasks(user?.email);
 
-  // Mock buyer data - replace with actual user data
-  const currentBuyer = {
-    email: "saiful@gmail.com",
-    name: "saiful",
-  };
+  // Fetch pending submissions using custom hook
+  const {
+    data: pendingSubmissions,
+    isLoading: isLoadingSubmissons,
+    error,
+  } = usePendingSubmissions(user?.email);
 
-  // Dummy tasks data based on your database structure
-  const buyerTasks = [
-    {
-      _id: "686fa052b72b4e22fac40581",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      task_title: "Elit velit sequi e",
-      task_detail:
-        "Tenetur consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      task_image_url:
-        "https://i.ibb.co/LD2g4qpw/Screenshot-2025-04-27-232435.png",
-      submission_info: "Autem quo eiusmod om",
-      total_workers: 66,
-      required_workers: 66,
-      payable_amount: 4,
-      total_payable_amount: 264,
-      total_paid_workers: 0,
-      total_paid_amount: 0,
-      completion_date: "2025-07-10T00:00:00.000+00:00",
-      created_at: "2025-07-10T11:13:22.929+00:00",
-      status: "active",
-    },
-    {
-      _id: "686fa052b72b4e22fac40582",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      task_title: "Create modern website design",
-      task_detail:
-        "Need a responsive website design with modern UI/UX principles for my business portfolio.",
-      task_image_url: "/placeholder.svg?height=200&width=300",
-      submission_info: "Submit design files in PSD/Figma format",
-      total_workers: 50,
-      required_workers: 45,
-      payable_amount: 25,
-      total_payable_amount: 1250,
-      total_paid_workers: 5,
-      total_paid_amount: 125,
-      completion_date: "2025-07-15T00:00:00.000+00:00",
-      created_at: "2025-07-08T09:30:15.123+00:00",
-      status: "active",
-    },
-    {
-      _id: "686fa052b72b4e22fac40583",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      task_title: "Write product descriptions",
-      task_detail:
-        "Need compelling product descriptions for e-commerce store with SEO optimization.",
-      task_image_url: "/placeholder.svg?height=200&width=300",
-      submission_info: "Submit descriptions in Word document format",
-      total_workers: 30,
-      required_workers: 25,
-      payable_amount: 8,
-      total_payable_amount: 240,
-      total_paid_workers: 5,
-      total_paid_amount: 40,
-      completion_date: "2025-07-12T00:00:00.000+00:00",
-      created_at: "2025-07-06T14:20:30.456+00:00",
-      status: "active",
-    },
-    {
-      _id: "686fa052b72b4e22fac40584",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      task_title: "Social media content creation",
-      task_detail:
-        "Create engaging social media posts for Instagram and Facebook with graphics and captions.",
-      task_image_url: "/placeholder.svg?height=200&width=300",
-      submission_info: "Submit high-resolution images with captions",
-      total_workers: 20,
-      required_workers: 20,
-      payable_amount: 15,
-      total_payable_amount: 300,
-      total_paid_workers: 0,
-      total_paid_amount: 0,
-      completion_date: "2025-07-20T00:00:00.000+00:00",
-      created_at: "2025-07-09T16:45:12.789+00:00",
-      status: "active",
-    },
-    {
-      _id: "686fa052b72b4e22fac40585",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      task_title: "Logo design project",
-      task_detail:
-        "Design a modern, professional logo for tech startup with multiple variations.",
-      task_image_url: "/placeholder.svg?height=200&width=300",
-      submission_info: "Submit vector files in AI/EPS format",
-      total_workers: 10,
-      required_workers: 8,
-      payable_amount: 50,
-      total_payable_amount: 500,
-      total_paid_workers: 2,
-      total_paid_amount: 100,
-      completion_date: "2025-07-18T00:00:00.000+00:00",
-      created_at: "2025-07-05T12:15:45.321+00:00",
-      status: "active",
-    },
-  ];
-
-  // Dummy submissions data based on your database structure
-  const pendingSubmissions = [
-    {
-      _id: "686fe55aca3e6dae34d38e69",
-      task_id: "686fa052b72b4e22fac40581",
-      task_title: "Elit velit sequi e",
-      payable_amount: 4,
-      submission_details:
-        "dfgdgdsfg completed the task as requested with attention to detail and quality work.",
-      worker_email: "neyamat7.ullah@gmail.com",
-      worker_name: "Neyamat Ullah",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      submission_date: "2025-07-10T16:07:54.705Z",
-      status: "pending",
-    },
-    {
-      _id: "686fe55aca3e6dae34d38e70",
-      task_id: "686fa052b72b4e22fac40582",
-      task_title: "Create modern website design",
-      payable_amount: 25,
-      submission_details:
-        "I have completed the website design with modern UI/UX principles. The design includes responsive layouts for desktop, tablet, and mobile devices. All files are provided in Figma format with detailed specifications.",
-      worker_email: "john.designer@gmail.com",
-      worker_name: "John Designer",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      submission_date: "2025-07-09T14:30:22.123Z",
-      status: "pending",
-    },
-    {
-      _id: "686fe55aca3e6dae34d38e71",
-      task_id: "686fa052b72b4e22fac40583",
-      task_title: "Write product descriptions",
-      payable_amount: 8,
-      submission_details:
-        "Completed 5 compelling product descriptions with SEO optimization. Each description is 150-200 words and highlights key features, benefits, and includes relevant keywords for better search visibility.",
-      worker_email: "writer.pro@gmail.com",
-      worker_name: "Sarah Writer",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      submission_date: "2025-07-08T09:15:45.456Z",
-      status: "pending",
-    },
-    {
-      _id: "686fe55aca3e6dae34d38e72",
-      task_id: "686fa052b72b4e22fac40584",
-      task_title: "Social media content creation",
-      payable_amount: 15,
-      submission_details:
-        "Created 10 engaging social media posts with high-quality graphics, compelling captions, and relevant hashtags. Content is optimized for both Instagram and Facebook platforms with proper sizing and formats.",
-      worker_email: "social.expert@gmail.com",
-      worker_name: "Mike Social",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      submission_date: "2025-07-07T11:45:30.789Z",
-      status: "pending",
-    },
-    {
-      _id: "686fe55aca3e6dae34d38e73",
-      task_id: "686fa052b72b4e22fac40585",
-      task_title: "Logo design project",
-      payable_amount: 50,
-      submission_details:
-        "Designed a modern, professional logo with 3 different variations including horizontal, vertical, and icon-only versions. All files provided in vector format (AI, EPS, SVG) and high-resolution PNG/JPG formats.",
-      worker_email: "logo.artist@gmail.com",
-      worker_name: "Emma Designer",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      submission_date: "2025-07-06T16:20:15.321Z",
-      status: "pending",
-    },
-    {
-      _id: "686fe55aca3e6dae34d38e74",
-      task_id: "686fa052b72b4e22fac40582",
-      task_title: "Create modern website design",
-      payable_amount: 25,
-      submission_details:
-        "Delivered a complete website design package including homepage, about page, services page, and contact page. The design follows modern trends with clean typography, proper spacing, and intuitive navigation.",
-      worker_email: "web.designer@gmail.com",
-      worker_name: "Alex Web",
-      buyer_email: "saiful@gmail.com",
-      buyer_name: "saiful",
-      submission_date: "2025-07-05T13:10:40.654Z",
-      status: "pending",
-    },
-  ];
+  if (isLoading || isLoadingSubmissons) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-blue-500"></div>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-red-500">Error: {error.message}</p>
+      </div>
+    );
+  }
 
   // Calculate stats
   const totalTasks = buyerTasks.length;
@@ -261,7 +95,7 @@ const BuyerHome = () => {
                   Buyer Dashboard
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Welcome back, {currentBuyer.name}! Manage your tasks and
+                  Welcome back, {user?.displayName}! Manage your tasks and
                   review submissions.
                 </p>
               </div>

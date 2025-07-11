@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   FiCalendar,
@@ -11,6 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { useBuyerTasks } from "../../../../hooks/useBuyerTasks";
 import TaskEditModal from "./TaskEditModal";
 
 const MyTask = () => {
@@ -22,15 +23,7 @@ const MyTask = () => {
   const [editTask, setEditTask] = useState();
 
   // Fetch tasks using TanStack Query
-  const { data: tasks, isLoading } = useQuery({
-    queryKey: ["tasks"],
-    queryFn: async () => {
-      const { data } = await axiosSecure.get("/buyer/tasks", {
-        params: { email: user?.email },
-      });
-      return data;
-    },
-  });
+  const { data: tasks, isLoading } = useBuyerTasks(user?.email);
 
   // Delete mutation
   const deleteMutation = useMutation({
@@ -71,7 +64,7 @@ const MyTask = () => {
     }
   };
 
-  const { mutate: updateTask, isLoading: isUpdating } = useMutation({
+  const { mutate: updateTask, isPending: isUpdating } = useMutation({
     mutationFn: async ({ taskId, updateData }) => {
       await axiosSecure.patch(`/buyer/tasks/${taskId}`, updateData);
     },
