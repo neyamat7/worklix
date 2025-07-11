@@ -13,9 +13,11 @@ import {
   FiX,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import { useApproveSubmission } from "../../../../hooks/useApproveSubmission";
 import { usePendingSubmissions } from "../../../../hooks/useBuyerPendingSubmissions";
 import { useBuyerTasks } from "../../../../hooks/useBuyerTasks";
+import { useRejectSubmission } from "../../../../hooks/useRejectSubmission";
 
 const BuyerHome = () => {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
@@ -24,6 +26,7 @@ const BuyerHome = () => {
   // Fetch buyer tasks using custom hook
   const { data: buyerTasks, isLoading } = useBuyerTasks(user?.email);
   const approveSubmission = useApproveSubmission();
+  const rejectSubmission = useRejectSubmission();
 
   // Fetch pending submissions using custom hook
   const {
@@ -85,10 +88,40 @@ const BuyerHome = () => {
     });
   };
 
-  const handleRejectSubmission = (submissionId) => {
-    // In real app, this would call your API
-    console.log("Rejecting submission:", submissionId);
-    alert("Submission rejected! Required workers count has been increased.");
+  const handleRejectSubmission = (submission) => {
+    Swal.fire({
+      title: "Reject Submission?",
+      html: `
+    <div class="text-center">
+      <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-4">
+        <svg class="h-10 w-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </div>
+      <p class="text-gray-700">Are you sure you want to reject this submission?</p>
+    </div>
+  `,
+      showCancelButton: true,
+      confirmButtonText: "Yes, Reject",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#EF4444", // Tailwind red-500
+      cancelButtonColor: "#E5E7EB", // Tailwind gray-200
+      background: "#f9fafb", // Tailwind gray-50
+      width: "28rem",
+      customClass: {
+        confirmButton: "px-4 py-2 rounded-md font-medium",
+        cancelButton: "px-4 py-2 rounded-md font-medium text-gray-700",
+        popup: "rounded-lg shadow-xl",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        rejectSubmission.mutate({
+          submissionId: submission._id,
+          task_id: submission.task_id,
+        });
+      }
+    });
   };
 
   return (
@@ -351,7 +384,7 @@ const BuyerHome = () => {
                                 </button>
                                 <button
                                   onClick={() =>
-                                    handleRejectSubmission(submission._id)
+                                    handleRejectSubmission(submission)
                                   }
                                   className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-1"
                                 >
@@ -419,9 +452,7 @@ const BuyerHome = () => {
                             </span>
                           </button>
                           <button
-                            onClick={() =>
-                              handleRejectSubmission(submission._id)
-                            }
+                            onClick={() => handleRejectSubmission(submission)}
                             className="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
                           >
                             <FiX className="w-4 h-4" />
@@ -536,7 +567,7 @@ const BuyerHome = () => {
               <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                 <button
                   onClick={() => {
-                    handleRejectSubmission(selectedSubmission._id);
+                    handleRejectSubmission(selectedSubmission);
                     setIsModalOpen(false);
                   }}
                   className="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2"
