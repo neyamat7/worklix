@@ -5,6 +5,7 @@ import LoginPage from "../components/auth/LoginPage";
 import RegisterPage from "../components/auth/RegisterPage";
 import DashboardLayouts from "../layouts/DashboardLayouts";
 import RootLayout from "../layouts/RootLayout";
+import ManageUsers from "../pages/Dashboard/DashboardHome/AdminDashboard/ManageUsers";
 import AddNewTask from "../pages/Dashboard/DashboardHome/BuyerDashboard/AddNewTask";
 import MyTask from "../pages/Dashboard/DashboardHome/BuyerDashboard/MyTask";
 import PaymentRecords from "../pages/Dashboard/DashboardHome/BuyerDashboard/PaymentRecords";
@@ -82,6 +83,11 @@ const router = createBrowserRouter([
       {
         path: "my-submissions",
         element: <MySubmissions />,
+      },
+      // admin routes
+      {
+        path: "manage-users",
+        element: <ManageUsers />,
       },
     ],
   },

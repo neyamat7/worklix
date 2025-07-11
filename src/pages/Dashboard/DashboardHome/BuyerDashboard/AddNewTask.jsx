@@ -114,7 +114,7 @@ const AddNewTask = ({ userCoins = 1000 }) => {
         scrollbarPadding: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate("/dashboard/purchase-coin");
+          navigate("/dashboard/purchase-coins");
         }
       });
       return;

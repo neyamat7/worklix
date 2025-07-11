@@ -12,7 +12,7 @@ import {
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useRecordPayment } from "../../../../../hooks/useRecordPayment";
-import { useUserData } from "../../../../../hooks/useUserData";
+import { useSingleUserData } from "../../../../../hooks/useUserData";
 import CheckoutForm from "./CheckoutForm";
 
 // Initialize Stripe
@@ -62,7 +62,7 @@ const PurchaseCoins = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [showCheckout, setShowCheckout] = useState(false);
   const { user: authUser } = useSelector((state) => state.auth);
-  const { data: user, isLoading, error } = useUserData(authUser?.email);
+  const { data: user, isLoading, error } = useSingleUserData(authUser?.email);
 
   const handlePackageSelect = (pkg) => {
     setSelectedPackage(pkg);

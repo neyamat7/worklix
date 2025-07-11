@@ -124,8 +124,8 @@ const DashboardLayouts = () => {
 
     const roleSpecificItems = {
       admin: [
-        { name: "Manage Users", icon: "👥" },
-        { name: "Manage Tasks", icon: "⚙️" },
+        { name: "Manage Users", icon: "👥", path: "/dashboard/manage-users" },
+        { name: "Manage Tasks", icon: "⚙️", path: "/dashboard/manage-tasks" },
       ],
       buyer: [
         { name: "Add New Tasks", icon: "➕", path: "/dashboard/add-new-task" },
