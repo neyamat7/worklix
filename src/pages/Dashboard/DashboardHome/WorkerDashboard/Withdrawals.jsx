@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useCreateWithdrawal } from "../../../../hooks/useRequestWithdrawal";
 import { useSingleUserData } from "../../../../hooks/useUserData";
 
 export default function Withdrawal() {
@@ -21,6 +22,8 @@ export default function Withdrawal() {
   const { user } = useSelector((state) => state.auth);
 
   const { data: workerData, isLoading } = useSingleUserData(user?.email);
+
+  const withdrawMutation = useCreateWithdrawal();
 
   const paymentSystems = [
     { value: "bkash", label: "bKash" },
@@ -71,14 +74,13 @@ export default function Withdrawal() {
     };
 
     // save withdrawal data to the database
+    withdrawMutation.mutate(withdrawalData, { userId: workerData._id });
 
     setCoinsToWithdraw(0);
     setWithdrawalAmount(0);
     setPaymentSystem("");
     setAccountNumber("");
     setIsSubmitting(false);
-
-    alert("Withdrawal request submitted successfully!");
   };
 
   return (
@@ -270,7 +272,12 @@ export default function Withdrawal() {
                   <>
                     {canWithdraw ? (
                       <>
-                        <span>Withdraw Funds</span>
+                        <span>
+                          {" "}
+                          {withdrawMutation.isPending
+                            ? "Processing..."
+                            : "Withdraw Funds"}
+                        </span>
                         <ArrowRight className="w-5 h-5" />
                       </>
                     ) : (
