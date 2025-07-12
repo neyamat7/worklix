@@ -12,6 +12,7 @@ export function useSingleUserData(email) {
       const res = await axiosSecure.get("/users/single-user", {
         params: { email },
       });
+
       return res.data;
     },
     enabled: !!email,

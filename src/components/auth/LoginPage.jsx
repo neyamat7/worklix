@@ -58,12 +58,14 @@ const LoginPage = () => {
     if (googleSignIn.fulfilled.match(resultAction)) {
       // Google sign-in succeeded
       const user = resultAction.payload;
+      console.log("Google user data:", user);
 
       const userInfo = {
         email: user?.email,
         name: user?.displayName,
         photoURL: user?.photoURL,
         coins: 10,
+        uid: user?.uid,
       };
 
       try {

@@ -14,10 +14,12 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { useSingleUserData } from "../../../../hooks/useUserData";
 
-const AddNewTask = ({ userCoins = 1000 }) => {
+const AddNewTask = () => {
   const { user } = useSelector((state) => state.auth);
   const axiosSecure = useAxiosSecure();
+  const { data: userData } = useSingleUserData(user?.email);
 
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
@@ -91,18 +93,22 @@ const AddNewTask = ({ userCoins = 1000 }) => {
 
   const onSubmit = (data) => {
     const totalCost = data.required_workers * data.payable_amount;
+    console.log(userData?.coins, totalCost);
 
     // Check coin balance
-    if (totalCost > userCoins) {
+    if (totalCost > userData?.coins) {
+      console.log("Insufficient coins:", userData?.coins, totalCost);
       Swal.fire({
         icon: "error",
         title: "Insufficient Coins",
         html: `
         <div class="text-left">
           <p>You need <strong>${
-            totalCost - userCoins
+            totalCost - userData?.coins
           }</strong> more coins to create this task.</p>
-          <p class="mt-2">Current balance: <strong>${userCoins} coins</strong></p>
+          <p class="mt-2">Current balance: <strong>${
+            userData?.coins
+          } coins</strong></p>
           <p class="mt-2">Total required: <strong>${totalCost} coins</strong></p>
         </div>
       `,
