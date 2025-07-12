@@ -9,6 +9,7 @@ import {
   FaUsers,
   FaUserTie,
 } from "react-icons/fa";
+import { useApproveWithdrawal } from "../../../../hooks/useApproveWithdrawal";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { usePendingWithdrawals } from "../../../../hooks/usePendingWithdrawals";
 import { useAllUsers } from "../../../../hooks/useUserData";
@@ -20,6 +21,7 @@ export default function AdminHome() {
 
   const { data: withdrawalRequests, isLoading: withdrawalsLoading } =
     usePendingWithdrawals();
+  const approveWithdrawalMutation = useApproveWithdrawal();
 
   const { data: totalPayments, isLoading } = useQuery({
     queryKey: ["total-payments"],
@@ -43,14 +45,7 @@ export default function AdminHome() {
   const totalAvailableCoins = users.reduce((sum, user) => sum + user.coins, 0);
 
   const handlePaymentSuccess = (withdrawalId) => {
-    // setWithdrawalRequests((prev) =>
-    //   prev.map((request) =>
-    //     request._id === withdrawalId
-    //       ? { ...request, status: "approved" }
-    //       : request
-    //   )
-    // );
-   
+    approveWithdrawalMutation.mutate(withdrawalId);
   };
 
   const formatDate = (dateString) => {
