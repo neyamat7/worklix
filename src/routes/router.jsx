@@ -15,6 +15,7 @@ import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
 import MySubmissions from "../pages/Dashboard/DashboardHome/WorkerDashboard/MySubmissions";
 import TaskDetails from "../pages/Dashboard/DashboardHome/WorkerDashboard/TaskDetails";
 import TaskList from "../pages/Dashboard/DashboardHome/WorkerDashboard/TaskList";
+import Withdrawal from "../pages/Dashboard/DashboardHome/WorkerDashboard/Withdrawals";
 import Home from "../pages/Home/Home/Home";
 import PrivateRoutes from "./PrivateRoutes";
 
@@ -84,6 +85,10 @@ const router = createBrowserRouter([
       {
         path: "my-submissions",
         element: <MySubmissions />,
+      },
+      {
+        path: "withdrawals",
+        element: <Withdrawal />,
       },
       // admin routes
       {
