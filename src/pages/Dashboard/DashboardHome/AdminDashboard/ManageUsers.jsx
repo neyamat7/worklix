@@ -116,8 +116,8 @@ const ManageUsers = () => {
 
   return (
     <div>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
-        <div className="relative z-10 min-h-screen p-4">
+      <div className="h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
+        <div className="relative z-10 h-full p-4">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="flex justify-between items-center mb-8 pt-8">

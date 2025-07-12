@@ -565,7 +565,7 @@ const DashboardLayouts = () => {
     <div className="h-screen bg-gray-50 dark:bg-gray-900 flex overflow-hidden">
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 z-50 w-64 h-screen bg-white dark:bg-gray-800 shadow-lg transform ${
+        className={`fixed top-0 left-0 z-50 w-72 h-screen bg-white dark:bg-gray-800 shadow-lg transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
         style={{ height: "100vh" }} // Ensures sidebar is always full height
@@ -603,7 +603,7 @@ const DashboardLayouts = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto flex flex-col min-h-screen">
         {/* Navbar */}
         <header className="bg-white z-50 sticky top-0 dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between px-4 py-4">
@@ -679,9 +679,17 @@ const DashboardLayouts = () => {
         </header>
 
         {/* Page Content */}
-        <main className="">
+        <main className="flex-1">
           <Outlet />
         </main>
+
+        <footer className="bg-white dark:bg-gray-800 shadow-inner">
+          <div className="container mx-auto px-4 py-2">
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+              &copy; {new Date().getFullYear()} Worklix. All rights reserved.
+            </p>
+          </div>
+        </footer>
       </div>
 
       {/* Overlay for mobile sidebar */}

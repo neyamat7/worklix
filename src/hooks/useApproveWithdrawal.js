@@ -19,7 +19,7 @@ export const useApproveWithdrawal = () => {
         confirmButtonText: "OK",
       });
 
-      // ✅ Refetch the pending withdrawals list
+      // ✅ Refetch the pending withdrawals
       queryClient.invalidateQueries(["pendingWithdrawals"]);
     },
     onError: (error) => {
