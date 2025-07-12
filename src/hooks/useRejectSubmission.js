@@ -7,10 +7,16 @@ export const useRejectSubmission = () => {
   const axiosSecure = useAxiosSecure();
 
   return useMutation({
-    mutationFn: async ({ submissionId, task_id }) => {
+    mutationFn: async ({
+      submissionId,
+      task_id,
+      buyer_name,
+      worker_email,
+      task_title,
+    }) => {
       const res = await axiosSecure.patch(
         `/submissions/${submissionId}/reject`,
-        { task_id }
+        { task_id, buyer_name, worker_email, task_title }
       );
       return res.data;
     },

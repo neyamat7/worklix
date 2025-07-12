@@ -44,8 +44,16 @@ export default function AdminHome() {
   const totalBuyers = users.filter((user) => user.role === "buyer").length;
   const totalAvailableCoins = users.reduce((sum, user) => sum + user.coins, 0);
 
-  const handlePaymentSuccess = (withdrawalId) => {
-    approveWithdrawalMutation.mutate(withdrawalId);
+  const handlePaymentSuccess = ({
+    _id: withdrawalId,
+    withdrawal_amount,
+    worker_email,
+  }) => {
+    approveWithdrawalMutation.mutate({
+      withdrawalId,
+      withdrawal_amount,
+      worker_email,
+    });
   };
 
   const formatDate = (dateString) => {
@@ -284,7 +292,7 @@ export default function AdminHome() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <button
-                          onClick={() => handlePaymentSuccess(request._id)}
+                          onClick={() => handlePaymentSuccess(request)}
                           className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 flex items-center space-x-2"
                         >
                           <FaCheckCircle className="w-4 h-4" />
@@ -368,7 +376,7 @@ export default function AdminHome() {
                   </div>
 
                   <button
-                    onClick={() => handlePaymentSuccess(request._id)}
+                    onClick={() => handlePaymentSuccess(request)}
                     className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-4 py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
                   >
                     <FaCheckCircle className="w-4 h-4" />

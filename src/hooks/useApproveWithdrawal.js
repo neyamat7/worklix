@@ -7,8 +7,11 @@ export const useApproveWithdrawal = () => {
   const axiosSecure = useAxiosSecure();
 
   return useMutation({
-    mutationFn: async (withdrawalId) => {
-      const res = await axiosSecure.patch(`/withdraw/${withdrawalId}/approve`);
+    mutationFn: async ({ withdrawalId, withdrawal_amount, worker_email }) => {
+      const res = await axiosSecure.patch(`/withdraw/${withdrawalId}/approve`, {
+        withdrawal_amount,
+        worker_email,
+      });
       return res.data;
     },
     onSuccess: () => {

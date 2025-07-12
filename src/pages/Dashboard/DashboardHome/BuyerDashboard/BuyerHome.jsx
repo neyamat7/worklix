@@ -119,6 +119,9 @@ const BuyerHome = () => {
         rejectSubmission.mutate({
           submissionId: submission._id,
           task_id: submission.task_id,
+          buyer_name: submission.buyer_name,
+          worker_email: submission.worker_email,
+          task_title: submission.task_title,
         });
       }
     });

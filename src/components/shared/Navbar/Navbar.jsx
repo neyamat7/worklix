@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
 import { signOutUser } from "../../../features/auth/authSlice";
 import { useTheme } from "../../../hooks/useTheme";
+import { useSingleUserData } from "../../../hooks/useUserData";
 import ThemeToggle from "../../ThemeToggle/ThemeToggle";
 
 const Navbar = () => {
@@ -13,15 +14,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   // get user from redux store
-  const { user } = useSelector((state) => state.auth);
-
-  // Mock user data
-  const userData = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    avatar: "/placeholder.svg?height=40&width=40",
-    coins: 1250,
-  };
+  const { user, loading } = useSelector((state) => state.auth);
+  const { data: userData, isLoading } = useSingleUserData(user?.email);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -37,6 +31,12 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  if (loading || isLoading) {
+    return (
+      <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50"></nav>
+    );
+  }
 
   const handleLogout = () => {
     dispatch(signOutUser());
@@ -93,7 +93,7 @@ const Navbar = () => {
                   >
                     Dashboard
                   </a>
-                  <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-2 rounded-lg">
+                  <div className="flex items-center space-x-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-2 rounded-lg">
                     <svg
                       className="w-4 h-4"
                       fill="currentColor"
@@ -107,7 +107,7 @@ const Navbar = () => {
                       />
                     </svg>
                     <span className="text-sm font-semibold">
-                      {userData.coins}
+                      Coins: {userData?.coins}
                     </span>
                   </div>
                   <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105">
@@ -123,7 +123,7 @@ const Navbar = () => {
                       className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full"
                     >
                       <img
-                        src={userData.avatar || "/placeholder.svg"}
+                        src={user.photoURL || "/placeholder.svg"}
                         alt="Profile"
                         className="w-10 h-10 rounded-full border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 transition-colors duration-200"
                       />
@@ -134,16 +134,16 @@ const Navbar = () => {
                       <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-4 px-6 z-50 transform transition-all duration-200 ease-out">
                         <div className="flex items-center space-x-4 mb-4">
                           <img
-                            src={userData.avatar || "/placeholder.svg"}
+                            src={user.photoURL || "/placeholder.svg"}
                             alt="Profile"
                             className="w-16 h-16 rounded-full border-2 border-gray-300 dark:border-gray-600"
                           />
                           <div>
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {userData.name}
+                              {user.name}
                             </h3>
                             <p className="text-sm text-gray-600 dark:text-gray-400">
-                              {userData.email}
+                              {user.email}
                             </p>
                           </div>
                         </div>
@@ -283,16 +283,16 @@ const Navbar = () => {
                 {/* User Profile Section */}
                 <div className="flex items-center space-x-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <img
-                    src={userData.avatar || "/placeholder.svg"}
+                    src={user.photoURL || "/placeholder.svg"}
                     alt="Profile"
                     className="w-12 h-12 rounded-full border-2 border-gray-300 dark:border-gray-600"
                   />
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white">
-                      {userData.name}
+                      {user.name}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {userData.email}
+                      {user.email}
                     </p>
                   </div>
                 </div>
