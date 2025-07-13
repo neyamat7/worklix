@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import Footer from "../components/shared/Footer/Footer";
 import Navbar from "../components/shared/Navbar/Navbar";
 
 const RootLayout = () => {
@@ -8,13 +9,7 @@ const RootLayout = () => {
       <div className="flex-1">
         <Outlet />
       </div>
-      <footer className="bg-gray-800 text-white py-4 text-center">
-        <div className="container mx-auto">
-          <p className="text-sm">
-            &copy; {new Date().getFullYear()} Worklix. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
