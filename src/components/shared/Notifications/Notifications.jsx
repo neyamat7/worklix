@@ -4,6 +4,7 @@ import { HiOutlineExclamation } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useNotifications } from "../../../hooks/useNotifications";
+import { showNotificationToast } from "../../../utils/showNotificationToast";
 import { socket } from "../../../utils/socket";
 
 const NotificationPopup = () => {
@@ -34,6 +35,7 @@ const NotificationPopup = () => {
     function handleNewNotification(notification) {
       if (notification.toEmail === user?.email) {
         setNotifications((prev) => [notification, ...prev]);
+        showNotificationToast(notification);
       }
     }
 
