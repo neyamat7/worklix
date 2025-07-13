@@ -5,7 +5,7 @@ export default function Unauthorized() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 dark:bg-slate-900 p-4">
+    <div className="h-full flex flex-col justify-center items-center bg-gray-100 dark:bg-slate-900 p-4">
       <h2 className="text-2xl font-semibold text-red-600 mb-2">
         Unauthorized Access
       </h2>

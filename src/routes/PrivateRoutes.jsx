@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router";
+import Loading from "../components/shared/Loading/Loading";
 
 const PrivateRoutes = ({ children }) => {
   const { user, loading } = useSelector((state) => state.auth);
@@ -7,7 +8,7 @@ const PrivateRoutes = ({ children }) => {
   const location = useLocation();
 
   if (loading) {
-    return <h1>Loading , please wait</h1>;
+    return <Loading />;
   }
 
   if (!user) {

@@ -142,7 +142,7 @@ export default function FeaturedSection() {
       : tasks.filter((task) => task.category === selectedCategory);
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 dark:bg-gray-900 relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">

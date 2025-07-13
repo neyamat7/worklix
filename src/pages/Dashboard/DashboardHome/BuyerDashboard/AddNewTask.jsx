@@ -13,11 +13,12 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import Loading from "../../../../components/shared/Loading/Loading";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useSingleUserData } from "../../../../hooks/useUserData";
 
 const AddNewTask = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user, loading } = useSelector((state) => state.auth);
   const axiosSecure = useAxiosSecure();
   const { data: userData } = useSingleUserData(user?.email);
 
@@ -140,6 +141,8 @@ const AddNewTask = () => {
 
     createTaskMutation.mutate(newTask);
   };
+
+  if (loading) return <Loading />;
 
   return (
     <div className="min-h-[calc(100vh-69px)] bg-gray-50 dark:bg-gray-900 p-4 md:p-8">

@@ -4,7 +4,7 @@ import ErrorMessage from "../components/shared/ErrorMessage/ErrorMessage";
 import Loading from "../components/shared/Loading/Loading";
 import { useUserRole } from "../hooks/useUserRole";
 
-const AdminRoute = ({ children }) => {
+const BuyerRoute = ({ children }) => {
   const { user } = useSelector((state) => state.auth);
   const { role, roleLoading, error } = useUserRole();
   const location = useLocation();
@@ -24,7 +24,7 @@ const AdminRoute = ({ children }) => {
     return <ErrorMessage message={error.message} />;
   }
 
-  if (user?.email && role !== "admin") {
+  if (user?.email && role !== "buyer") {
     return <Navigate to="/dashboard/unauthorized" replace />;
   }
 
@@ -32,4 +32,4 @@ const AdminRoute = ({ children }) => {
   return children;
 };
 
-export default AdminRoute;
+export default BuyerRoute;

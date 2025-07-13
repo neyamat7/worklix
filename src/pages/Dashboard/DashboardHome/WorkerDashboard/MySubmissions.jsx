@@ -16,6 +16,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import Loading from "../../../../components/shared/Loading/Loading";
 import { usePaginatedSubmissions } from "../../../../hooks/usePaginatedSubmissions";
 
 const MySubmissions = () => {
@@ -133,16 +134,7 @@ const MySubmissions = () => {
   ).length;
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <FiLoader className="animate-spin h-12 w-12 text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">
-            Loading submissions...
-          </p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

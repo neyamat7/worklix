@@ -7,7 +7,6 @@ export function useUserRole() {
   const axiosSecure = useAxiosSecure();
 
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
 
   const { data: role, isLoading: roleLoading } = useQuery({
     queryKey: ["userRole", user?.email],

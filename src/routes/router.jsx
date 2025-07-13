@@ -17,7 +17,11 @@ import TaskDetails from "../pages/Dashboard/DashboardHome/WorkerDashboard/TaskDe
 import TaskList from "../pages/Dashboard/DashboardHome/WorkerDashboard/TaskList";
 import Withdrawal from "../pages/Dashboard/DashboardHome/WorkerDashboard/Withdrawals";
 import Home from "../pages/Home/Home/Home";
+import Unauthorized from "../pages/UnAuthorized/UnAuthorized";
+import AdminRoute from "./AdminRoute";
+import BuyerRoute from "./BuyerRoute";
 import PrivateRoutes from "./PrivateRoutes";
+import WorkerRoute from "./WorkerRoute";
 
 const router = createBrowserRouter([
   {
@@ -45,7 +49,6 @@ const router = createBrowserRouter([
     element: (
       <PrivateRoutes>
         <DashboardLayouts />
-        {/* <Dashboard /> */}
       </PrivateRoutes>
     ),
     children: [
@@ -59,45 +62,89 @@ const router = createBrowserRouter([
       },
       {
         path: "add-new-task",
-        element: <AddNewTask />,
+        element: (
+          <BuyerRoute>
+            <AddNewTask />
+          </BuyerRoute>
+        ),
       },
       {
         path: "my-tasks",
-        element: <MyTask />,
+        element: (
+          <BuyerRoute>
+            <MyTask />
+          </BuyerRoute>
+        ),
       },
       {
         path: "purchase-coins",
-        element: <PurchaseCoins />,
+        element: (
+          <BuyerRoute>
+            <PurchaseCoins />
+          </BuyerRoute>
+        ),
       },
       {
         path: "payment-records",
-        element: <PaymentRecords />,
+        element: (
+          <BuyerRoute>
+            <PaymentRecords />
+          </BuyerRoute>
+        ),
       },
       // worker routes
       {
         path: "task-list",
-        element: <TaskList />,
+        element: (
+          <WorkerRoute>
+            <TaskList />
+          </WorkerRoute>
+        ),
       },
       {
         path: "task-details/:taskId",
-        element: <TaskDetails />,
+        element: (
+          <WorkerRoute>
+            <TaskDetails />
+          </WorkerRoute>
+        ),
       },
       {
         path: "my-submissions",
-        element: <MySubmissions />,
+        element: (
+          <WorkerRoute>
+            <MySubmissions />
+          </WorkerRoute>
+        ),
       },
       {
         path: "withdrawals",
-        element: <Withdrawal />,
+        element: (
+          <WorkerRoute>
+            <Withdrawal />
+          </WorkerRoute>
+        ),
       },
       // admin routes
       {
         path: "manage-users",
-        element: <ManageUsers />,
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
       },
       {
         path: "manage-tasks",
-        element: <ManageTasks />,
+        element: (
+          <AdminRoute>
+            <ManageTasks />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "unauthorized",
+        element: <Unauthorized />,
       },
     ],
   },
