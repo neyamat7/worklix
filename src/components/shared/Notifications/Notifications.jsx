@@ -4,6 +4,7 @@ import { HiOutlineExclamation } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useNotifications } from "../../../hooks/useNotifications";
+import { socket } from "../../../utils/socket";
 
 const NotificationPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,37 @@ const NotificationPopup = () => {
   const notificationRef = useRef(null);
   const { user } = useSelector((state) => state.auth);
 
-  const { data: notifications, isLoading } = useNotifications(user?.email);
+  const { data, isLoading } = useNotifications(user?.email);
+
+  // 2️⃣ Local state to hold notifications
+  const [notifications, setNotifications] = useState([]);
+
+  // 3️⃣ Populate state when TanStack loads data
+  useEffect(() => {
+    if (data) {
+      setNotifications(data);
+    }
+  }, [data]);
+
+  // 4️⃣ Subscribe to socket events
+  useEffect(() => {
+    if (!user?.email) return;
+
+    // Join a room for this user (optional, but better)
+    socket.emit("join", user?.email);
+
+    function handleNewNotification(notification) {
+      if (notification.toEmail === user?.email) {
+        setNotifications((prev) => [notification, ...prev]);
+      }
+    }
+
+    socket.on("new-notification", handleNewNotification);
+
+    return () => {
+      socket.off("new-notification", handleNewNotification);
+    };
+  }, [user?.email]);
 
   const togglePopup = () => setIsOpen(!isOpen);
   const closePopup = () => setIsOpen(false);

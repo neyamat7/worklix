@@ -44,15 +44,9 @@ export default function AdminHome() {
   const totalBuyers = users.filter((user) => user.role === "buyer").length;
   const totalAvailableCoins = users.reduce((sum, user) => sum + user.coins, 0);
 
-  const handlePaymentSuccess = ({
-    _id: withdrawalId,
-    withdrawal_amount,
-    worker_email,
-  }) => {
+  const handlePaymentSuccess = ({ _id: withdrawalId }) => {
     approveWithdrawalMutation.mutate({
       withdrawalId,
-      withdrawal_amount,
-      worker_email,
     });
   };
 
