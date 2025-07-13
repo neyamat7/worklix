@@ -172,7 +172,7 @@ const ManageTasks = () => {
   return (
     <div>
       <div className="h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-indigo-950 dark:to-purple-950">
-        <div className="relative z-10 h-full p-4">
+        <div className="relative z-10 h-[calc(100vh-105px)] p-4">
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-8 pt-8">
               <div>

@@ -1,102 +1,22 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router";
 import NotificationPopup from "../components/shared/Notifications/Notifications";
 import ThemeToggle from "../components/ThemeToggle/ThemeToggle";
+import { useSingleUserData } from "../hooks/useUserData";
 import { useUserRole } from "../hooks/useUserRole";
 
 const DashboardLayouts = () => {
-  const [currentUser] = useState({
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    role: "buyer", // Change this to "admin", "buyer", or "worker" to test different views
-    coins: 1250,
-    avatar: "/placeholder.svg?height=40&width=40",
-  });
-
   const { role, roleLoading } = useUserRole();
 
-  const [activeRoute, setActiveRoute] = useState("Home");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Dummy data
-  const [tasks] = useState([
-    {
-      id: "1",
-      title: "Website Design",
-      description: "Create a modern website design",
-      payable_amount: 500,
-      required_workers: 2,
-      buyer_id: "1",
-      buyer_name: "John Doe",
-      status: "active",
-    },
-    {
-      id: "2",
-      title: "Logo Creation",
-      description: "Design a company logo",
-      payable_amount: 200,
-      required_workers: 1,
-      buyer_id: "1",
-      buyer_name: "John Doe",
-      status: "active",
-    },
-  ]);
+  const { user: authUser } = useSelector((state) => state.auth);
+  const { data: userData, isLoading: userLoading } = useSingleUserData(
+    authUser?.email
+  );
 
-  const [submissions, setSubmissions] = useState([
-    {
-      id: "1",
-      task_id: "1",
-      task_title: "Website Design",
-      worker_id: "2",
-      worker_name: "Alice Smith",
-      buyer_name: "John Doe",
-      payable_amount: 500,
-      status: "pending",
-      submission_details:
-        "I have completed the website design with modern UI/UX principles...",
-      submitted_at: "2024-01-15",
-    },
-    {
-      id: "2",
-      task_id: "2",
-      task_title: "Logo Creation",
-      worker_id: "3",
-      worker_name: "Bob Johnson",
-      buyer_name: "John Doe",
-      payable_amount: 200,
-      status: "approved",
-      submission_details: "Logo design completed with multiple variations...",
-      submitted_at: "2024-01-14",
-    },
-  ]);
-
-  const [users] = useState([
-    {
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      role: "buyer",
-      coins: 1250,
-      avatar: "/placeholder.svg",
-    },
-    {
-      id: "2",
-      name: "Alice Smith",
-      email: "alice@example.com",
-      role: "worker",
-      coins: 800,
-      avatar: "/placeholder.svg",
-    },
-    {
-      id: "3",
-      name: "Bob Johnson",
-      email: "bob@example.com",
-      role: "worker",
-      coins: 600,
-      avatar: "/placeholder.svg",
-    },
-  ]);
+  if (userLoading || roleLoading) return <div>Loading...</div>;
 
   // Navigation items based on role
   const getNavigationItems = () => {
@@ -134,44 +54,6 @@ const DashboardLayouts = () => {
 
     return [...commonItems, ...roleSpecificItems[role]];
   };
-
-  // Stats calculations
-  const getStats = () => {
-    if (currentUser.role === "admin") {
-      return {
-        totalWorkers: users.filter((u) => u.role === "worker").length,
-        totalBuyers: users.filter((u) => u.role === "buyer").length,
-        totalCoins: users.reduce((sum, u) => sum + u.coins, 0),
-        totalPayments: 5420, // dummy data
-      };
-    } else if (currentUser.role === "buyer") {
-      const userTasks = tasks.filter((t) => t.buyer_id === currentUser.id);
-      return {
-        totalTasks: userTasks.length,
-        pendingTasks: userTasks.reduce((sum, t) => sum + t.required_workers, 0),
-        totalPayments: 1200, // dummy data
-      };
-    } else {
-      const workerSubmissions = submissions.filter(
-        (s) => s.worker_id === currentUser.id
-      );
-      return {
-        totalSubmissions: workerSubmissions.length,
-        pendingSubmissions: workerSubmissions.filter(
-          (s) => s.status === "pending"
-        ).length,
-        totalEarnings: workerSubmissions
-          .filter((s) => s.status === "approved")
-          .reduce((sum, s) => sum + s.payable_amount, 0),
-      };
-    }
-  };
-
-  const stats = getStats();
-
-  const handleToggleNotificationPopup = () => {};
-
-  if (roleLoading) return <div>Loading...</div>;
 
   return (
     <div className="h-screen bg-gray-50 dark:bg-gray-900 flex overflow-hidden">
@@ -238,32 +120,29 @@ const DashboardLayouts = () => {
                   />
                 </svg>
               </button>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {activeRoute}
-              </h1>
             </div>
 
             <div className="flex items-center space-x-4">
               {/* Available Coins */}
               <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-lg">
                 <span className="text-sm font-medium">
-                  🪙 {currentUser.coins}
+                  🪙 {userData?.coins}
                 </span>
               </div>
 
               {/* User Info */}
               <div className="flex items-center space-x-3">
                 <img
-                  src={currentUser.avatar || "/placeholder.svg"}
+                  src={authUser?.photoURL || "/placeholder.svg"}
                   alt="User Avatar"
                   className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600"
                 />
                 <div className="hidden md:block">
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {currentUser.name}
+                    {authUser?.name}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-                    {currentUser.role}
+                    {userData?.role}
                   </p>
                 </div>
               </div>

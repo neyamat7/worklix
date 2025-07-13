@@ -102,7 +102,7 @@ const PurchaseCoins = () => {
   return (
     <Elements stripe={stripePromise}>
       <div>
-        <div className="min-h-[calc(100vh-68px)] bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <div className="h-full bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
           {/* Decorative background elements */}
           {/* <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
@@ -110,7 +110,7 @@ const PurchaseCoins = () => {
             <div className="absolute top-40 left-40 w-60 h-60 bg-gradient-to-br from-yellow-400 to-orange-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
           </div> */}
 
-          <div className="relative z-10 min-h-[calc(100vh-68px)] p-4">
+          <div className="relative z-10 h-full p-4">
             {/* Header */}
             <div className="max-w-6xl mx-auto">
               {/* <div className="flex justify-between items-center mb-8 pt-8">

@@ -10,7 +10,7 @@ import {
   FiUser,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import { useWorkerSubmissions } from "../../../../hooks/useWorkerSubmissions";
+import { usePaginatedSubmissions } from "../../../../hooks/usePaginatedSubmissions";
 
 const WorkerHome = () => {
   // // Dummy data based on your submission structure
@@ -32,24 +32,21 @@ const WorkerHome = () => {
   // ];
 
   const { user } = useSelector((state) => state.auth);
-  const {
-    data: submissions,
-    isLoading,
-    error,
-  } = useWorkerSubmissions(user?.email);
+  const { data, isLoading, error } = usePaginatedSubmissions(user?.email, 1);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading submissions: {error.message}</div>;
+  console.log(data);
 
   // Calculate stats
-  const totalSubmissions = submissions.length;
-  const pendingSubmissions = submissions.filter(
+  const totalSubmissions = data?.allSubmissions.length;
+  const pendingSubmissions = data?.allSubmissions.filter(
     (s) => s.status === "pending"
   ).length;
-  const approvedSubmissions = submissions.filter(
+  const approvedSubmissions = data?.allSubmissions.filter(
     (s) => s.status === "approved"
   );
-  const totalEarnings = approvedSubmissions.reduce(
+  const totalEarnings = approvedSubmissions?.reduce(
     (sum, s) => sum + parseInt(s.payable_amount),
     0
   );
@@ -64,8 +61,8 @@ const WorkerHome = () => {
 
   return (
     <div>
-      <div className="min-h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
-        <div className="relative z-10 min-h-full p-4 lg:p-8">
+      <div className="min-h-[calc(100vh-105px)] bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
+        <div className="relative z-10 h-full p-4 lg:p-8">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pt-4">
@@ -167,7 +164,7 @@ const WorkerHome = () => {
             </div>
 
             {/* Approved Submissions Section */}
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+            <div className="bg-white/80  dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
               <div className="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
                 <div className="flex items-center justify-between">
                   <div>

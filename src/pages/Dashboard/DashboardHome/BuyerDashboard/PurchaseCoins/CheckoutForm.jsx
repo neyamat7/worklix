@@ -3,9 +3,11 @@ import { useState } from "react";
 import { FiCreditCard, FiLoader, FiShield } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
+import { useTheme } from "../../../../../hooks/useTheme";
 // import { useSingleUserData } from "../../../../../hooks/useUserData";
 
 const CheckoutForm = ({ selectedPackage, onSuccess, onCancel }) => {
+  const { theme } = useTheme();
   const { user } = useSelector((state) => state.auth);
   //   const { refetch } = useSingleUserData(user?.email);
   const stripe = useStripe();
@@ -87,7 +89,7 @@ const CheckoutForm = ({ selectedPackage, onSuccess, onCancel }) => {
     style: {
       base: {
         fontSize: "16px",
-        color: "#424770",
+        color: theme === "dark" ? "#fff" : "#424770",
         "::placeholder": {
           color: "#aab7c4",
         },
@@ -192,7 +194,7 @@ const CheckoutForm = ({ selectedPackage, onSuccess, onCancel }) => {
               </div>
 
               {/* Stripe Card Element */}
-              <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-700">
+              <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-900">
                 <CardElement options={cardElementOptions} />
               </div>
             </div>
