@@ -1,4 +1,5 @@
 import BestWorkers from "../BestWorkers/BestWorkers";
+import FeaturedSection from "../FeaturedSection/FeaturedSection";
 import Hero from "../Hero/Hero";
 import OurProcess from "../OurProcess/OurProcess";
 import SecurityTrust from "../SecurityTrust/SecurityTrust";
@@ -9,6 +10,7 @@ const Home = () => {
     <div>
       <Hero />
       <BestWorkers />
+      <FeaturedSection />
       <Testimonials />
       <OurProcess />
       <SecurityTrust />
