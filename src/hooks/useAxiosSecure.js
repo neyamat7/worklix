@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAuth } from "firebase/auth";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -16,9 +17,12 @@ const useAxiosSecure = () => {
 
   useEffect(() => {
     const requestInterceptor = axiosSecure.interceptors.request.use(
-      (config) => {
-        if (user) {
-          config.headers.Authorization = `Bearer ${user.accessToken}`;
+      async (config) => {
+        const auth = getAuth();
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          const freshToken = await currentUser.getIdToken();
+          config.headers.Authorization = `Bearer ${freshToken}`;
         }
         return config;
       }
@@ -30,7 +34,8 @@ const useAxiosSecure = () => {
         return response;
       },
       (error) => {
-        if (error.status === 401) {
+        const status = error?.response?.status;
+        if (status === 401) {
           // Unauthorized
           dispatch(signOutUser())
             .unwrap()
@@ -43,7 +48,7 @@ const useAxiosSecure = () => {
             .catch((err) => {
               console.error("Error during sign out:", err);
             });
-        } else if (error.status === 403) {
+        } else if (status === 403) {
           // Forbidden
           navigate("/dashboard/unauthorized");
         }

@@ -11,7 +11,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import useUserPayments from "../../../../hooks/userUserPayments";
+import useUserPayments from "../../../../hooks/useUserPayments";
 
 const PaymentRecords = () => {
   const [viewMode, setViewMode] = useState("table");
