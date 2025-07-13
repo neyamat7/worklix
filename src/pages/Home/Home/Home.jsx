@@ -1,6 +1,7 @@
 import BestWorkers from "../BestWorkers/BestWorkers";
 import Hero from "../Hero/Hero";
 import OurProcess from "../OurProcess/OurProcess";
+import SecurityTrust from "../SecurityTrust/SecurityTrust";
 import Testimonials from "../Testimonials/Testimonials";
 
 const Home = () => {
@@ -10,6 +11,7 @@ const Home = () => {
       <BestWorkers />
       <Testimonials />
       <OurProcess />
+      <SecurityTrust />
     </div>
   );
 };
