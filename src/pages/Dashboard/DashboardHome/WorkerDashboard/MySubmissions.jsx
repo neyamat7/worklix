@@ -121,14 +121,14 @@ const MySubmissions = () => {
   };
 
   // Calculate stats
-  const totalEarnings = filteredSubmissions
+  const totalEarnings = data?.allSubmissions
     .filter((s) => s.status === "approved")
     .reduce((sum, s) => sum + Number.parseInt(s.payable_amount), 0);
 
-  const pendingCount = filteredSubmissions.filter(
+  const pendingCount = data?.allSubmissions.filter(
     (s) => s.status === "pending"
   ).length;
-  const approvedCount = filteredSubmissions.filter(
+  const approvedCount = data?.allSubmissions.filter(
     (s) => s.status === "approved"
   ).length;
 
