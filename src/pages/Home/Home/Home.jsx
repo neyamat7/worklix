@@ -1,5 +1,13 @@
+import BestWorkers from "../BestWorkers/BestWorkers";
+import Hero from "../Hero/Hero";
+
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div>
+      <Hero />
+      {/* <BestWorkers /> */}
+    </div>
+  );
 };
 
 export default Home;

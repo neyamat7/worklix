@@ -87,12 +87,12 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <a
-                    href="/dashboard"
+                  <Link
+                    to="/dashboard"
                     className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                   >
                     Dashboard
-                  </a>
+                  </Link>
                   <div className="flex items-center space-x-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-2 rounded-lg">
                     <svg
                       className="w-4 h-4"
@@ -297,13 +297,13 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                <a
-                  href="/dashboard"
+                <Link
+                  to="/dashboard"
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Dashboard
-                </a>
+                </Link>
 
                 <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg">
                   <span className="font-medium">Available Coins</span>

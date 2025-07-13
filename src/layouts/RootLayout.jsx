@@ -1,18 +1,20 @@
 import { Outlet } from "react-router";
 import Navbar from "../components/shared/Navbar/Navbar";
-import NavbarTest from "../components/shared/Navbar/NavbarTest";
-import NavbarViolet from "../components/shared/Navbar/NavbarViolet";
 
 const RootLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      {/* <NavbarViolet /> */}
-      {/* <NavbarTest /> */}
       <div className="flex-1">
         <Outlet />
       </div>
-      {/* <Footer /> */}
+      <footer className="bg-gray-800 text-white py-4 text-center">
+        <div className="container mx-auto">
+          <p className="text-sm">
+            &copy; {new Date().getFullYear()} Worklix. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
