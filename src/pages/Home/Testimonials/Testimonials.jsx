@@ -11,57 +11,64 @@ const testimonials = [
   {
     id: 1,
     name: "Jennifer Adams",
-    photo: "/placeholder.svg?height=80&width=80",
+    photo:
+      "https://i.postimg.cc/m2nv9N2v/photo-1438761681033-6461ffad8d80.avif",
     role: "Freelance Writer",
     rating: 5,
     quote:
       "This platform has completely transformed my freelancing career. I've earned over $5,000 in just 3 months!",
     earnings: "$5,240",
   },
+
   {
     id: 2,
     name: "Robert Chen",
-    photo: "/placeholder.svg?height=80&width=80",
+    photo:
+      "https://i.postimg.cc/brWmZgHL/360-F-523629123-Rp-AMod-BJXg-CTPfilf-Ya-CIb-Paal-FIjbvv.jpg",
     role: "Data Analyst",
     rating: 5,
     quote:
       "The tasks are well-organized and payments are always on time. Perfect for earning extra income in my spare time.",
     earnings: "$3,890",
   },
+
   {
     id: 3,
     name: "Maria Garcia",
-    photo: "/placeholder.svg?height=80&width=80",
+    photo: "https://i.postimg.cc/2ybwNvRW/images-2.jpg",
     role: "Virtual Assistant",
     rating: 5,
     quote:
       "Amazing platform! The variety of tasks keeps things interesting, and the community is incredibly supportive.",
     earnings: "$4,650",
   },
+
   {
     id: 4,
     name: "James Wilson",
-    photo: "/placeholder.svg?height=80&width=80",
+    photo: "https://i.postimg.cc/GpXVckNg/images-3.jpg",
     role: "Graphic Designer",
     rating: 5,
     quote:
       "I love how easy it is to find tasks that match my skills. The earning potential here is truly unlimited!",
     earnings: "$6,120",
   },
+
   {
     id: 5,
     name: "Sophie Turner",
-    photo: "/placeholder.svg?height=80&width=80",
+    photo: "https://i.postimg.cc/yd5GR77F/ecf3db173fea15839fdfe0625b25bfec.jpg",
     role: "Content Creator",
     rating: 5,
     quote:
       "The best decision I made was joining this platform. It's helped me achieve financial independence.",
     earnings: "$7,350",
   },
+
   {
     id: 6,
     name: "Ahmed Hassan",
-    photo: "/placeholder.svg?height=80&width=80",
+    photo: "https://i.postimg.cc/05MFsKCZ/images-4.jpg",
     role: "Web Developer",
     rating: 5,
     quote:
@@ -126,7 +133,7 @@ export default function Testimonials() {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             What Our
             <span className="block bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              Workers Say
+              Achievers Say
             </span>
           </h2>
 

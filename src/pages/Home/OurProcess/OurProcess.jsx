@@ -14,19 +14,19 @@ const steps = [
     title: "Create Account",
     description:
       "Sign up for free in under 60 seconds. No credit card required, no hidden fees.",
-    color: "from-blue-500 to-cyan-500",
+    color: "from-purple-500 to-blue-500",
     bgColor:
-      "from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20",
+      "from-blue-50/60 to-cyan-50/60 dark:from-blue-900/20 dark:to-cyan-900/20",
   },
   {
     id: 2,
     icon: FiSearch,
     title: "Find Perfect Tasks",
     description:
-      "Browse thousands of tasks that match your skills and interests. Filter by category, budget, and deadline.",
-    color: "from-purple-500 to-pink-500",
+      "Browse thousands of tasks that match your skills and interests. Filter by category and budget.",
+    color: "from-purple-500 to-blue-500",
     bgColor:
-      "from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20",
+      "from-blue-50/50 to-cyan-50/50 dark:from-blue-900/20 dark:to-cyan-900/20",
   },
   {
     id: 3,
@@ -34,9 +34,9 @@ const steps = [
     title: "Complete & Submit",
     description:
       "Work on tasks at your own pace. Submit high-quality work and get feedback from clients.",
-    color: "from-green-500 to-emerald-500",
+    color: "from-purple-500 to-blue-500",
     bgColor:
-      "from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20",
+      "from-blue-50/60 to-cyan-50/60 dark:from-blue-900/20 dark:to-cyan-900/20",
   },
   {
     id: 4,
@@ -44,9 +44,9 @@ const steps = [
     title: "Get Paid Instantly",
     description:
       "Receive payments directly to your account. Withdraw anytime with multiple payment options.",
-    color: "from-orange-500 to-yellow-500",
+    color: "from-purple-500 to-blue-500",
     bgColor:
-      "from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20",
+      "from-blue-50/60 to-cyan-50/60 dark:from-blue-900/20 dark:to-cyan-900/20",
   },
 ];
 
@@ -97,16 +97,16 @@ export default function OurProcess() {
             viewport={{ once: true }}
             className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 px-8 py-4 rounded-full mb-8 border border-blue-200/50 dark:border-blue-700/30"
           >
-            <FiCheckCircle className="text-2xl text-blue-600 dark:text-blue-400" />
-            <span className="text-blue-800 dark:text-blue-300 font-semibold text-lg">
+            <FiCheckCircle className="text-2xl text-purple-600 dark:text-purple-400" />
+            <span className="text-purple-800 dark:text-purple-300 font-medium text-lg">
               Simple Process
             </span>
           </motion.div>
 
           <h2 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-6">
-            How It
+            Your Path
             <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">
-              Works
+              To Quick Earnings
             </span>
           </h2>
 
@@ -119,17 +119,6 @@ export default function OurProcess() {
 
         {/* Steps */}
         <div className="relative">
-          {/* Connection Line */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-200 via-purple-200 to-cyan-200 dark:from-blue-800 dark:via-purple-800 dark:to-cyan-800 transform -translate-y-1/2 rounded-full">
-            <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              transition={{ duration: 2, delay: 0.5 }}
-              viewport={{ once: true }}
-              className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full origin-left"
-            />
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((step, index) => (
               <motion.div
@@ -141,7 +130,7 @@ export default function OurProcess() {
                 className="relative group"
               >
                 <div
-                  className={`bg-gradient-to-br ${step.bgColor} rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/50 dark:border-gray-700/30 relative overflow-hidden`}
+                  className={`bg-gradient-to-br ${step.bgColor} rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/50 dark:border-gray-700/30 relative overflow-hidden dark: z-50`}
                 >
                   {/* Step Number */}
                   <div className="absolute top-6 right-6">
@@ -166,17 +155,17 @@ export default function OurProcess() {
 
                   {/* Content */}
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-purple-600 dark:group-hover:text-blue-400 transition-colors whitespace-nowrap">
                       {step.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm line-clamp-2">
                       {step.description}
                     </p>
                   </div>
 
                   {/* Arrow for larger screens */}
                   {index < steps.length - 1 && (
-                    <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
+                    <div className="hidden lg:block absolute top-1/2 -right-1 transform -translate-y-1/2 z-10">
                       <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}

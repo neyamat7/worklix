@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { FaCoins } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
+import { IoLogOutOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
 import { signOutUser } from "../../../features/auth/authSlice";
 import { useTheme } from "../../../hooks/useTheme";
 import { useSingleUserData } from "../../../hooks/useUserData";
 import ThemeToggle from "../../ThemeToggle/ThemeToggle";
-
 const Navbar = () => {
   const { theme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -69,8 +71,10 @@ const Navbar = () => {
               {!user ? (
                 <>
                   <Link to="/login">
-                    <button className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
-                      Login
+                    <button className="relative px-4 py-2 rounded-lg font-medium text-sm group overflow-hidden transition-all duration-300 ease-out bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-500 shadow-sm hover:shadow-md">
+                      <span className="relative z-10 text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                        Login
+                      </span>
                     </button>
                   </Link>
 
@@ -79,7 +83,10 @@ const Navbar = () => {
                       Register
                     </button>
                   </Link>
-                  <a href="https://github.com/neyamat7" target="_blank">
+                  <a
+                    href="https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-neyamat7"
+                    target="_blank"
+                  >
                     <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105">
                       Join as Developer
                     </button>
@@ -89,31 +96,36 @@ const Navbar = () => {
                 <>
                   <Link
                     to="/dashboard"
-                    className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                    className="relative overflow-hidden px-5 py-2.5 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 group transition-all duration-300 border border-gray-200 dark:border-gray-600"
                   >
-                    Dashboard
+                    {/* Text with gradient color change */}
+                    <span className="relative z-10 block transition-all duration-300 group-hover:text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-300">
+                      Dashboard
+                    </span>
+
+                    {/* Animated background effect */}
+                    <span className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-blue-600/5 dark:from-blue-400/5 dark:to-blue-300/5 rounded-lg transform scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
+
+                    {/* Border animation */}
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-300 transform scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-700 delay-100" />
+
+                    {/* Shine effect */}
+                    <span className="absolute top-0 left-0 w-1/2 h-full bg-white/10 transform -skew-x-12 -translate-x-full group-hover:translate-x-[200%] transition-transform duration-700" />
                   </Link>
-                  <div className="flex items-center space-x-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-2 rounded-lg">
-                    <svg
-                      className="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                  <div className="flex items-center space-x-1 bg-gradient-to-r from-yellow-600 to-orange-500 text-white px-3 py-2 rounded-lg">
+                    <FaCoins></FaCoins>
                     <span className="text-sm font-semibold">
                       Coins: {userData?.coins}
                     </span>
                   </div>
-                  <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105">
-                    Join as Developer
-                  </button>
-
+                  <a
+                    href="https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-neyamat7"
+                    target="_blank"
+                  >
+                    <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105">
+                      Join as Developer
+                    </button>
+                  </a>
                   {/* User Profile */}
                   <div className="relative" ref={profileDropdownRef}>
                     <button
@@ -140,7 +152,7 @@ const Navbar = () => {
                           />
                           <div>
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {user.name}
+                              {user.displayName}
                             </h3>
                             <p className="text-sm text-gray-600 dark:text-gray-400">
                               {user.email}
@@ -153,19 +165,7 @@ const Navbar = () => {
                             onClick={handleLogout}
                             className="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
                           >
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                              />
-                            </svg>
+                            <IoLogOutOutline className="w-5 h-5" />
                             <span>Logout</span>
                           </button>
                         </div>
@@ -246,33 +246,28 @@ const Navbar = () => {
               onClick={() => setIsMobileMenuOpen(false)}
               className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-              <svg
-                className="h-6 w-6"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <IoMdClose className="w-6 h-6" />
             </button>
           </div>
 
-          <div className="p-4 space-y-4">
+          <div className="p-4 space-y-3">
             {!user ? (
               <>
-                <button className="w-full text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
-                  Login
-                </button>
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200">
-                  Register
-                </button>
+                <Link to="/login">
+                  <button className="w-full text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 border bordergray-200 dark:border-gray-700 mb-3">
+                    Login
+                  </button>
+                </Link>
+                <Link to="/register">
+                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 mb-3">
+                    Register
+                  </button>
+                </Link>
 
-                <a href="https://github.com/neyamat7" target="_blank">
+                <a
+                  href="https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-neyamat7"
+                  target="_blank"
+                >
                   <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200">
                     Join as Developer
                   </button>
@@ -289,7 +284,7 @@ const Navbar = () => {
                   />
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white">
-                      {user.name}
+                      {user.displayName}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       {user.email}
@@ -299,7 +294,7 @@ const Navbar = () => {
 
                 <Link
                   to="/dashboard"
-                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 border border-gray-300 dark:border-gray-700"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Dashboard
@@ -308,43 +303,25 @@ const Navbar = () => {
                 <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg">
                   <span className="font-medium">Available Coins</span>
                   <div className="flex items-center space-x-2">
-                    <svg
-                      className="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <FaCoins className="w-5 h-5" />
                     <span className="font-bold">{userData.coins}</span>
                   </div>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200">
-                  Join as Developer
-                </button>
+                <a
+                  href="https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-neyamat7"
+                  target="_blank"
+                >
+                  <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200 mb-3">
+                    Join as Developer
+                  </button>
+                </a>
 
                 <button
                   onClick={handleLogout}
                   className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
+                  <IoLogOutOutline className="w-5 h-5" />
                   <span>Logout</span>
                 </button>
               </>

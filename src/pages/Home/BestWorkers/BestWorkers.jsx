@@ -1,64 +1,23 @@
 import { motion } from "framer-motion";
-import { FiAward, FiStar, FiTrendingUp } from "react-icons/fi";
-
-const topWorkers = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    photo: "/placeholder.svg?height=120&width=120",
-    coins: 2850,
-    rating: 4.9,
-    completedTasks: 156,
-    specialty: "Data Entry",
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    photo: "/placeholder.svg?height=120&width=120",
-    coins: 3200,
-    rating: 5.0,
-    completedTasks: 203,
-    specialty: "Content Writing",
-  },
-  {
-    id: 3,
-    name: "Emily Rodriguez",
-    photo: "/placeholder.svg?height=120&width=120",
-    coins: 2650,
-    rating: 4.8,
-    completedTasks: 142,
-    specialty: "Graphic Design",
-  },
-  {
-    id: 4,
-    name: "David Kim",
-    photo: "/placeholder.svg?height=120&width=120",
-    coins: 3100,
-    rating: 4.9,
-    completedTasks: 189,
-    specialty: "Web Development",
-  },
-  {
-    id: 5,
-    name: "Lisa Thompson",
-    photo: "/placeholder.svg?height=120&width=120",
-    coins: 2750,
-    rating: 4.7,
-    completedTasks: 134,
-    specialty: "Translation",
-  },
-  {
-    id: 6,
-    name: "Alex Martinez",
-    photo: "/placeholder.svg?height=120&width=120",
-    coins: 2950,
-    rating: 4.8,
-    completedTasks: 167,
-    specialty: "Video Editing",
-  },
-];
+import { FiAward } from "react-icons/fi";
+import Loading from "../../../components/shared/Loading/Loading";
+import { useTopWorkers } from "../../../hooks/useTopWorkers";
 
 export default function BestWorkers() {
+  const { data: workers, isLoading, error } = useTopWorkers(6);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  const progress = 70 + (workers.coins % 26);
+  console.log(workers);
+  console.log(progress);
+
   return (
     <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
       {/* Background Elements */}
@@ -111,7 +70,7 @@ export default function BestWorkers() {
 
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Meet Our
-            <span className="block bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Best Workers
             </span>
           </h2>
@@ -124,135 +83,100 @@ export default function BestWorkers() {
 
         {/* Workers Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {topWorkers.map((worker, index) => (
-            <motion.div
-              key={worker.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="group"
-            >
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl p-8 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
-                {/* Rank Badge */}
-                {index < 3 && (
-                  <div className="absolute top-4 right-4">
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
-                        index === 0
-                          ? "bg-gradient-to-r from-yellow-400 to-yellow-600"
-                          : index === 1
-                          ? "bg-gradient-to-r from-gray-400 to-gray-600"
-                          : "bg-gradient-to-r from-orange-400 to-orange-600"
-                      }`}
+          {workers.map((worker, index) => {
+            const progress = 70 + (worker.coins % 26);
+            return (
+              <motion.div
+                key={worker.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{
+                  y: -10,
+                  scale: 1.02,
+                  transition: {
+                    y: { duration: 0.2, delay: 0 }, // No delay on hover y
+                    scale: { duration: 0.2 },
+                  },
+                }}
+                transition={{
+                  opacity: { duration: 0.6, delay: index * 0.1 },
+                  y: { duration: 0.6, delay: index * 0.1 },
+                }}
+                viewport={{ once: true }}
+                className="group"
+              >
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl p-8 border border-gray-200/50 dark:border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+                  {/* Worker Photo */}
+                  <div className="relative mb-6">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-gradient-to-r from-purple-400 to-blue-400 p-1"
                     >
-                      {index + 1}
-                    </div>
-                  </div>
-                )}
-
-                {/* Worker Photo */}
-                <div className="relative mb-6">
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.3 }}
-                    className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-gradient-to-r from-purple-400 to-blue-400 p-1"
-                  >
-                    <img
-                      src={worker.photo || "/placeholder.svg"}
-                      alt={worker.name}
-                      className="w-full h-full rounded-full object-cover"
-                    />
-                  </motion.div>
-
-                  {/* Online Status */}
-                  <div className="absolute bottom-0 right-1/2 transform translate-x-8 translate-y-1">
-                    <div className="w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Worker Info */}
-                <div className="text-center space-y-4">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                    {worker.name}
-                  </h3>
-
-                  <div className="text-sm text-purple-600 dark:text-purple-400 font-medium bg-purple-100 dark:bg-purple-900/30 px-3 py-1 rounded-full inline-block">
-                    {worker.specialty}
-                  </div>
-
-                  {/* Stats */}
-                  <div className="space-y-3">
-                    {/* Coins */}
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">C</span>
-                      </div>
-                      <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {worker.coins.toLocaleString()}
-                      </span>
-                      <span className="text-gray-500 dark:text-gray-400">
-                        coins
-                      </span>
-                    </div>
-
-                    {/* Rating */}
-                    <div className="flex items-center justify-center gap-2">
-                      <FiStar className="text-yellow-500 fill-current" />
-                      <span className="font-semibold text-gray-900 dark:text-white">
-                        {worker.rating}
-                      </span>
-                      <span className="text-gray-500 dark:text-gray-400">
-                        ({worker.completedTasks} tasks)
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="mt-4">
-                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
-                      <span>Progress to next level</span>
-                      <span>85%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: "85%" }}
-                        transition={{ duration: 1, delay: index * 0.1 }}
-                        viewport={{ once: true }}
-                        className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full"
+                      <img
+                        src={worker?.photoURL || "/placeholder.svg"}
+                        alt={worker?.name}
+                        className="w-full h-full rounded-full object-cover"
                       />
+                    </motion.div>
+
+                    {/* Online Status */}
+                    <div className="absolute bottom-0 right-1/2 transform translate-x-8 translate-y-1">
+                      <div className="w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-gray-800 flex items-center justify-center">
+                        <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      </div>
                     </div>
                   </div>
+
+                  {/* Worker Info */}
+                  <div className="text-center space-y-4">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                      {worker.name}
+                    </h3>
+
+                    {/* Stats */}
+                    <div className="space-y-3">
+                      {/* Coins */}
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                          <span className="text-white font-bold text-sm">
+                            C
+                          </span>
+                        </div>
+                        <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                          {worker.coins.toLocaleString()}
+                        </span>
+                        <span className="text-gray-500 dark:text-gray-400">
+                          coins
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="mt-4">
+                      <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        <span>Progress to next level</span>
+                        <span>{progress}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${progress}%` }}
+                          transition={{ duration: 1, delay: index * 0.1 }}
+                          viewport={{ once: true }}
+                          className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Hover Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-blue-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-
-                {/* Hover Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-blue-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
-
-        {/* View All Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mt-12"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="group bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 flex items-center gap-3 mx-auto shadow-xl"
-          >
-            View All Workers
-            <FiTrendingUp className="group-hover:translate-x-1 transition-transform" />
-          </motion.button>
-        </motion.div>
       </div>
     </section>
   );

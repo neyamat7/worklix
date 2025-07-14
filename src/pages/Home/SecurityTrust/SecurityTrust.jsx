@@ -1,59 +1,6 @@
 import { motion } from "framer-motion";
-import {
-  FiAward,
-  FiCheckCircle,
-  FiCreditCard,
-  FiLock,
-  FiShield,
-  FiUsers,
-} from "react-icons/fi";
-
-const features = [
-  {
-    id: 1,
-    icon: FiShield,
-    title: "Secure Platform",
-    description:
-      "Bank-level security with SSL encryption and secure data storage",
-    color: "from-green-500 to-green-600",
-  },
-  {
-    id: 2,
-    icon: FiLock,
-    title: "Privacy Protected",
-    description: "Your personal information is never shared with third parties",
-    color: "from-blue-500 to-blue-600",
-  },
-  {
-    id: 3,
-    icon: FiCheckCircle,
-    title: "Verified Tasks",
-    description: "All tasks are reviewed and verified before being published",
-    color: "from-purple-500 to-purple-600",
-  },
-  {
-    id: 4,
-    icon: FiCreditCard,
-    title: "Secure Payments",
-    description: "Multiple payment options with guaranteed secure transactions",
-    color: "from-orange-500 to-orange-600",
-  },
-  {
-    id: 5,
-    icon: FiUsers,
-    title: "Trusted Community",
-    description: "Join a community of verified workers and trusted employers",
-    color: "from-cyan-500 to-cyan-600",
-  },
-  {
-    id: 6,
-    icon: FiAward,
-    title: "Quality Assurance",
-    description:
-      "Our quality control team ensures fair treatment for all users",
-    color: "from-pink-500 to-pink-600",
-  },
-];
+import { FiAward, FiCheckCircle, FiShield, FiUsers } from "react-icons/fi";
+import { features } from "../../../data/features";
 
 const stats = [
   { label: "Trusted Users", value: "50K+", icon: FiUsers },
@@ -105,10 +52,10 @@ export default function SecurityTrust() {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/30 dark:to-blue-900/30 px-6 py-3 rounded-full mb-6"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 px-6 py-3 rounded-full mb-6"
           >
-            <FiShield className="text-green-600 dark:text-green-400" />
-            <span className="text-green-800 dark:text-green-300 font-medium">
+            <FiShield className="text-purple-600 dark:text-purple-400" />
+            <span className="text-purple-800 dark:text-purple-300 font-medium">
               Security & Trust
             </span>
           </motion.div>
@@ -164,9 +111,19 @@ export default function SecurityTrust() {
               key={feature.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{
+                y: -5,
+                scale: 1.02,
+                transition: {
+                  y: { duration: 0.2, delay: 0 },
+                  scale: { duration: 0.2, delay: 0 },
+                },
+              }}
+              transition={{
+                opacity: { duration: 0.6, delay: index * 0.1 },
+                y: { duration: 0.6, delay: index * 0.1 },
+              }}
               viewport={{ once: true }}
-              whileHover={{ y: -5, scale: 1.02 }}
               className="group"
             >
               <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 rounded-3xl p-8 border border-gray-200/50 dark:border-gray-600/50 shadow-lg hover:shadow-2xl transition-all duration-500 h-full relative overflow-hidden">
@@ -186,7 +143,7 @@ export default function SecurityTrust() {
 
                 {/* Content */}
                 <div className="relative z-10">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                     {feature.title}
                   </h3>
 
