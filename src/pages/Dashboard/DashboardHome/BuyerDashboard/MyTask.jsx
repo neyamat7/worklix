@@ -10,6 +10,7 @@ import {
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import Loading from "../../../../components/shared/Loading/Loading";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useBuyerTasks } from "../../../../hooks/useBuyerTasks";
 import TaskEditModal from "./TaskEditModal";
@@ -93,16 +94,12 @@ const MyTask = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
     <div className="h-full p-4 md:p-8 bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-6">
           Your Tasks
         </h1>
@@ -199,7 +196,6 @@ const MyTask = () => {
         </div>
 
         {/* Mobile Card View */}
-        {/* Mobile Card View */}
         <div className="md:hidden space-y-4">
           {tasks?.map((task) => (
             <div
@@ -265,7 +261,7 @@ const MyTask = () => {
 
         {/* Task Details Modal */}
         {isModalOpen && selectedTask && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex justify-between items-start">

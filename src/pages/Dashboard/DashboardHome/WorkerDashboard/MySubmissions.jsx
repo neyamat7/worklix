@@ -151,7 +151,7 @@ const MySubmissions = () => {
   }
 
   return (
-    <div className="h-full bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="h-full bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
       <div className="relative z-10 h-full p-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
@@ -167,7 +167,7 @@ const MySubmissions = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/50">
               <div className="flex items-center justify-between">
                 <div>
@@ -279,7 +279,6 @@ const MySubmissions = () => {
                 {isFetching && (
                   <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400">
                     <FiLoader className="animate-spin w-4 h-4" />
-                    <span className="text-sm">Loading...</span>
                   </div>
                 )}
               </div>
@@ -299,7 +298,7 @@ const MySubmissions = () => {
             </div>
           ) : viewMode === "table" ? (
             /* Table View - Hidden on small screens */
-            <div className="hidden lg:block bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+            <div className="hidden md:block bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gray-50/80 dark:bg-gray-700/80">
@@ -442,7 +441,7 @@ const MySubmissions = () => {
 
           {/* Show card view on large screens when table is selected but force cards on mobile */}
           {viewMode === "table" && (
-            <div className="lg:hidden">
+            <div className="md:hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {filteredSubmissions.map((submission) => (
                   <div

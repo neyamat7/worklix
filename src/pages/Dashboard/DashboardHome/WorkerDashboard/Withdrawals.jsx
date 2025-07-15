@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import Loading from "../../../../components/shared/Loading/Loading";
 import { useCreateWithdrawal } from "../../../../hooks/useRequestWithdrawal";
 import { useSingleUserData } from "../../../../hooks/useUserData";
 
@@ -43,11 +45,7 @@ export default function Withdrawal() {
   const canWithdraw = workerData?.coins >= minWithdrawalCoins;
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   const handleCoinsChange = (value) => {
@@ -75,6 +73,11 @@ export default function Withdrawal() {
 
     // save withdrawal data to the database
     withdrawMutation.mutate(withdrawalData, { userId: workerData._id });
+    Swal.fire(
+      "Success!",
+      "Withdrawal request submitted successfully.",
+      "success"
+    );
 
     setCoinsToWithdraw(0);
     setWithdrawalAmount(0);
@@ -84,14 +87,14 @@ export default function Withdrawal() {
   };
 
   return (
-    <div className="h-full bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden">
-      <div className="relative z-10 container mx-auto px-4 py-8">
+    <div className="h-full bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950 relative overflow-hidden">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-gray-400 to-gray-500 dark:from-purple-500 dark:to-pink-500 rounded-full mb-6 shadow-2xl">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mb-6 shadow-2xl">
             <Wallet className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-gray-800 via-gray-500 to-gray-400 dark:from-white dark:via-purple-200 dark:to-pink-200 bg-clip-text text-transparent mb-4">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600  bg-clip-text text-transparent mb-4">
             Withdrawal Center
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -102,7 +105,7 @@ export default function Withdrawal() {
 
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
           {/* Current Balance Card */}
-          <div className="bg-white/80 dark:bg-gray-900/60 backdrop-blur-xl rounded-3xl p-8 border border-gray-200 dark:border-gray-800 shadow-2xl">
+          <div className="bg-gradient-to-br from-purple-50 via-white to-purple-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 bg-purple-100 backdrop-blur-xl rounded-3xl p-8 border border-gray-200 dark:border-gray-800 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 Current Balance
@@ -256,41 +259,41 @@ export default function Withdrawal() {
               </div>
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isSubmitting || coinsToWithdraw < minWithdrawalCoins}
-                className="w-full bg-gradient-to-r from-gray-500 to-gray-700 dark:from-purple-500 dark:to-pink-500 hover:from-gray-600 hover:to-gray-800  disabled:from-gray-300 disabled:to-gray-400 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:scale-100 disabled:shadow-none flex items-center justify-center space-x-2
+
+              {canWithdraw ? (
+                <button
+                  type="submit"
+                  disabled={
+                    isSubmitting || coinsToWithdraw < minWithdrawalCoins
+                  }
+                  className="w-full bg-gradient-to-r from-gray-500 to-gray-700 dark:from-purple-500 dark:to-pink-500 hover:from-gray-600 hover:to-gray-800  disabled:from-gray-300 disabled:to-gray-400 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl disabled:scale-100 disabled:shadow-none flex items-center justify-center space-x-2
                 disabled:cursor-not-allowed
                 "
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Processing...</span>
-                  </>
-                ) : (
-                  <>
-                    {canWithdraw ? (
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Processing...</span>
+                    </>
+                  ) : (
+                    <>
                       <>
                         <span>
-                          {" "}
                           {withdrawMutation.isPending
                             ? "Processing..."
                             : "Withdraw Funds"}
                         </span>
                         <ArrowRight className="w-5 h-5" />
                       </>
-                    ) : (
-                      <>
-                        <span className="disabled:cursor-not-allowed">
-                          Insufficient Coin
-                        </span>
-                        <ArrowRight className="w-5 h-5" />
-                      </>
-                    )}
-                  </>
-                )}
-              </button>
+                    </>
+                  )}
+                </button>
+              ) : (
+                <div className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 cursor-not-allowed">
+                  <span className="font-medium">Insufficient Coin</span>
+                  <ArrowRight className="w-5 h-5 opacity-50" />
+                </div>
+              )}
             </form>
           </div>
         </div>

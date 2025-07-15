@@ -52,7 +52,10 @@ const steps = [
 
 export default function OurProcess() {
   return (
-    <section className="py-24 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
+    <section
+      id="how-it-works"
+      className="py-24 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden"
+    >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -103,7 +106,7 @@ export default function OurProcess() {
             </span>
           </motion.div>
 
-          <h2 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Your Path
             <span className="block bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">
               To Quick Earnings

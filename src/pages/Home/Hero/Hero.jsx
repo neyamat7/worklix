@@ -9,7 +9,15 @@ import { heroSlides } from "../../../data/slidesData";
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full h-[60vh]  min-h-[600px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{
+        duration: 1, // fade in over 1.2 seconds
+        ease: "easeOut",
+      }}
+      className="relative w-full h-[60vh]  min-h-[600px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800"
+    >
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         direction="horizontal"
@@ -80,6 +88,6 @@ export default function HeroSection() {
 
       {/* Custom Pagination */}
       <div className="swiper-pagination-custom absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex space-x-3"></div>
-    </section>
+    </motion.section>
   );
 }

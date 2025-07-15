@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FaCoins } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -8,6 +9,8 @@ import { signOutUser } from "../../../features/auth/authSlice";
 import { useTheme } from "../../../hooks/useTheme";
 import { useSingleUserData } from "../../../hooks/useUserData";
 import ThemeToggle from "../../ThemeToggle/ThemeToggle";
+import Logo from "../Logo/Logo";
+
 const Navbar = () => {
   const { theme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -47,23 +50,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-400">
+    <motion.nav
+      initial={{ y: -50 }} // 50px above the top (hidden)
+      animate={{ y: 0 }} // slide down to 0
+      transition={{
+        type: "spring",
+        stiffness: 80,
+        damping: 12,
+        duration: 0.6,
+      }}
+      className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-400"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Brand */}
-          <Link to="/" className="flex-shrink-0">
-            <button
-              className={`text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-purple-700 transition-all duration-300 ${
-                user ? "cursor-pointer" : "cursor-default"
-              }`}
-            >
-              {theme === "dark" ? (
-                <img className="h-18 w-17 mt-2" src="/light-logo.png" alt="" />
-              ) : (
-                <img className="h-18 w-17 mt-2" src="/dark-logo.png" alt="" />
-              )}
-            </button>
-          </Link>
+          <Logo />
 
           {/* Desktop Navigation */}
           <div className="hidden md:block">
@@ -329,7 +330,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 

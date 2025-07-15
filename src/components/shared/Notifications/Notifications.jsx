@@ -90,13 +90,13 @@ const NotificationPopup = () => {
   }
 
   return (
-    <div ref={notificationRef} className="relative">
+    <div ref={notificationRef} className="relative mr-1">
       {/* Notification Bell Icon with Badge */}
       <button
         onClick={togglePopup}
         className="relative p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-        <FaBell className="w-5 h-5 text-gray-600" />
+        <FaBell className="w-6 h-6 text-gray-600" />
         {notifications.length > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-600 text-white text-sm font-bold rounded-full min-h-5 min-w-5 flex items-center justify-center">
             {notifications.length}
@@ -106,7 +106,7 @@ const NotificationPopup = () => {
 
       {/* Notification Popup */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-68 min-[390px]:w-72 min-[400px]:w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50 overflow-hidden">
           {/* Header */}
           <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-gray-50">
             <h3 className="font-semibold text-gray-800">Notifications</h3>

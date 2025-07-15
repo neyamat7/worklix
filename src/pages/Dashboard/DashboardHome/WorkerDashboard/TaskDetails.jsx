@@ -103,12 +103,6 @@ const TaskDetails = () => {
   return (
     <div>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-        {/* Decorative background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-400 to-red-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        </div>
-
         <div className="relative z-10 min-h-screen p-4">
           <div className="max-w-4xl mx-auto">
             {/* Header */}
@@ -233,7 +227,7 @@ const TaskDetails = () => {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-20">
                     <div>
                       <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
                         Buyer Information
@@ -390,9 +384,9 @@ const SubmissionModal = ({ task, onClose, worker, mutation }) => {
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Payment:</span>
+              <span className="text-gray-600 dark:text-gray-400">Payment(Coin):</span>
               <span className="text-green-600 dark:text-green-400 font-bold">
-                ${task.payable_amount}
+                {task.payable_amount}
               </span>
             </div>
           </div>

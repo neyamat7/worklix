@@ -1,15 +1,46 @@
 import { motion } from "framer-motion";
+import { FaGithub } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import {
   FiFacebook,
-  FiInstagram,
   FiLinkedin,
   FiMail,
   FiMapPin,
   FiPhone,
-  FiTwitter,
 } from "react-icons/fi";
+import FooterLogo from "../Logo/FooterLogo";
 
 export default function Footer() {
+  const navItems = [
+    { id: "best-workers", name: "Best Workers" },
+    { id: "recent-task", name: "Recent Task" },
+    { id: "how-it-works", name: "How It Works" },
+    { id: "testimonials", name: "Testimonials" },
+  ];
+
+  const socialLinks = [
+    {
+      icon: FaGithub,
+      link: "https://github.com/neyamat7",
+      color: "hover:text-gray-500",
+    },
+    {
+      icon: FaXTwitter,
+      link: "https://twitter.com/neyamat7ullah",
+      color: "hover:text-blue-400",
+    },
+    {
+      icon: FiFacebook,
+      link: "https://www.facebook.com/neyamat4",
+      color: "hover:text-blue-600",
+    },
+    {
+      icon: FiLinkedin,
+      link: "https://www.linkedin.com/",
+      color: "hover:text-blue-500",
+    },
+  ];
+
   return (
     <footer className="bg-gray-900 dark:bg-black text-white relative overflow-hidden">
       {/* Background Elements */}
@@ -39,9 +70,7 @@ export default function Footer() {
             className="col-span-1 md:col-span-2"
           >
             <div className="mb-6">
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                TaskEarn
-              </h3>
+              <FooterLogo />
               <p className="text-gray-400 mt-2 max-w-md">
                 Empowering freelancers worldwide with micro-tasks and fair
                 earnings. Join our community and start your journey to financial
@@ -53,15 +82,15 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-gray-400">
                 <FiMail className="text-purple-400" />
-                <span>support@taskearn.com</span>
+                <span>support@worklix.com</span>
               </div>
               <div className="flex items-center gap-3 text-gray-400">
                 <FiPhone className="text-purple-400" />
-                <span>+1 (555) 123-4567</span>
+                <span>+8801834529197</span>
               </div>
               <div className="flex items-center gap-3 text-gray-400">
                 <FiMapPin className="text-purple-400" />
-                <span>San Francisco, CA</span>
+                <span>Mirpur, Dhaka</span>
               </div>
             </div>
           </motion.div>
@@ -75,19 +104,14 @@ export default function Footer() {
           >
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {[
-                "About Us",
-                "How It Works",
-                "Privacy Policy",
-                "Terms of Service",
-              ].map((link, index) => (
+              {navItems.map((link, index) => (
                 <li key={index}>
                   <motion.a
-                    href="#"
+                    href={`#${link.id}`}
                     whileHover={{ x: 5 }}
                     className="text-gray-400 hover:text-purple-400 transition-colors"
                   >
-                    {link}
+                    {link.name}
                   </motion.a>
                 </li>
               ))}
@@ -103,15 +127,11 @@ export default function Footer() {
           >
             <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
             <div className="flex gap-4">
-              {[
-                { icon: FiTwitter, color: "hover:text-blue-400" },
-                { icon: FiFacebook, color: "hover:text-blue-600" },
-                { icon: FiInstagram, color: "hover:text-pink-400" },
-                { icon: FiLinkedin, color: "hover:text-blue-500" },
-              ].map((social, index) => (
+              {socialLinks.map((social, index) => (
                 <motion.a
                   key={index}
-                  href="#"
+                  href={social.link}
+                  target="_blank"
                   whileHover={{ scale: 1.2, y: -2 }}
                   whileTap={{ scale: 0.9 }}
                   className={`text-gray-400 ${social.color} transition-colors`}

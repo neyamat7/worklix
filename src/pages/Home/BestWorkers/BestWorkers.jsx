@@ -19,7 +19,10 @@ export default function BestWorkers() {
   console.log(progress);
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
+    <section
+      id="best-workers"
+      className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden"
+    >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -68,7 +71,7 @@ export default function BestWorkers() {
             </span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
             Meet Our
             <span className="block bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               Best Workers
@@ -87,7 +90,7 @@ export default function BestWorkers() {
             const progress = 70 + (worker.coins % 26);
             return (
               <motion.div
-                key={worker.id}
+                key={worker._id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 whileHover={{

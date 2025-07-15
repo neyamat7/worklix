@@ -1,16 +1,18 @@
 import { useState } from "react";
+import { FaCoins } from "react-icons/fa";
 import {
   FiCalendar,
   FiCheck,
   FiClock,
   FiCreditCard,
-  FiDollarSign,
   FiDownload,
   FiGrid,
   FiList,
   FiX,
 } from "react-icons/fi";
+import { PiHandCoinsDuotone } from "react-icons/pi";
 import { useSelector } from "react-redux";
+import Loading from "../../../../components/shared/Loading/Loading";
 import useUserPayments from "../../../../hooks/useUserPayments";
 
 const PaymentRecords = () => {
@@ -36,7 +38,7 @@ const PaymentRecords = () => {
 
   const formatAmount = (amount, currency) => {
     return new Intl.NumberFormat("en-US", {
-      style: "currency",
+      // style: "currency",
       currency: currency.toUpperCase(),
     }).format(amount / 100); // Assuming amount is in cents
   };
@@ -99,16 +101,7 @@ const PaymentRecords = () => {
     .reduce((sum, p) => sum + p.coins_purchased, 0);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">
-            Loading payment history...
-          </p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {
@@ -153,7 +146,7 @@ const PaymentRecords = () => {
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
-                  <FiDollarSign className="w-6 h-6 text-white" />
+                  <PiHandCoinsDuotone className="w-6 h-6 text-white" />
                 </div>
               </div>
             </div>
@@ -169,7 +162,7 @@ const PaymentRecords = () => {
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold">🪙</span>
+                  <FaCoins className="w-6 h-6 text-white" />
                 </div>
               </div>
             </div>
@@ -240,7 +233,7 @@ const PaymentRecords = () => {
             </div>
           ) : viewMode === "table" ? (
             /* Table View - Hidden on small screens */
-            <div className="hidden lg:block bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+            <div className="hidden md:block bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gray-50/80 dark:bg-gray-700/80">
@@ -251,7 +244,7 @@ const PaymentRecords = () => {
                       <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Coins
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Amount
                       </th>
                       <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -293,8 +286,8 @@ const PaymentRecords = () => {
                               </span>
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                          <td className="px-6 py-4 text-center">
+                            <span className="text-sm font-semibold  text-gray-900 dark:text-white">
                               {formatAmount(
                                 payment.amount_paid,
                                 payment.currency
@@ -407,7 +400,7 @@ const PaymentRecords = () => {
 
           {/* Show card view on large screens when table is selected but force cards on mobile */}
           {viewMode === "table" && (
-            <div className="lg:hidden">
+            <div className="md:hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {payments.map((payment) => {
                   const packageInfo = getPackageInfo(payment.package_id);

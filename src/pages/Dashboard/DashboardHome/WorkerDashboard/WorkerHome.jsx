@@ -1,3 +1,4 @@
+import { FaCoins } from "react-icons/fa";
 import {
   FiAward,
   FiCalendar,
@@ -10,33 +11,21 @@ import {
   FiUser,
 } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import ErrorMessage from "../../../../components/shared/ErrorMessage/ErrorMessage";
+import Loading from "../../../../components/shared/Loading/Loading";
 import { usePaginatedSubmissions } from "../../../../hooks/usePaginatedSubmissions";
 
 const WorkerHome = () => {
-  // // Dummy data based on your submission structure
-  // const submissions = [
-  //   {
-  //     _id: { $oid: "686fe55aca3e6dae34d38e69" },
-  //     task_id: { $oid: "686fa052b72b4e22fac40581" },
-  //     task_title: "Create Modern Website Design",
-  //     payable_amount: 25,
-  //     submission_details:
-  //       "Completed modern responsive website design with UI/UX best practices",
-  //     worker_email: "neyamat7.ullah@gmail.com",
-  //     worker_name: "Neyamat Ullah",
-  //     buyer_email: "john@gmail.com",
-  //     buyer_name: "John Doe",
-  //     submission_date: "2025-07-10T16:07:54.705Z",
-  //     status: "approved",
-  //   },
-  // ];
-
   const { user } = useSelector((state) => state.auth);
   const { data, isLoading, error } = usePaginatedSubmissions(user?.email, 1);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading submissions: {error.message}</div>;
-  console.log(data);
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
 
   // Calculate stats
   const totalSubmissions = data?.allSubmissions.length;
@@ -60,15 +49,15 @@ const WorkerHome = () => {
   };
 
   return (
-    <div>
-      <div className="min-h-[calc(100vh-105px)] bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
+    <div className="h-full bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
+      <div className="max-w-6xl mx-auto">
         <div className="relative z-10 h-full p-4 lg:p-8">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pt-4">
               <div className="mb-4 sm:mb-0">
                 <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                  Worker Dashboard
+                  Worker Home
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 text-lg">
                   Track your submissions and earnings
@@ -81,14 +70,14 @@ const WorkerHome = () => {
               {/* Total Submissions */}
               <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="flex flex-col gap-3">
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
                       Total Submissions
                     </p>
                     <p className="text-3xl font-bold text-gray-900 dark:text-white">
                       {totalSubmissions}
                     </p>
-                    <p className="text-xs text-green-600 dark:text-green-400 mt-1 flex items-center">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 flex items-center">
                       <FiTrendingUp className="w-3 h-3 mr-1" />
                       All time
                     </p>
@@ -102,19 +91,19 @@ const WorkerHome = () => {
               {/* Pending Submissions */}
               <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="flex flex-col gap-3">
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
                       Pending Submissions
                     </p>
                     <p className="text-3xl font-bold text-gray-900 dark:text-white">
                       {pendingSubmissions}
                     </p>
-                    <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 flex items-center">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 flex">
                       <FiClock className="w-3 h-3 mr-1" />
                       Under review
                     </p>
                   </div>
-                  <div className="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-14 h-14 bg-gradient-to-br from-gray-500 to-gray-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <FiClock className="w-7 h-7 text-white" />
                   </div>
                 </div>
@@ -123,14 +112,14 @@ const WorkerHome = () => {
               {/* Approved Submissions */}
               <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="flex flex-col gap-3">
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
                       Approved Submissions
                     </p>
                     <p className="text-3xl font-bold text-gray-900 dark:text-white">
                       {approvedSubmissions.length}
                     </p>
-                    <p className="text-xs text-green-600 dark:text-green-400 mt-1 flex items-center">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 flex ">
                       <FiAward className="w-3 h-3 mr-1" />
                       Completed
                     </p>
@@ -144,16 +133,16 @@ const WorkerHome = () => {
               {/* Total Earnings */}
               <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl hover:scale-105 transition-all duration-300">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="flex flex-col gap-3">
                     <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
                       Total Earnings
                     </p>
                     <p className="text-3xl font-bold text-gray-900 dark:text-white">
                       ${totalEarnings}
                     </p>
-                    <p className="text-xs text-green-600 dark:text-green-400 mt-1 flex items-center">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 flex">
                       <FiTarget className="w-3 h-3 mr-1" />
-                      From approved tasks
+                      From approved
                     </p>
                   </div>
                   <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -197,7 +186,7 @@ const WorkerHome = () => {
               ) : (
                 <>
                   {/* Desktop Table View */}
-                  <div className="hidden lg:block overflow-x-auto">
+                  <div className="hidden sm:block overflow-x-auto">
                     <table className="w-full">
                       <thead className="bg-gray-50/80 dark:bg-gray-700/80">
                         <tr>
@@ -207,10 +196,10 @@ const WorkerHome = () => {
                           <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             Buyer
                           </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                          <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             Amount
                           </th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                          <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             Status
                           </th>
                           <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -231,26 +220,31 @@ const WorkerHome = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4">
-                              <div className="flex items-center space-x-2">
+                              <div className="flex items-center gap-1">
                                 <FiUser className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                                 <span className="text-sm text-gray-900 dark:text-white">
                                   {submission.buyer_name}
                                 </span>
                               </div>
                             </td>
-                            <td className="px-6 py-4">
-                              <span className="text-sm font-bold text-green-600 dark:text-green-400">
-                                ${submission.payable_amount.$numberInt}
-                              </span>
+                            <td className="px-6 py-4 ">
+                              <div className="flex items-center justify-center">
+                                <span className="text-sm font-bold text-yellow-600 dark:text-yellow-400 flex gap-1">
+                                  <FaCoins className="w-4 h-4 mr-1" />
+                                  {submission.payable_amount}
+                                </span>
+                              </div>
                             </td>
                             <td className="px-6 py-4">
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                <FiCheck className="w-3 h-3 mr-1" />
-                                Approved
-                              </span>
+                              <div className="flex items-center justify-center">
+                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                  <FiCheck className="w-3 h-3 mr-1" />
+                                  Approved
+                                </span>
+                              </div>
                             </td>
                             <td className="px-6 py-4">
-                              <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400">
+                              <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                                 <FiCalendar className="w-4 h-4" />
                                 <span>
                                   {formatDate(submission.submission_date)}
@@ -264,7 +258,7 @@ const WorkerHome = () => {
                   </div>
 
                   {/* Mobile/Tablet Card View */}
-                  <div className="lg:hidden p-6">
+                  <div className="sm:hidden p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {approvedSubmissions.map((submission, index) => (
                         <div
@@ -298,8 +292,8 @@ const WorkerHome = () => {
                                 <FiDollarSign className="w-4 h-4" />
                                 <span>Earnings</span>
                               </div>
-                              <span className="text-sm font-bold text-green-600 dark:text-green-400">
-                                ${submission.payable_amount.$numberInt}
+                              <span className="text-sm font-bold text-yellow-600 dark:text-yellow-400">
+                                {submission.payable_amount} coins
                               </span>
                             </div>
 

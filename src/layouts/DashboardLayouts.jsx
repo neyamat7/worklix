@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router";
+import Loading from "../components/shared/Loading/Loading";
+import Logo from "../components/shared/Logo/Logo";
 import NotificationPopup from "../components/shared/Notifications/Notifications";
 import ThemeToggle from "../components/ThemeToggle/ThemeToggle";
 import { useSingleUserData } from "../hooks/useUserData";
@@ -16,7 +18,9 @@ const DashboardLayouts = () => {
     authUser?.email
   );
 
-  if (userLoading || roleLoading) return <div>Loading...</div>;
+  if (userLoading || roleLoading) {
+    return <Loading />;
+  }
 
   // Navigation items based on role
   const getNavigationItems = () => {
@@ -59,22 +63,16 @@ const DashboardLayouts = () => {
     <div className="h-screen bg-gray-50 dark:bg-gray-900 flex overflow-hidden">
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 z-50 w-72 h-screen bg-white dark:bg-gray-800 shadow-lg transform ${
+        className={`fixed top-0 left-0 z-50 w-72 h-screen bg-white dark:bg-gray-800 shadow-lg transform border-r border-r-gray-100 dark:border-r-gray-700 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
-        style={{ height: "100vh" }} // Ensures sidebar is always full height
+        style={{ height: "100vh" }}
       >
-        <Link to="/">
-          <div className="flex items-center justify-center h-17 px-4 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center space-x-2">
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Worklix
-              </span>
-            </div>
-          </div>
-        </Link>
+        <div className="px-4 -mt-3 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+          <Logo />
+        </div>
 
-        <nav className="mt-8 px-4 space-y-2">
+        <nav className="px-4 space-y-2 mt-1">
           {getNavigationItems().map((item) => (
             <NavLink
               onClick={() => setIsSidebarOpen(false)}
@@ -99,9 +97,9 @@ const DashboardLayouts = () => {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto flex flex-col min-h-screen">
         {/* Navbar */}
-        <header className="bg-white z-50 sticky top-0 dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between px-4 py-4">
-            <div className="flex items-center space-x-4">
+        <header className="bg-white w-full mx-auto z-50 sticky top-0 dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+          <div className="max-w-6xl mx-auto flex items-center justify-between px-4 pt-5 py-4">
+            <div className="flex items-center space-x-0">
               <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className="lg:hidden p-2 rounded-md text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -120,33 +118,38 @@ const DashboardLayouts = () => {
                   />
                 </svg>
               </button>
+              <Link
+                to="/"
+                className="text-xl font-semibold bg-gradient-to-tr from-blue-600 to-purple-600 bg-clip-text text-transparent lg:hidden"
+              >
+                Worklix
+              </Link>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center">
               {/* Available Coins */}
-              <div className="flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-lg">
+              <div className="flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-lg mr-2">
                 <span className="text-sm font-medium">
-                  🪙 {userData?.coins}
+                  Coins: {userData?.coins}
                 </span>
               </div>
 
               {/* User Info */}
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center md:mr-2">
                 <img
                   src={authUser?.photoURL || "/placeholder.svg"}
                   alt="User Avatar"
-                  className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600"
+                  className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 mr-2"
                 />
                 <div className="hidden md:block">
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {authUser?.name}
+                    {authUser?.displayName}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
                     {userData?.role}
                   </p>
                 </div>
               </div>
-
               {/* Notifications */}
               <NotificationPopup />
               <ThemeToggle />
@@ -159,7 +162,7 @@ const DashboardLayouts = () => {
           <Outlet />
         </main>
 
-        <footer className="bg-white dark:bg-gray-800 shadow-inner">
+        <footer className="bg-white dark:bg-gray-800 shadow-inner shadow-gray-200 dark:shadow-gray-700 py-4">
           <div className="container mx-auto px-4 py-2">
             <p className="text-center text-sm text-gray-500 dark:text-gray-400">
               &copy; {new Date().getFullYear()} Worklix. All rights reserved.
