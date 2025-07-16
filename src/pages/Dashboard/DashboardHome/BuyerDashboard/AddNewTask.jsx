@@ -426,9 +426,10 @@ const AddNewTask = () => {
             <div className="pt-4">
               <button
                 type="submit"
-                className={`w-full py-3 px-6 rounded-lg font-medium text-white bg-purple-600 hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800`}
+                disabled={createTaskMutation.isPending}
+                className={`w-full py-3 px-6 rounded-lg font-medium text-white bg-purple-600 hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed`}
               >
-                {createTaskMutation.isLoading ? "Adding Task..." : "Add Task"}
+                {createTaskMutation.isPending ? "Processing..." : "Add Task"}
               </button>
             </div>
           </form>

@@ -151,7 +151,7 @@ const TaskEditModal = ({ task, onClose, onSave, isUpdating }) => {
                       Per Worker
                     </p>
                     <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                      ${task.payable_amount}
+                      {task.payable_amount}
                     </p>
                   </div>
                   <div>
@@ -159,7 +159,7 @@ const TaskEditModal = ({ task, onClose, onSave, isUpdating }) => {
                       Total
                     </p>
                     <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                      ${task.total_payable_amount}
+                      {task.total_payable_amount}
                     </p>
                   </div>
                 </div>
