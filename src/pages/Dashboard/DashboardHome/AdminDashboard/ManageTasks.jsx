@@ -17,6 +17,8 @@ import {
   FiXCircle,
 } from "react-icons/fi";
 import Swal from "sweetalert2";
+import ErrorMessage from "../../../../components/shared/ErrorMessage/ErrorMessage";
+import Loading from "../../../../components/shared/Loading/Loading";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useDeleteTaskByAdmin } from "../../../../hooks/useDeleteTaskByAdmin";
 
@@ -29,7 +31,7 @@ const ManageTasks = () => {
   const {
     data: tasks = [],
     isLoading,
-    isError,
+    error,
   } = useQuery({
     queryKey: ["allTasks"],
     queryFn: async () => {
@@ -41,8 +43,12 @@ const ManageTasks = () => {
   // delete task mutation
   const deleteTaskMutation = useDeleteTaskByAdmin();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {isError.message}</div>;
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
 
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =

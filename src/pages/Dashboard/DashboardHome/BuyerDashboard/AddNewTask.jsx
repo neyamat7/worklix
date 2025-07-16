@@ -145,10 +145,13 @@ const AddNewTask = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="min-h-[calc(100vh-69px)] bg-gray-50 dark:bg-gray-900 p-4 md:p-8">
+    <div
+      className="h-full
+    bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950 p-4 md:p-8"
+    >
       <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
         <div className="p-6 md:p-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-500 to-purple-600 bg-clip-text text-transparent mb-2">
             Create New Task
           </h2>
           <p className="text-gray-600 dark:text-gray-300 mb-6">

@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router";
 import LoginPage from "../components/auth/LoginPage";
 
 import RegisterPage from "../components/auth/RegisterPage";
+import ErrorPage from "../components/shared/NotFountPage/NorFoundPage";
 import DashboardLayouts from "../layouts/DashboardLayouts";
 import RootLayout from "../layouts/RootLayout";
 import ManageTasks from "../pages/Dashboard/DashboardHome/AdminDashboard/ManageTasks";
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    errorElement: <div>something went wrong</div>,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,

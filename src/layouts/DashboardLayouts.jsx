@@ -56,7 +56,7 @@ const DashboardLayouts = () => {
       ],
     };
 
-    return [...commonItems, ...roleSpecificItems[role]];
+    return [...commonItems, ...roleSpecificItems[role || "worker"]];
   };
 
   return (

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   FiCalendar,
+  FiClipboard,
   FiDollarSign,
   FiEdit2,
   FiEye,
@@ -14,6 +15,7 @@ import Loading from "../../../../components/shared/Loading/Loading";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useBuyerTasks } from "../../../../hooks/useBuyerTasks";
 import TaskEditModal from "./TaskEditModal";
+import TaskModal from "./TaskModal";
 
 const MyTask = () => {
   const queryClient = useQueryClient();
@@ -24,14 +26,20 @@ const MyTask = () => {
   const [editTask, setEditTask] = useState();
 
   // Fetch tasks using TanStack Query
-  const { data: tasks, isLoading } = useBuyerTasks(user?.email);
+  const { data: tasks = [], isLoading } = useBuyerTasks(user?.email);
 
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: (taskId) => axiosSecure.delete(`/buyer/tasks/${taskId}`),
     onSuccess: () => {
       queryClient.invalidateQueries(["tasks"]);
-      Swal.fire("Deleted!", "Your task has been deleted.", "success");
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your task has been deleted.",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     },
     onError: (error) => {
       Swal.fire("Error!", error.message || "Something went wrong.", "error");
@@ -61,7 +69,6 @@ const MyTask = () => {
 
     if (result.isConfirmed) {
       deleteMutation.mutate(taskId);
-      Swal.fire("Deleted!", "Your task has been deleted.", "success");
     }
   };
 
@@ -98,51 +105,137 @@ const MyTask = () => {
   }
 
   return (
-    <div className="h-full p-4 md:p-8 bg-gray-50 dark:bg-gray-900">
+    <div className="h-full p-4 md:p-8 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-6">
-          Your Tasks
-        </h1>
+        {tasks?.length > 0 && (
+          <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-7">
+            Manage Your Tasks
+          </h1>
+        )}
 
-        {/* Desktop Table View */}
-        <div className="hidden md:block">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-700">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Task Title
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Deadline
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="hidden lg:table-cell px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ">
-                    Total Workers
-                  </th>
-                  <th className="hidden lg:table-cell px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Paid Workers
-                  </th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                {tasks?.map((task) => (
-                  <tr
-                    key={task._id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                      {task.task_title}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                      {formatDate(task.completion_date)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+        {tasks?.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+            <div className="mb-5 p-5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500">
+              <FiClipboard className="w-8 h-8" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
+              No tasks yet
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400 max-w-xs mx-auto text-sm">
+              Tasks you add will show up here. Tap the "+" button to begin.
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="hidden sm:block">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Task Title
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Deadline
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="hidden lg:table-cell px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ">
+                        Total Workers
+                      </th>
+                      <th className="hidden lg:table-cell px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Paid Workers
+                      </th>
+                      <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {tasks?.map((task) => (
+                      <tr
+                        key={task._id}
+                        className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                          {task.task_title}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                          {formatDate(task.completion_date)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`px-2 py-1 text-xs rounded-full ${
+                              task.status === "active"
+                                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
+                            }`}
+                          >
+                            {task.status}
+                          </span>
+                        </td>
+                        <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                          <div className="flex items-center justify-center">
+                            <FiUsers className="mr-1" />
+                            {task.required_workers}
+                          </div>
+                        </td>
+                        <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                          <div className="flex items-center justify-center">
+                            <FiDollarSign className="mr-1" />
+                            {task.total_paid_workers}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-center">
+                          <button
+                            onClick={() => {
+                              setSelectedTask(task);
+                              setIsModalOpen(true);
+                            }}
+                            className="text-purple-600 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-300 mr-3"
+                          >
+                            <FiEye className="inline mr-1" /> View
+                          </button>
+                          <button
+                            onClick={() => setEditTask(task)}
+                            className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-3"
+                          >
+                            <FiEdit2 className="inline mr-1" /> Edit
+                          </button>
+                          <button
+                            onClick={() => handleDelete(task._id)}
+                            className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
+                          >
+                            <FiTrash2 className="inline mr-1" /> Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="sm:hidden space-y-4">
+              {tasks?.map((task) => (
+                <div
+                  key={task._id}
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
+                >
+                  <div className="p-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+                          {task.task_title}
+                        </h3>
+                        <div className="flex items-center mt-1 space-x-4">
+                          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <FiCalendar className="mr-1" />
+                            <span>{formatDate(task.completion_date)}</span>
+                          </div>
+                        </div>
+                      </div>
                       <span
                         className={`px-2 py-1 text-xs rounded-full ${
                           task.status === "active"
@@ -152,237 +245,51 @@ const MyTask = () => {
                       >
                         {task.status}
                       </span>
-                    </td>
-                    <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                      <div className="flex items-center justify-center">
-                        <FiUsers className="mr-1" />
-                        {task.required_workers}
-                      </div>
-                    </td>
-                    <td className="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                      <div className="flex items-center justify-center">
-                        <FiDollarSign className="mr-1" />
-                        {task.total_paid_workers}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex justify-center">
-                      <button
-                        onClick={() => {
-                          setSelectedTask(task);
-                          setIsModalOpen(true);
-                        }}
-                        className="text-purple-600 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-300 mr-3"
-                      >
-                        <FiEye className="inline mr-1" /> View
-                      </button>
-                      <button
-                        onClick={() => setEditTask(task)}
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-3"
-                      >
-                        <FiEdit2 className="inline mr-1" /> Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(task._id)}
-                        className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300"
-                      >
-                        <FiTrash2 className="inline mr-1" /> Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Mobile Card View */}
-        <div className="md:hidden space-y-4">
-          {tasks?.map((task) => (
-            <div
-              key={task._id}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
-            >
-              <div className="p-4">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-white">
-                      {task.task_title}
-                    </h3>
-                    <div className="flex items-center mt-1 space-x-4">
+                    </div>
+                    <div className="mt-4 flex justify-between space-x-2">
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                        <FiCalendar className="mr-1" />
-                        <span>{formatDate(task.completion_date)}</span>
+                        <FiUsers className="mr-1" />
+                        <span>{task.required_workers} needed</span>
+                      </div>
+                      <div>
+                        <button
+                          onClick={() => {
+                            setSelectedTask(task);
+                            setIsModalOpen(true);
+                          }}
+                          className="p-2 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 rounded-full"
+                        >
+                          <FiEye />
+                        </button>
+                        <button
+                          onClick={() => setEditTask(task)}
+                          className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full"
+                        >
+                          <FiEdit2 />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(task._id)}
+                          className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full"
+                        >
+                          <FiTrash2 />
+                        </button>
                       </div>
                     </div>
                   </div>
-                  <span
-                    className={`px-2 py-1 text-xs rounded-full ${
-                      task.status === "active"
-                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                        : "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200"
-                    }`}
-                  >
-                    {task.status}
-                  </span>
                 </div>
-                <div className="mt-4 flex justify-between space-x-2">
-                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                    <FiUsers className="mr-1" />
-                    <span>{task.required_workers} needed</span>
-                  </div>
-                  <div>
-                    <button
-                      onClick={() => {
-                        setSelectedTask(task);
-                        setIsModalOpen(true);
-                      }}
-                      className="p-2 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 rounded-full"
-                    >
-                      <FiEye />
-                    </button>
-                    <button
-                      onClick={() => setEditTask(task)}
-                      className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full"
-                    >
-                      <FiEdit2 />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(task._id)}
-                      className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full"
-                    >
-                      <FiTrash2 />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
+
+        {/* Mobile Card View */}
 
         {/* Task Details Modal */}
         {isModalOpen && selectedTask && (
-          <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <div className="p-6">
-                <div className="flex justify-between items-start">
-                  <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-                    {selectedTask.task_title}
-                  </h2>
-                  <button
-                    onClick={() => setIsModalOpen(false)}
-                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                {selectedTask.task_image_url && (
-                  <div className="mt-4 rounded-lg overflow-hidden">
-                    <img
-                      src={selectedTask.task_image_url}
-                      alt="Task"
-                      className="w-full h-48 object-cover"
-                    />
-                  </div>
-                )}
-
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-                      Task Details
-                    </h3>
-                    <p className="text-gray-800 dark:text-gray-200">
-                      {selectedTask.task_detail}
-                    </p>
-                  </div>
-
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-                      Submission Info
-                    </h3>
-                    <p className="text-gray-800 dark:text-gray-200">
-                      {selectedTask.submission_info}
-                    </p>
-                  </div>
-
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <div className="flex items-center mb-2">
-                      <FiUsers className="text-gray-500 dark:text-gray-400 mr-2" />
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        Workers
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Required
-                        </p>
-                        <p className="text-gray-800 dark:text-gray-200">
-                          {selectedTask.required_workers}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Completed
-                        </p>
-                        <p className="text-gray-800 dark:text-gray-200">
-                          {selectedTask.total_paid_workers}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <div className="flex items-center mb-2">
-                      <FiDollarSign className="text-gray-500 dark:text-gray-400 mr-2" />
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        Payment
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Per Worker
-                        </p>
-                        <p className="text-gray-800 dark:text-gray-200">
-                          ${selectedTask.payable_amount}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Total Paid
-                        </p>
-                        <p className="text-gray-800 dark:text-gray-200">
-                          ${selectedTask.total_paid_amount}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Created
-                      </p>
-                      <p className="text-gray-800 dark:text-gray-200">
-                        {formatDate(selectedTask.created_at)}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Deadline
-                      </p>
-                      <p className="text-gray-800 dark:text-gray-200">
-                        {formatDate(selectedTask.completion_date)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <TaskModal
+            selectedTask={selectedTask}
+            setIsModalOpen={setIsModalOpen}
+          />
         )}
 
         {editTask && (

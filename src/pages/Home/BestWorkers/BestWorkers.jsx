@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FiAward } from "react-icons/fi";
+import ErrorMessage from "../../../components/shared/ErrorMessage/ErrorMessage";
 import Loading from "../../../components/shared/Loading/Loading";
 import { useTopWorkers } from "../../../hooks/useTopWorkers";
 
@@ -11,7 +12,7 @@ export default function BestWorkers() {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <ErrorMessage message={error.message} />;
   }
 
   const progress = 70 + (workers.coins % 26);

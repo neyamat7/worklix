@@ -1,16 +1,24 @@
 import { useState } from "react";
 import { FaCoins } from "react-icons/fa";
 import { FiArrowRight, FiClock, FiUsers } from "react-icons/fi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import ErrorMessage from "../../../components/shared/ErrorMessage/ErrorMessage";
 import Loading from "../../../components/shared/Loading/Loading";
 import { useRecentTasks } from "../../../hooks/useRecentTasks";
+import { useUserRole } from "../../../hooks/useUserRole";
 import { formatDate } from "../../../utils/formateDate";
 import { getDeadlineDuration } from "../../../utils/getDeadlineDuration";
+import TaskModal from "../../Dashboard/DashboardHome/BuyerDashboard/TaskModal";
 
 export default function FeaturedSection() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  // const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { role, roleLoading } = useUserRole();
 
   const { data: tasks, isLoading, error } = useRecentTasks(6);
+  const navigate = useNavigate();
 
   // const categories = [
   //   { id: "all", name: "All Tasks", count: 24 },
@@ -143,8 +151,11 @@ export default function FeaturedSection() {
   //     ? tasks
   //     : tasks.filter((task) => task.category === selectedCategory);
 
-  if (isLoading) {
+  if (isLoading || roleLoading) {
     return <Loading />;
+  }
+  if (error) {
+    return <ErrorMessage message={error.message} />;
   }
 
   return (
@@ -273,12 +284,47 @@ export default function FeaturedSection() {
               </div>
 
               {/* Apply Button */}
-              <Link to={`/dashboard/task-details/${task._id}`}>
-                <button className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 group-hover:scale-105 flex items-center justify-center gap-2">
-                  Apply Now
+              {role === "worker" && (
+                <Link to={`/dashboard/task-details/${task._id}`}>
+                  <button className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 group-hover:scale-105 flex items-center justify-center gap-2">
+                    Apply Now
+                    <FiArrowRight className="w-4 h-4" />
+                  </button>
+                </Link>
+              )}
+
+              {role === "buyer" && (
+                <button
+                  onClick={() => {
+                    setSelectedTask(task);
+                    setIsModalOpen(true);
+                  }}
+                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 group-hover:scale-105 flex items-center justify-center gap-2"
+                >
+                  View Summary
                   <FiArrowRight className="w-4 h-4" />
                 </button>
-              </Link>
+              )}
+
+              {role === "admin" && (
+                <button
+                  onClick={() => navigate("/dashboard/manage-tasks")}
+                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 group-hover:scale-105 flex items-center justify-center gap-2"
+                >
+                  Manage Task
+                  <FiArrowRight className="w-4 h-4" />
+                </button>
+              )}
+
+              {!role && (
+                <button
+                  onClick={() => navigate("/dashboard")}
+                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 group-hover:scale-105 flex items-center justify-center gap-2"
+                >
+                  See Details
+                  <FiArrowRight className="w-4 h-4" />
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -291,6 +337,12 @@ export default function FeaturedSection() {
           </button>
         </div> */}
       </div>
+      {selectedTask && isModalOpen && (
+        <TaskModal
+          selectedTask={selectedTask}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </section>
   );
 }

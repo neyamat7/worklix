@@ -4,6 +4,8 @@ import { FiCalendar, FiUser } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
+import ErrorMessage from "../../../../components/shared/ErrorMessage/ErrorMessage";
+import Loading from "../../../../components/shared/Loading/Loading";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useHasSubmitted } from "../../../../hooks/useHasSubmitted";
 
@@ -29,8 +31,11 @@ const TaskDetails = () => {
     },
   });
 
-  const { data } = useHasSubmitted(user?.email, task?._id);
-  const alreadySubmitted = data?.alreadySubmitted;
+  const { data, isLoading: hasSubmittedLoading } = useHasSubmitted(
+    user?.email,
+    task?._id
+  );
+  // const alreadySubmitted = data?.alreadySubmitted;
 
   const mutation = useMutation({
     mutationFn: async (submissionData) => {
@@ -67,6 +72,8 @@ const TaskDetails = () => {
   });
 
   const handleClickSubmitTask = () => {
+    const alreadySubmitted = data?.alreadySubmitted;
+
     if (alreadySubmitted) {
       Swal.fire({
         title: "Already Submitted",
@@ -93,12 +100,12 @@ const TaskDetails = () => {
     setShowSubmissionModal(true);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || hasSubmittedLoading) {
+    return <Loading />;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (

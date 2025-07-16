@@ -63,8 +63,8 @@ const Navbar = () => {
           title: "Logged Out!",
           text: "You have been successfully logged out.",
           icon: "success",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#3085d6",
+          timer: 2000,
+          showConfirmButton: false,
         });
       }
     });
