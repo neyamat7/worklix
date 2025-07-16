@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -21,6 +21,7 @@ const AddNewTask = () => {
   const { user, loading } = useSelector((state) => state.auth);
   const axiosSecure = useAxiosSecure();
   const { data: userData } = useSingleUserData(user?.email);
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
@@ -46,6 +47,7 @@ const AddNewTask = () => {
     },
     onSuccess: (data) => {
       toast.success("Task created successfully!");
+      queryClient.invalidateQueries(["user", user?.email]);
       navigate("/dashboard/my-tasks");
     },
     onError: (error) => {

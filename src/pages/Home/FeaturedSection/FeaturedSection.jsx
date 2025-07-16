@@ -201,21 +201,15 @@ export default function FeaturedSection() {
         </div> */}
 
         {/* Tasks Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {tasks.map((task, index) => (
             <div
               key={task._id}
-              className="group relative bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
+              className="group relative bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 flex flex-col h-[555px]"
             >
-              {/* Featured Badge */}
-              {/* {task.featured && (
-                <div className="absolute -top-3 -right-3 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg">
-                  FEATURED
-                </div>
-              )} */}
-              <div className="mb-4 w-full max-h-60 h-full flex">
+              <div className="mb-4 w-full h-50 flex">
                 <img
-                  className="w-full object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded-lg"
                   src={task.task_image_url}
                   alt=""
                 />
@@ -227,7 +221,7 @@ export default function FeaturedSection() {
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {task.task_title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-2">
                     {task.task_detail}
                   </p>
                 </div>
@@ -283,7 +277,9 @@ export default function FeaturedSection() {
                 </div>
               </div>
 
-              {/* Apply Button */}
+              <div className="flex-1"></div>
+
+              {/* Button */}
               {role === "worker" && (
                 <Link to={`/dashboard/task-details/${task._id}`}>
                   <button className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 group-hover:scale-105 flex items-center justify-center gap-2">

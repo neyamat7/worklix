@@ -16,7 +16,7 @@ export default function HeroSection() {
         duration: 1, // fade in over 1.2 seconds
         ease: "easeOut",
       }}
-      className="relative w-full h-[60vh]  min-h-[600px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800"
+      className="relative w-full h-[70vh]  min-h-[600px] overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800"
     >
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
