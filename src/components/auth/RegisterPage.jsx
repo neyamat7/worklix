@@ -143,7 +143,7 @@ const RegisterPage = () => {
             Join Our Community
           </h2>
           <p className="text-gray-900 dark:text-gray-200 opacity-90 mt-2 text-center">
-            Connect with professionals and grow your network
+            Start earning by completing simple tasks today.
           </p>
         </div>
       </div>

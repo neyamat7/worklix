@@ -60,7 +60,7 @@ export default function Footer() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-3 md:mb-2">
           {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -69,7 +69,7 @@ export default function Footer() {
             viewport={{ once: true }}
             className="col-span-1 md:col-span-2"
           >
-            <div className="mb-6">
+            <div className="mb-5 -mt-4">
               <FooterLogo />
               <p className="text-gray-400 mt-2 max-w-md">
                 Empowering freelancers worldwide with micro-tasks and fair
@@ -142,18 +142,18 @@ export default function Footer() {
             </div>
           </motion.div>
         </div>
-
-        {/* Bottom Bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="border-t border-gray-800 mt-8 pt-8 text-center"
-        >
-          <p className="text-gray-400">© 2024 TaskEarn. All rights reserved.</p>
-        </motion.div>
       </div>
+
+      {/* Bottom Bar */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        viewport={{ once: true }}
+        className="border-t border-gray-800  text-center py-10"
+      >
+        <p className="text-gray-400">© 2024 TaskEarn. All rights reserved.</p>
+      </motion.div>
     </footer>
   );
 }

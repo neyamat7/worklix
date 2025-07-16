@@ -4,7 +4,6 @@ import { FaCoins } from "react-icons/fa";
 import {
   FiCalendar,
   FiClock,
-  FiDollarSign,
   FiEye,
   FiGrid,
   FiSearch,
@@ -129,11 +128,11 @@ const TaskList = () => {
                     Total Earnings
                   </p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    ${tasks.reduce((sum, t) => sum + t.payable_amount, 0)}
+                    {tasks.reduce((sum, t) => sum + t.payable_amount, 0)}
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                  <FiDollarSign className="w-6 h-6 text-white" />
+                  <FaCoins className="w-6 h-6 text-white" />
                 </div>
               </div>
             </div>

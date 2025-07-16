@@ -6,6 +6,7 @@ import {
   FiSearch,
   FiUserPlus,
 } from "react-icons/fi";
+import { Link } from "react-router";
 
 const steps = [
   {
@@ -205,13 +206,15 @@ export default function OurProcess() {
               Join thousands of successful freelancers who are already earning
               money with our platform.
             </p>
-            <motion.button
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 shadow-xl shadow-blue-500/25"
-            >
-              Get Started for Free
-            </motion.button>
+            <Link to="">
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 shadow-xl shadow-blue-500/25"
+              >
+                Get Started for Free
+              </motion.button>
+            </Link>
           </div>
         </motion.div>
       </div>

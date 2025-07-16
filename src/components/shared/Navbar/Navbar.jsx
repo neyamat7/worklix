@@ -5,6 +5,7 @@ import { IoMdClose } from "react-icons/io";
 import { IoLogOutOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
+import Swal from "sweetalert2";
 import { signOutUser } from "../../../features/auth/authSlice";
 import { useTheme } from "../../../hooks/useTheme";
 import { useSingleUserData } from "../../../hooks/useUserData";
@@ -44,9 +45,29 @@ const Navbar = () => {
   }
 
   const handleLogout = () => {
-    dispatch(signOutUser());
-    setIsProfileDropdownOpen(false);
-    setIsMobileMenuOpen(false);
+    Swal.fire({
+      title: "Are you sure you want to logout?",
+      text: "You will need to log in again to access your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, logout",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(signOutUser());
+        setIsProfileDropdownOpen(false);
+        setIsMobileMenuOpen(false);
+        Swal.fire({
+          title: "Logged Out!",
+          text: "You have been successfully logged out.",
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#3085d6",
+        });
+      }
+    });
   };
 
   return (
@@ -255,7 +276,7 @@ const Navbar = () => {
             {!user ? (
               <>
                 <Link to="/login">
-                  <button className="w-full text-left text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 border bordergray-200 dark:border-gray-700 mb-3">
+                  <button className="w-full text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 border bordergray-200 dark:border-gray-700 mb-3 text-center">
                     Login
                   </button>
                 </Link>
@@ -295,7 +316,7 @@ const Navbar = () => {
 
                 <Link
                   to="/dashboard"
-                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 border border-gray-300 dark:border-gray-700"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 border border-gray-300 dark:border-gray-700 text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Dashboard

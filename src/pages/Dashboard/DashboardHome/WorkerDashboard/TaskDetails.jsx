@@ -56,6 +56,7 @@ const TaskDetails = () => {
       refetch();
       queryClient.invalidateQueries(["submissions"]);
       queryClient.invalidateQueries(["tasks"]);
+      navigate("/dashboard/my-submissions");
     },
     onError: (error) => {
       console.error("Submission error:", error);
@@ -384,7 +385,9 @@ const SubmissionModal = ({ task, onClose, worker, mutation }) => {
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Payment(Coin):</span>
+              <span className="text-gray-600 dark:text-gray-400">
+                Payment(Coin):
+              </span>
               <span className="text-green-600 dark:text-green-400 font-bold">
                 {task.payable_amount}
               </span>

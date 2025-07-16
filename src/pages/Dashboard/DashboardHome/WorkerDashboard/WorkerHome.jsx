@@ -138,15 +138,15 @@ const WorkerHome = () => {
                       Total Earnings
                     </p>
                     <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                      ${totalEarnings}
+                      {totalEarnings}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 flex">
                       <FiTarget className="w-3 h-3 mr-1" />
                       From approved
                     </p>
                   </div>
-                  <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <FiDollarSign className="w-7 h-7 text-white" />
+                  <div className="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <FaCoins className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </div>

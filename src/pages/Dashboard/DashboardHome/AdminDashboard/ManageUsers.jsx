@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaCoins } from "react-icons/fa";
 import {
   FiAlertTriangle,
   FiFilter,
@@ -13,6 +14,8 @@ import {
   FiUsers,
   FiX,
 } from "react-icons/fi";
+import ErrorMessage from "../../../../components/shared/ErrorMessage/ErrorMessage";
+import Loading from "../../../../components/shared/Loading/Loading";
 import { useDeleteUser } from "../../../../hooks/useDeleteUser";
 import { useUpdateUserRole } from "../../../../hooks/useUpdateUserRole";
 import { useAllUsers } from "../../../../hooks/useUserData";
@@ -30,8 +33,12 @@ const ManageUsers = () => {
   // delete user mutation
   const deleteUserMutation = useDeleteUser();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading users: {error.message}</div>;
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
 
   // Filter users based on search and role
   const filteredUsers = users.filter((user) => {
@@ -116,7 +123,7 @@ const ManageUsers = () => {
 
   return (
     <div>
-      <div className="min-h-[calc(100vh-105px)] bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
+      <div className="h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
         <div className="relative z-10 h-full p-4">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
@@ -208,7 +215,7 @@ const ManageUsers = () => {
                     </p>
                   </div>
                   <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">🪙</span>
+                    <FaCoins className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </div>
@@ -294,7 +301,7 @@ const ManageUsers = () => {
               </div>
             ) : viewMode === "table" ? (
               /* Table View - Hidden on small screens */
-              <div className="hidden lg:block bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+              <div className="hidden sm:block bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
@@ -480,7 +487,7 @@ const ManageUsers = () => {
 
             {/* Show card view on large screens when table is selected but force cards on mobile */}
             {viewMode === "table" && (
-              <div className="lg:hidden">
+              <div className="sm:hidden">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {filteredUsers.map((user, index) => (
                     <div
@@ -571,7 +578,7 @@ const ManageUsers = () => {
 
         {/* Delete Confirmation Modal */}
         {showDeleteModal && userToDelete && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/50 bg-opacity-50 z-50 flex items-center justify-center p-4">
             <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
               {/* Header */}
               <div className="p-6 border-b border-gray-200 dark:border-gray-700">

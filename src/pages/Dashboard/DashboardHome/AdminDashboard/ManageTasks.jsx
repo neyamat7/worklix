@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { FaCoins } from "react-icons/fa";
 import {
   FiAlertCircle,
   FiCalendar,
@@ -55,7 +56,7 @@ const ManageTasks = () => {
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
+      year: "2-digit",
       month: "short",
       day: "numeric",
     });
@@ -171,8 +172,8 @@ const ManageTasks = () => {
 
   return (
     <div>
-      <div className="h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-indigo-950 dark:to-purple-950">
-        <div className="relative z-10 h-[calc(100vh-105px)] p-4">
+      <div className="h-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950">
+        <div className="relative z-10 h-full p-4">
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-8 pt-8">
               <div>
@@ -253,11 +254,11 @@ const ManageTasks = () => {
                       Total Budget
                     </p>
                     <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                      ${totalBudget.toLocaleString()}
+                      {totalBudget.toLocaleString()}
                     </p>
                   </div>
                   <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center">
-                    <FiDollarSign className="w-6 h-6 text-white" />
+                    <FaCoins className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </div>
@@ -331,7 +332,7 @@ const ManageTasks = () => {
                 </p>
               </div>
             ) : viewMode === "table" ? (
-              <div className="hidden lg:block bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+              <div className="hidden sm:block bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
@@ -425,16 +426,16 @@ const ManageTasks = () => {
                           </td>
                           <td className="px-6 py-4">
                             <div className="text-sm">
-                              <div className="font-bold text-gray-900 dark:text-white">
-                                ${task.total_payable_amount}
+                              <div className="font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                                {task.total_payable_amount} coins
                               </div>
                               <div className="text-xs text-gray-500 dark:text-gray-400">
-                                ${task.payable_amount} per worker
+                                {task.payable_amount} per worker
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400">
+                            <div className="flex items-center space-x-1 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                               <FiCalendar className="w-4 h-4" />
                               <span>{formatDate(task.completion_date)}</span>
                             </div>
@@ -554,7 +555,7 @@ const ManageTasks = () => {
               </div>
             )}
             {viewMode === "table" && (
-              <div className="lg:hidden">
+              <div className="sm:hidden">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {filteredTasks.map((task, index) => (
                     <div
@@ -562,7 +563,7 @@ const ManageTasks = () => {
                       className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-gray-200/50 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-300 group"
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
-                      <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-start justify-between mb-4 gap-2">
                         <div className="flex items-center space-x-3">
                           <img
                             src={task.task_image_url || "/placeholder.svg"}
@@ -585,7 +586,7 @@ const ManageTasks = () => {
                           <FiTrash2 className="w-4 h-4" />
                         </button>
                       </div>
-                      <div className="mb-4">
+                      <div className="mb-4 flex">
                         <span className={getStatusBadge(task.status)}>
                           {getStatusIcon(task.status)}
                           <span className="capitalize">{task.status}</span>
@@ -613,16 +614,16 @@ const ManageTasks = () => {
                       </div>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-                            <FiDollarSign className="w-4 h-4" />
+                          <div className="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-400">
+                            <FaCoins className="w-4 h-4" />
                             <span>Budget</span>
                           </div>
                           <div className="text-right">
                             <div className="font-bold text-gray-900 dark:text-white">
-                              ${task.total_payable_amount}
+                              {task.total_payable_amount} coins
                             </div>
                             <div className="text-xs text-gray-500 dark:text-gray-400">
-                              ${task.payable_amount} per worker
+                              {task.payable_amount} per worker
                             </div>
                           </div>
                         </div>

@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
 import Loading from "../../../../components/shared/Loading/Loading";
 import { useCreateWithdrawal } from "../../../../hooks/useRequestWithdrawal";
 import { useSingleUserData } from "../../../../hooks/useUserData";
@@ -72,12 +71,7 @@ export default function Withdrawal() {
     };
 
     // save withdrawal data to the database
-    withdrawMutation.mutate(withdrawalData, { userId: workerData._id });
-    Swal.fire(
-      "Success!",
-      "Withdrawal request submitted successfully.",
-      "success"
-    );
+    withdrawMutation.mutate({ withdrawalData, userId: workerData._id });
 
     setCoinsToWithdraw(0);
     setWithdrawalAmount(0);
