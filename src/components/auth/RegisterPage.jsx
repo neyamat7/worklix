@@ -135,7 +135,7 @@ const RegisterPage = () => {
       <div className=" hidden  lg:flex items-center justify-center p-8">
         <div className="max-w-md">
           <img
-            src="/public/sign-up_qamz.svg"
+            src="/sign-up_qamz.svg"
             alt="Registration Illustration"
             className="w-full h-auto"
           />
