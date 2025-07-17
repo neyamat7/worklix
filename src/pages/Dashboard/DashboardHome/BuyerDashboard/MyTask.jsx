@@ -142,7 +142,7 @@ const MyTask = () => {
                         Status
                       </th>
                       <th className="hidden lg:table-cell px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ">
-                        Total Workers
+                        Required Workers
                       </th>
                       <th className="hidden lg:table-cell px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Paid Workers
@@ -249,7 +249,7 @@ const MyTask = () => {
                     <div className="mt-4 flex justify-between space-x-2">
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <FiUsers className="mr-1" />
-                        <span>{task.required_workers} needed</span>
+                        <span>{task.required_workers} Required</span>
                       </div>
                       <div>
                         <button

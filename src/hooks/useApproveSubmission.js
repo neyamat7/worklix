@@ -13,6 +13,8 @@ export const useApproveSubmission = () => {
       payable_amount,
       task_id,
       buyer_email,
+      buyer_name,
+      task_title
     }) => {
       const res = await axiosSecure.patch(
         `/submissions/${submissionId}/approve`,
@@ -21,6 +23,8 @@ export const useApproveSubmission = () => {
           payable_amount,
           task_id,
           buyer_email,
+          buyer_name,
+          task_title
         }
       );
       return res.data;
@@ -63,6 +67,7 @@ export const useApproveSubmission = () => {
       queryClient.invalidateQueries(["submissions"]);
       queryClient.invalidateQueries(["pendingSubmissions"]);
       queryClient.invalidateQueries(["users"]);
+      queryClient.invalidateQueries(["tasks"]);
     },
     onError: (error) => {
       console.error("Approval error:", error);

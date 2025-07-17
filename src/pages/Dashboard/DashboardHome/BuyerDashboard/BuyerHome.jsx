@@ -82,6 +82,8 @@ const BuyerHome = () => {
       payable_amount,
       task_id: submission.task_id,
       buyer_email: submission.buyer_email,
+      buyer_name: submission.buyer_name,
+      task_title: submission.task_title,
     });
   };
 
