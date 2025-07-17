@@ -7,6 +7,7 @@ import {
   FiEye,
   FiFileText,
   FiGrid,
+  FiLoader,
   FiUser,
   FiUsers,
   FiX,
@@ -21,12 +22,13 @@ import { useBuyerTasks } from "../../../../hooks/useBuyerTasks";
 import { useRejectSubmission } from "../../../../hooks/useRejectSubmission";
 
 const BuyerHome = () => {
+  const [approveId, setApproveId] = useState(null);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useSelector((state) => state.auth);
   // Fetch buyer tasks using custom hook
   const { data: buyerTasks, isLoading } = useBuyerTasks(user?.email);
-  const approveSubmission = useApproveSubmission();
+  const approveSubmission = useApproveSubmission(setApproveId);
   const rejectSubmission = useRejectSubmission();
 
   // Fetch pending submissions using custom hook
@@ -75,6 +77,7 @@ const BuyerHome = () => {
 
   const handleApproveSubmission = (submission) => {
     const { _id, worker_email, payable_amount } = submission;
+    setApproveId(_id);
 
     approveSubmission.mutate({
       submissionId: _id,
@@ -133,7 +136,7 @@ const BuyerHome = () => {
           {/* Header */}
           <div className="flex justify-between items-center mb-8 pt-8">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+              <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
                 Buyer Dashboard
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
@@ -307,7 +310,7 @@ const BuyerHome = () => {
                         <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                           Task Title
                         </th>
-                        <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider whitespace-nowrap">
                           Payment Amount
                         </th>
                         <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -367,7 +370,14 @@ const BuyerHome = () => {
                                 }
                                 className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center space-x-1"
                               >
-                                <FiCheck className="w-3 h-3" />
+                                {approveId === submission._id ? (
+                                  <span className="animate-spin">
+                                    <FiLoader className="w-3 h-3" />
+                                  </span>
+                                ) : (
+                                  <FiCheck className="w-3 h-3" />
+                                )}
+
                                 <span>Approve</span>
                               </button>
                               <button
@@ -430,14 +440,16 @@ const BuyerHome = () => {
                         </button>
                         <button
                           onClick={() => handleApproveSubmission(submission)}
-                          className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
+                          className="flex-1 bg-green-600  hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center space-x-2"
                         >
-                          <FiCheck className="w-4 h-4" />
-                          <span>
-                            {approveSubmission.isPending
-                              ? "Approving..."
-                              : "Approve"}
-                          </span>
+                          {approveId === submission._id ? (
+                            <span className="animate-spin">
+                              <FiLoader className="w-3 h-3" />
+                            </span>
+                          ) : (
+                            <FiCheck className="w-3 h-3" />
+                          )}
+                          <span>Approve</span>
                         </button>
                         <button
                           onClick={() => handleRejectSubmission(submission)}
@@ -504,7 +516,8 @@ const BuyerHome = () => {
                       Payment:
                     </span>
                     <span className="text-green-600 dark:text-green-400 font-bold">
-                      ${selectedSubmission.payable_amount}
+                      {selectedSubmission.payable_amount}{" "}
+                      {selectedSubmission.payable_amount > 1 ? "coins" : "coin"}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -568,7 +581,7 @@ const BuyerHome = () => {
                   handleApproveSubmission(selectedSubmission);
                   setIsModalOpen(false);
                 }}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2"
+                className="flex-1 bg-green-600  hover:bg-green-700 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 flex items-center justify-center space-x-2"
               >
                 <FiCheck className="w-4 h-4" />
                 <span>

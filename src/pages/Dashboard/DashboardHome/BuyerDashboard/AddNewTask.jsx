@@ -96,11 +96,11 @@ const AddNewTask = () => {
 
   const onSubmit = (data) => {
     const totalCost = data.required_workers * data.payable_amount;
-    console.log(userData?.coins, totalCost);
+    // console.log(userData?.coins, totalCost);
 
     // Check coin balance
     if (totalCost > userData?.coins) {
-      console.log("Insufficient coins:", userData?.coins, totalCost);
+      // console.log("Insufficient coins:", userData?.coins, totalCost);
       Swal.fire({
         icon: "error",
         title: "Insufficient Coins",

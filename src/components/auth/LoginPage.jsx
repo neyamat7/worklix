@@ -26,15 +26,14 @@ const LoginPage = () => {
   });
 
   const loginUser = async ({ email, password }) => {
-    console.log(email);
-    console.log(password);
+   
     try {
       const resultAction = await dispatch(signInUser({ email, password }));
 
       if (signInUser.fulfilled.match(resultAction)) {
         toast.success("Login successful! Welcome back.");
         navigate("/dashboard");
-        console.log(resultAction);
+        // console.log(resultAction);
       } else {
         // The thunk was rejected
         toast.error(resultAction.error.message);
@@ -61,7 +60,7 @@ const LoginPage = () => {
     if (googleSignIn.fulfilled.match(resultAction)) {
       // Google sign-in succeeded
       const user = resultAction.payload;
-      console.log("Google user data:", user);
+      // console.log("Google user data:", user);
 
       const userInfo = {
         email: user?.email,

@@ -54,7 +54,7 @@ const ManageUsers = () => {
     // update user role using mutation
     updateRoleMuation.mutate({ userId, newRole });
     // In real app, this would call your API
-    console.log(`Updated user ${userId} role to ${newRole}`);
+    // console.log(`Updated user ${userId} role to ${newRole}`);
   };
 
   const handleDeleteUser = (user) => {

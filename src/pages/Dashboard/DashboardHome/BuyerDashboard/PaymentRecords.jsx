@@ -124,7 +124,7 @@ const PaymentRecords = () => {
           {/* Header */}
           <div className="flex justify-between items-center mb-8 pt-8">
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+              <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
                 Payment History
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
@@ -213,7 +213,10 @@ const PaymentRecords = () => {
               </div>
 
               {/* Export Button */}
-              <button className="no-print flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
+              <button
+                onClick={() => window.print()}
+                className="no-print flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-200 transform hover:scale-105"
+              >
                 <FiDownload className="w-4 h-4" />
                 <span className="hidden sm:inline">Print</span>
               </button>

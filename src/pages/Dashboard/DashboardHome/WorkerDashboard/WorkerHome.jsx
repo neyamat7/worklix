@@ -210,7 +210,7 @@ const WorkerHome = () => {
                       <tbody className="divide-y divide-gray-200/50 dark:divide-gray-700/50">
                         {approvedSubmissions.map((submission, index) => (
                           <tr
-                            key={submission._id.$oid}
+                            key={submission._id}
                             className="hover:bg-gray-50/50 dark:hover:bg-gray-700/50 transition-colors duration-200"
                             style={{ animationDelay: `${index * 100}ms` }}
                           >
@@ -262,7 +262,7 @@ const WorkerHome = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {approvedSubmissions.map((submission, index) => (
                         <div
-                          key={submission._id.$oid}
+                          key={submission._id}
                           className="bg-white/60 dark:bg-gray-700/60 backdrop-blur-sm rounded-xl p-5 border border-gray-200/50 dark:border-gray-600/50 hover:shadow-lg transition-all duration-300 hover:scale-105"
                           style={{ animationDelay: `${index * 100}ms` }}
                         >

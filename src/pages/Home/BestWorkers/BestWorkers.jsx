@@ -15,9 +15,9 @@ export default function BestWorkers() {
     return <ErrorMessage message={error.message} />;
   }
 
-  const progress = 70 + (workers.coins % 26);
-  console.log(workers);
-  console.log(progress);
+  // const progress = 70 + (workers.coins % 26);
+  // console.log(workers);
+  // console.log(progress);
 
   return (
     <section

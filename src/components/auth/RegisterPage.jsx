@@ -92,7 +92,7 @@ const RegisterPage = () => {
       toast.success("Your account has been created!");
       navigate(location?.state || "/dashboard");
       reset();
-      console.log(resultAction);
+      // console.log(resultAction);
     } else {
       if (
         resultAction.payload === "Firebase: Error (auth/email-already-in-use)."

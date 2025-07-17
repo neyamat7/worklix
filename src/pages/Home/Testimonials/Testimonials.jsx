@@ -301,7 +301,7 @@ export default function Testimonials() {
         </motion.div>
       </div>
 
-      <style jsx global>{`
+      <style>{`
         .testimonials-swiper .swiper-pagination {
           bottom: 0 !important;
         }

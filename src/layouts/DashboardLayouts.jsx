@@ -162,9 +162,9 @@ const DashboardLayouts = () => {
           <Outlet />
         </main>
 
-        <footer className="bg-white dark:bg-gray-800 shadow-inner shadow-gray-200 dark:shadow-gray-700 py-4">
-          <div className="container mx-auto px-4 py-2">
-            <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+        <footer className="bg-gray-100 dark:bg-gray-800 shadow-inner shadow-gray-200 dark:shadow-gray-700 py-4">
+          <div className="max-w-6xl mx-auto px-4 py-2">
+            <p className="text-center text-sm text-gray-700 dark:text-gray-400">
               &copy; {new Date().getFullYear()} Worklix. All rights reserved.
             </p>
           </div>

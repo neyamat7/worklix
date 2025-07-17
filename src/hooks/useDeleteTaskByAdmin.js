@@ -15,7 +15,8 @@ export const useDeleteTaskByAdmin = () => {
       // ✅ Re-fetch tasks list
 
       queryClient.invalidateQueries(["allTasks"]);
-      console.log("Task deletion success:", data);
+      queryClient.invalidateQueries(["users"]);
+      queryClient.invalidateQueries(["user"]);
     },
     onError: (error) => {
       Swal.fire({

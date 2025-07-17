@@ -16,7 +16,7 @@ export function useUserRole() {
         `/users/role?email=${encodeURIComponent(user?.email)}`
       );
 
-      console.log(data.role);
+      // console.log(data.role);
       return data.role;
     },
     enabled: !!user?.email, // only run when email is truthy

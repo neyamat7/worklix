@@ -27,11 +27,11 @@ const TaskList = () => {
     queryKey: ["activeTasks"],
     queryFn: async () => {
       const res = await axiosSecure.get("/worker/tasks-list");
-      console.log(res);
+      // console.log(res);
       return res.data;
     },
   });
-  console.log(tasks);
+  // console.log(tasks);
 
   if (isLoading) {
     return <Loading />;
