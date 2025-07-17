@@ -84,6 +84,20 @@ Worklix is a comprehensive platform that bridges the gap between task creators a
 
 ---
 
+## 🧪 Test the Application
+
+### **Demo Credentials**
+
+You can test the application using these demo accounts:
+
+#### **🔧 Admin Account**
+
+- **Email**: `saiful@gmail.com`
+- **Password**: `6789@S`
+- **Access**: Full platform management, user oversight, task moderation
+
+---
+
 ## 📱 User Roles & Permissions
 
 ### 🔐 **Admin**
