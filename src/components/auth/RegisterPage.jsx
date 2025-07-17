@@ -323,6 +323,10 @@ const RegisterPage = () => {
                       value: 6,
                       message: "Password must be at least 6 characters",
                     },
+                    validate: (value) => {
+                      const strength = validatePassword(value);
+                      return strength >= 3 || "Password is not strong enough.";
+                    },
                   })}
                   onChange={(e) => {
                     setPasswordStrength(validatePassword(e.target.value));
@@ -424,7 +428,7 @@ const RegisterPage = () => {
             <button
               onClick={handleFormSubmit}
               type="button"
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-4 px-4 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
             >
               {isSubmitting ? "Creating... " : "Create Account"}
             </button>
