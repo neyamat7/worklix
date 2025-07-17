@@ -2,13 +2,13 @@
 
 <div align="center">
 
-![Worklix Buyer Dashboard](https://i.postimg.cc/43BKz29J/Screenshot-2025-07-17-180054.png)
+![Worklix Homepage](https://i.postimg.cc/43BKz29J/Screenshot-2025-07-17-180054.png)
 _Home Page_
 
-![Worklix Buyer Dashboard](https://i.postimg.cc/TPdjRybh/Screenshot-2025-07-17-182621.png)
+![Worklix Admin Dashboard](https://i.postimg.cc/TPdjRybh/Screenshot-2025-07-17-182621.png)
 _Admin Dashboard_
 
-![Worklix Buyer Dashboard](https://i.postimg.cc/dVTPRhZD/Screenshot-2025-07-17-180256.png)
+![Worklix Buyer Dashboard](https://i.postimg.cc/8CHZkzvZ/Screenshot-2025-07-17-183944.png)
 _Buyer Dashboard_
 
 **A modern micro-task marketplace connecting buyers and workers**
