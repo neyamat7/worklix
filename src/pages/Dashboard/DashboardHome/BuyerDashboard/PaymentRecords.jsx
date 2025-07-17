@@ -122,15 +122,13 @@ const PaymentRecords = () => {
       <div className="relative z-10 h-full p-4">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8 pt-8">
-            <div>
-              <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                Payment History
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Track all your coin purchases and transactions
-              </p>
-            </div>
+          <div className="text-center mb-8 pt-8">
+            <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+              Payment History
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Track all your coin purchases and transactions
+            </p>
           </div>
 
           {/* Stats Cards */}
