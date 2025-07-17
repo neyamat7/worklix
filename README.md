@@ -1,7 +1,9 @@
 # 🚀 Worklix- Microtask Freelance Platform
 
 <div align="center">
-  <img src="https://i.postimg.cc/43BKz29J/Screenshot-2025-07-17-180054.png" alt="Worklix Home"/>
+
+![Worklix Buyer Dashboard](https://i.postimg.cc/43BKz29J/Screenshot-2025-07-17-180054.png)
+_Home Page_
 
 ![Worklix Buyer Dashboard](https://i.postimg.cc/dVTPRhZD/Screenshot-2025-07-17-180256.png)
 _Buyer Dashboard_
