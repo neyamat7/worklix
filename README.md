@@ -5,6 +5,9 @@
 ![Worklix Buyer Dashboard](https://i.postimg.cc/43BKz29J/Screenshot-2025-07-17-180054.png)
 _Home Page_
 
+![Worklix Buyer Dashboard](https://i.postimg.cc/TPdjRybh/Screenshot-2025-07-17-182621.png)
+_Admin Dashboard_
+
 ![Worklix Buyer Dashboard](https://i.postimg.cc/dVTPRhZD/Screenshot-2025-07-17-180256.png)
 _Buyer Dashboard_
 
