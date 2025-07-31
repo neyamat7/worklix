@@ -263,12 +263,7 @@ const RegisterPage = () => {
                   />
                 </div>
               </div>
-              <input
-                type="hidden"
-                {...register("profilePicture", {
-                  required: "Profile picture is required",
-                })}
-              />
+              <input type="hidden" {...register("profilePicture")} />
               {errors.profilePicture && (
                 <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                   {errors.profilePicture.message}
