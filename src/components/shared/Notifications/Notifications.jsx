@@ -4,8 +4,8 @@ import { HiOutlineExclamation } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useNotifications } from "../../../hooks/useNotifications";
-import { showNotificationToast } from "../../../utils/showNotificationToast";
-import { socket } from "../../../utils/socket";
+// import { showNotificationToast } from "../../../utils/showNotificationToast";
+// import { socket } from "../../../utils/socket";
 
 const NotificationPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
