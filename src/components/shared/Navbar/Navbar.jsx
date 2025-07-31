@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FaCoins } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
@@ -38,7 +37,7 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  if (loading || isLoading) {
+  if (isLoading) {
     return (
       <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50"></nav>
     );
@@ -71,17 +70,7 @@ const Navbar = () => {
   };
 
   return (
-    <motion.nav
-      initial={{ y: -50 }} // 50px above the top (hidden)
-      animate={{ y: 0 }} // slide down to 0
-      transition={{
-        type: "spring",
-        stiffness: 80,
-        damping: 12,
-        duration: 0.6,
-      }}
-      className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-400"
-    >
+    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Brand */}
@@ -159,7 +148,7 @@ const Navbar = () => {
                       <img
                         src={user.photoURL || "/placeholder.svg"}
                         alt="Profile"
-                        className="w-10 h-10 rounded-full border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 transition-colors duration-200"
+                        className="w-10 h-10 rounded-full border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 transition-colors duration-200 object-cover"
                       />
                     </button>
 
@@ -351,7 +340,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 

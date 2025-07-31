@@ -26,25 +26,25 @@ const NotificationPopup = () => {
   }, [data]);
 
   // 4️⃣ Subscribe to socket events
-  useEffect(() => {
-    if (!user?.email) return;
+  // useEffect(() => {
+  //   if (!user?.email) return;
 
-    // Join a room for this user (optional, but better)
-    socket.emit("join", user?.email);
+  //   // Join a room for this user (optional, but better)
+  //   socket.emit("join", user?.email);
 
-    function handleNewNotification(notification) {
-      if (notification.toEmail === user?.email) {
-        setNotifications((prev) => [notification, ...prev]);
-        showNotificationToast(notification);
-      }
-    }
+  //   function handleNewNotification(notification) {
+  //     if (notification.toEmail === user?.email) {
+  //       setNotifications((prev) => [notification, ...prev]);
+  //       showNotificationToast(notification);
+  //     }
+  //   }
 
-    socket.on("new-notification", handleNewNotification);
+  //   socket.on("new-notification", handleNewNotification);
 
-    return () => {
-      socket.off("new-notification", handleNewNotification);
-    };
-  }, [user?.email]);
+  //   return () => {
+  //     socket.off("new-notification", handleNewNotification);
+  //   };
+  // }, [user?.email]);
 
   const togglePopup = () => setIsOpen(!isOpen);
   const closePopup = () => setIsOpen(false);
