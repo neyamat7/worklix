@@ -1,18 +1,19 @@
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { signOutUser } from "../features/auth/authSlice";
+import useAuth from "../context/AuthContext";
+// import { signOutUser } from "../features/auth/authSlice";
 
 const axiosSecure = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
 const useAxiosSecure = () => {
-  const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
+  // const user = useSelector((state) => state.auth.user);
+  // const dispatch = useDispatch();
+  const { user, signOutUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,8 +38,7 @@ const useAxiosSecure = () => {
         const status = error?.response?.status;
         if (status === 401) {
           // Unauthorized
-          dispatch(signOutUser())
-            .unwrap()
+          signOutUser()
             .then(() => {
               toast.error(
                 "You have been logged out due to unauthorized access. Please log in again."
@@ -60,7 +60,7 @@ const useAxiosSecure = () => {
       axiosSecure.interceptors.request.eject(requestInterceptor);
       axiosSecure.interceptors.response.eject(responseInterceptor);
     };
-  }, [user, dispatch, navigate]);
+  }, [user, navigate, signOutUser]);
 
   return axiosSecure;
 };

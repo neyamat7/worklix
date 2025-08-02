@@ -1,11 +1,11 @@
-import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router";
 import ErrorMessage from "../components/shared/ErrorMessage/ErrorMessage";
 import Loading from "../components/shared/Loading/Loading";
+import useAuth from "../context/AuthContext";
 import { useUserRole } from "../hooks/useUserRole";
 
 const BuyerRoute = ({ children }) => {
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
   const { role, roleLoading, error } = useUserRole();
   const location = useLocation();
 

@@ -1,14 +1,14 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { FiCreditCard, FiLoader, FiShield } from "react-icons/fi";
-import { useSelector } from "react-redux";
+import useAuth from "../../../../../context/AuthContext";
 import useAxiosSecure from "../../../../../hooks/useAxiosSecure";
 import { useTheme } from "../../../../../hooks/useTheme";
 // import { useSingleUserData } from "../../../../../hooks/useUserData";
 
 const CheckoutForm = ({ selectedPackage, onSuccess, onCancel }) => {
   const { theme } = useTheme();
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
   //   const { refetch } = useSingleUserData(user?.email);
   const stripe = useStripe();
   const elements = useElements();

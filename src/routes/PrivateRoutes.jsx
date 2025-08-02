@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router";
 import Loading from "../components/shared/Loading/Loading";
+import useAuth from "../context/AuthContext";
 
 const PrivateRoutes = ({ children }) => {
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user, loading } = useAuth();
 
   const location = useLocation();
 

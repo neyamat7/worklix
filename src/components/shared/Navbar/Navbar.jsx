@@ -2,24 +2,24 @@ import { useEffect, useRef, useState } from "react";
 import { FaCoins } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { IoLogOutOutline } from "react-icons/io5";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
-import { signOutUser } from "../../../features/auth/authSlice";
-import { useTheme } from "../../../hooks/useTheme";
+import useAuth from "../../../context/AuthContext";
 import { useSingleUserData } from "../../../hooks/useUserData";
 import ThemeToggle from "../../ThemeToggle/ThemeToggle";
 import Logo from "../Logo/Logo";
 
 const Navbar = () => {
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const profileDropdownRef = useRef(null);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // get user from redux store
-  const { user, loading } = useSelector((state) => state.auth);
+  // const { user, loading } = useSelector((state) => state.auth);
+  const { user, signOutUser, loading } = useAuth();
+
   const { data: userData, isLoading } = useSingleUserData(user?.email);
 
   // Close dropdown when clicking outside
@@ -37,7 +37,7 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  if (isLoading) {
+  if ((isLoading, loading)) {
     return (
       <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50"></nav>
     );
@@ -55,7 +55,7 @@ const Navbar = () => {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(signOutUser());
+        signOutUser();
         setIsProfileDropdownOpen(false);
         setIsMobileMenuOpen(false);
         Swal.fire({
@@ -315,7 +315,7 @@ const Navbar = () => {
                   <span className="font-medium">Available Coins</span>
                   <div className="flex items-center space-x-2">
                     <FaCoins className="w-5 h-5" />
-                    <span className="font-bold">{userData.coins}</span>
+                    <span className="font-bold">{userData?.coins}</span>
                   </div>
                 </div>
 

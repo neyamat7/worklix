@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { FaBell, FaCheckCircle, FaRegClock, FaTimes } from "react-icons/fa";
 import { HiOutlineExclamation } from "react-icons/hi";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import useAuth from "../../../context/AuthContext";
 import { useNotifications } from "../../../hooks/useNotifications";
 // import { showNotificationToast } from "../../../utils/showNotificationToast";
 // import { socket } from "../../../utils/socket";
@@ -11,7 +11,7 @@ const NotificationPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const notificationRef = useRef(null);
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
 
   const { data, isLoading } = useNotifications(user?.email);
 

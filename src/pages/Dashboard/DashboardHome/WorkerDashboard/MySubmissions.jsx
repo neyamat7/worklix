@@ -15,14 +15,14 @@ import {
   FiUser,
   FiX,
 } from "react-icons/fi";
-import { useSelector } from "react-redux";
 import Loading from "../../../../components/shared/Loading/Loading";
+import useAuth from "../../../../context/AuthContext";
 import { usePaginatedSubmissions } from "../../../../hooks/usePaginatedSubmissions";
 
 const MySubmissions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState("table");
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState("");
 

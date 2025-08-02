@@ -9,16 +9,16 @@ import {
   FiUpload,
   FiUsers,
 } from "react-icons/fi";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Loading from "../../../../components/shared/Loading/Loading";
+import useAuth from "../../../../context/AuthContext";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useSingleUserData } from "../../../../hooks/useUserData";
 
 const AddNewTask = () => {
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user, loading } = useAuth();
   const axiosSecure = useAxiosSecure();
   const { data: userData } = useSingleUserData(user?.email);
   const queryClient = useQueryClient();

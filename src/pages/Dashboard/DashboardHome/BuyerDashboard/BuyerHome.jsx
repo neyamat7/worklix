@@ -12,10 +12,10 @@ import {
   FiUsers,
   FiX,
 } from "react-icons/fi";
-import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
 import Loading from "../../../../components/shared/Loading/Loading";
+import useAuth from "../../../../context/AuthContext";
 import { useApproveSubmission } from "../../../../hooks/useApproveSubmission";
 import { usePendingSubmissions } from "../../../../hooks/useBuyerPendingSubmissions";
 import { useBuyerTasks } from "../../../../hooks/useBuyerTasks";
@@ -25,7 +25,7 @@ const BuyerHome = () => {
   const [approveId, setApproveId] = useState(null);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
   // Fetch buyer tasks using custom hook
   const { data: buyerTasks, isLoading } = useBuyerTasks(user?.email);
   const approveSubmission = useApproveSubmission(setApproveId);

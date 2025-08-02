@@ -1,8 +1,8 @@
-import { useSelector } from "react-redux";
 import { Link } from "react-router";
+import useAuth from "../../../context/AuthContext";
 
 const FooterLogo = () => {
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user, loading } = useAuth();
 
   if (loading) return <div>...</div>;
 

@@ -10,7 +10,7 @@ import {
   FiTrendingUp,
   FiZap,
 } from "react-icons/fi";
-import { useSelector } from "react-redux";
+import useAuth from "../../../../../context/AuthContext";
 import { useRecordPayment } from "../../../../../hooks/useRecordPayment";
 import { useSingleUserData } from "../../../../../hooks/useUserData";
 import CheckoutForm from "./CheckoutForm";
@@ -61,7 +61,7 @@ const PurchaseCoins = () => {
     useRecordPayment();
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [showCheckout, setShowCheckout] = useState(false);
-  const { user: authUser } = useSelector((state) => state.auth);
+  const { user: authUser } = useAuth();
   const { data: user, isLoading, error } = useSingleUserData(authUser?.email);
 
   const handlePackageSelect = (pkg) => {

@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FiCalendar, FiUser } from "react-icons/fi";
-import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
 import ErrorMessage from "../../../../components/shared/ErrorMessage/ErrorMessage";
 import Loading from "../../../../components/shared/Loading/Loading";
+import useAuth from "../../../../context/AuthContext";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useHasSubmitted } from "../../../../hooks/useHasSubmitted";
 
@@ -15,7 +15,7 @@ const TaskDetails = () => {
   const { taskId } = useParams();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
 
   const {
     data: task,

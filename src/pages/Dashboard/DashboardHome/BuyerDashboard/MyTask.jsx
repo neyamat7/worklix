@@ -9,9 +9,9 @@ import {
   FiTrash2,
   FiUsers,
 } from "react-icons/fi";
-import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import Loading from "../../../../components/shared/Loading/Loading";
+import useAuth from "../../../../context/AuthContext";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useBuyerTasks } from "../../../../hooks/useBuyerTasks";
 import TaskEditModal from "./TaskEditModal";
@@ -22,7 +22,7 @@ const MyTask = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const axiosSecure = useAxiosSecure();
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
   const [editTask, setEditTask] = useState();
 
   // Fetch tasks using TanStack Query

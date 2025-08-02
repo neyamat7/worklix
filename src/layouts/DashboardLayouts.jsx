@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { Link, NavLink, Outlet } from "react-router";
 import Loading from "../components/shared/Loading/Loading";
 import Logo from "../components/shared/Logo/Logo";
 import NotificationPopup from "../components/shared/Notifications/Notifications";
 import ThemeToggle from "../components/ThemeToggle/ThemeToggle";
+import useAuth from "../context/AuthContext";
 import { useSingleUserData } from "../hooks/useUserData";
 import { useUserRole } from "../hooks/useUserRole";
 
@@ -13,7 +13,7 @@ const DashboardLayouts = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const { user: authUser } = useSelector((state) => state.auth);
+  const { user: authUser } = useAuth();
   const { data: userData, isLoading: userLoading } = useSingleUserData(
     authUser?.email
   );

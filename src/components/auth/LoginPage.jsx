@@ -2,17 +2,18 @@ import Lottie from "lottie-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import loginAnimation from "../../assets/Login.json";
-import { googleSignIn, signInUser } from "../../features/auth/authSlice";
-import { axiosPublic } from "../../hooks/userAxiosPublic";
+import useAuth from "../../context/AuthContext";
+import useAxiosPublic from "../../hooks/userAxiosPublic";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const { signInUser, googleSignIn, setLoading } = useAuth();
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
 
   const {
     register,
@@ -25,66 +26,100 @@ const LoginPage = () => {
     },
   });
 
-  const loginUser = async ({ email, password }) => {
-   
-    try {
-      const resultAction = await dispatch(signInUser({ email, password }));
-
-      if (signInUser.fulfilled.match(resultAction)) {
+  const loginUser = ({ email, password }) => {
+    signInUser(email, password)
+      .then((res) => {
         toast.success("Login successful! Welcome back.");
         navigate("/dashboard");
-        // console.log(resultAction);
-      } else {
-        // The thunk was rejected
-        toast.error(resultAction.error.message);
-        console.error("Login error:", resultAction.error);
-      }
-    } catch (error) {
-      // This catch block is rarely triggered unless something crashes badly
-      console.error("Unexpected error:", error);
-    }
+        reset();
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.error(err.message);
+      });
+
+    // try {
+    //   const resultAction = await dispatch(signInUser({ email, password }));
+    //   if (signInUser.fulfilled.match(resultAction)) {
+    //     toast.success("Login successful! Welcome back.");
+    //     navigate("/dashboard");
+    //     // console.log(resultAction);
+    //   } else {
+    //     // The thunk was rejected
+    //     toast.error(resultAction.error.message);
+    //     console.error("Login error:", resultAction.error);
+    //   }
+    // } catch (error) {
+    //   // This catch block is rarely triggered unless something crashes badly
+    //   console.error("Unexpected error:", error);
+    // }
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     try {
-      await loginUser(data);
-      reset();
+      loginUser(data);
     } catch (error) {
       console.error("Login error:", error);
     }
   };
 
-  const handleGoogleLogin = async () => {
-    const resultAction = await dispatch(googleSignIn());
+  const handleGoogleLogin = () => {
+    googleSignIn()
+      .then(async (res) => {
+        toast.success("Login successful! Welcome back.");
 
-    if (googleSignIn.fulfilled.match(resultAction)) {
-      // Google sign-in succeeded
-      const user = resultAction.payload;
-      // console.log("Google user data:", user);
+        const user = res.user;
+        const userInfo = {
+          email: user?.email,
+          name: user?.displayName,
+          photoURL: user?.photoURL,
+          coins: 10,
+          uid: user?.uid,
+        };
 
-      const userInfo = {
-        email: user?.email,
-        name: user?.displayName,
-        photoURL: user?.photoURL,
-        coins: 10,
-        uid: user?.uid,
-      };
+        try {
+          await axiosPublic.post("/users", userInfo);
+          toast.success("Logged in successfully with Google!");
+          navigate("/dashboard");
+        } catch (error) {
+          console.error("Failed to save user to backend:", error);
+          toast.error("Failed to save user data.");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-      try {
-        await axiosPublic.post("/users", userInfo);
-        toast.success("Logged in successfully with Google!");
-        navigate("/dashboard");
-      } catch (error) {
-        console.error("Failed to save user to backend:", error);
-        toast.error("Failed to save user data.");
-      }
+    // const resultAction = await dispatch(googleSignIn());
 
-      // or wherever you want
-    } else {
-      // Google sign-in failed
-      toast.error(resultAction.error.message || "Google login failed.");
-      console.error("Google sign-in error:", resultAction.error);
-    }
+    // if (googleSignIn.fulfilled.match(resultAction)) {
+    //   // Google sign-in succeeded
+    //   const user = resultAction.payload;
+    //   // console.log("Google user data:", user);
+
+    //   const userInfo = {
+    //     email: user?.email,
+    //     name: user?.displayName,
+    //     photoURL: user?.photoURL,
+    //     coins: 10,
+    //     uid: user?.uid,
+    //   };
+
+    //   try {
+    //     await axiosPublic.post("/users", userInfo);
+    //     toast.success("Logged in successfully with Google!");
+    //     navigate("/dashboard");
+    //   } catch (error) {
+    //     console.error("Failed to save user to backend:", error);
+    //     toast.error("Failed to save user data.");
+    //   }
+
+    //   // or wherever you want
+    // } else {
+    //   // Google sign-in failed
+    //   toast.error(resultAction.error.message || "Google login failed.");
+    //   console.error("Google sign-in error:", resultAction.error);
+    // }
   };
 
   return (

@@ -2,10 +2,10 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaCheck, FaEye, FaEyeSlash, FaTimes, FaUpload } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { registerUser } from "../../features/auth/authSlice";
+import useAuth from "../../context/AuthContext";
+import useAxiosPublic from "../../hooks/userAxiosPublic";
 import { validatePassword } from "../../utils/validatePassword";
 
 const RegisterPage = () => {
@@ -15,7 +15,8 @@ const RegisterPage = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [passwordValue, setPasswordValue] = useState("");
 
-  const dispatch = useDispatch();
+  const { createUser, setUser, updateUser } = useAuth();
+  const axiosPublic = useAxiosPublic();
 
   const navigate = useNavigate();
 
@@ -75,32 +76,73 @@ const RegisterPage = () => {
   }) => {
     const coins = role === "worker" ? 10 : 50;
 
-    // create new user
-    const resultAction = await dispatch(
-      registerUser({
-        name,
-        email,
-        password,
-        photoURL: profilePicture,
-        role,
-        coins,
+    // register with firebase and save to database
+    createUser(email, password)
+      .then((res) => {
+        const user = res.user;
+        updateUser({ displayName: name, photoURL: profilePicture })
+          .then(() => {
+            setUser({ ...user, displayName: name, photoURL: profilePicture });
+            setImagePreview(null);
+            toast.success("Your account has been created!");
+            navigate("/dashboard");
+            axiosPublic
+              .post("/users", {
+                name,
+                email,
+                photoURL: profilePicture,
+                role,
+                coins,
+                uid: user.uid,
+              })
+              .then((response) => {
+                console.log("User saved:", response.data);
+                reset();
+              })
+              .catch((error) => {
+                console.error("Error saving user:", error);
+              });
+          })
+          .catch((error) => {
+            console.error("Failed to update user profile:", error);
+            toast.error("Failed to update user profile.");
+          });
       })
-    );
+      .catch((error) => {
+        if (error.code === "auth/email-already-in-use") {
+          setError("email", { message: "Email already exists." });
+          toast.error("Email already exists.");
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
+      });
 
-    if (registerUser.fulfilled.match(resultAction)) {
-      setImagePreview(null);
-      toast.success("Your account has been created!");
-      navigate(location?.state || "/dashboard");
-      reset();
-      // console.log(resultAction);
-    } else {
-      if (
-        resultAction.payload === "Firebase: Error (auth/email-already-in-use)."
-      ) {
-        setError("email", { message: "Email already exists." });
-      }
-      toast.error(resultAction.payload || "Registration failed.");
-    }
+    // create new user
+    // const resultAction = await dispatch(
+    //   registerUser({
+    //     name,
+    //     email,
+    //     password,
+    //     photoURL: profilePicture,
+    //     role,
+    //     coins,
+    //   })
+    // );
+
+    // if (registerUser.fulfilled.match(resultAction)) {
+    //   setImagePreview(null);
+    //   toast.success("Your account has been created!");
+    //   navigate(location?.state || "/dashboard");
+    //   reset();
+    //   // console.log(resultAction);
+    // } else {
+    //   if (
+    //     resultAction.payload === "Firebase: Error (auth/email-already-in-use)."
+    //   ) {
+    //     setError("email", { message: "Email already exists." });
+    //   }
+    //   toast.error(resultAction.payload || "Registration failed.");
+    // }
   };
 
   const onSubmit = async (data) => {

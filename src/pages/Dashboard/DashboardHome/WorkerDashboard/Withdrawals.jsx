@@ -8,8 +8,8 @@ import {
   Wallet,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import Loading from "../../../../components/shared/Loading/Loading";
+import useAuth from "../../../../context/AuthContext";
 import { useCreateWithdrawal } from "../../../../hooks/useRequestWithdrawal";
 import { useSingleUserData } from "../../../../hooks/useUserData";
 
@@ -20,7 +20,7 @@ export default function Withdrawal() {
   const [accountNumber, setAccountNumber] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
 
   const { data: workerData, isLoading } = useSingleUserData(user?.email);
 

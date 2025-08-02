@@ -10,13 +10,13 @@ import {
   FiTrendingUp,
   FiUser,
 } from "react-icons/fi";
-import { useSelector } from "react-redux";
 import ErrorMessage from "../../../../components/shared/ErrorMessage/ErrorMessage";
 import Loading from "../../../../components/shared/Loading/Loading";
+import useAuth from "../../../../context/AuthContext";
 import { usePaginatedSubmissions } from "../../../../hooks/usePaginatedSubmissions";
 
 const WorkerHome = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
   const { data, isLoading, error } = usePaginatedSubmissions(user?.email, 1);
 
   if (isLoading) {

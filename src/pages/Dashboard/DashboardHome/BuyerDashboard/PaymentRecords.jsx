@@ -11,14 +11,14 @@ import {
   FiX,
 } from "react-icons/fi";
 import { PiHandCoinsDuotone } from "react-icons/pi";
-import { useSelector } from "react-redux";
 import Loading from "../../../../components/shared/Loading/Loading";
+import useAuth from "../../../../context/AuthContext";
 import useUserPayments from "../../../../hooks/useUserPayments";
 
 const PaymentRecords = () => {
   const [viewMode, setViewMode] = useState("table");
 
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useAuth();
 
   const {
     data: payments = [],

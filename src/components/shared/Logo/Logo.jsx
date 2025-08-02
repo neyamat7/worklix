@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux";
 import { Link } from "react-router";
+import useAuth from "../../../context/AuthContext";
 import { useTheme } from "../../../hooks/useTheme";
 
 const Logo = () => {
-  const { user, loading } = useSelector((state) => state.auth);
+  const { user, loading } = useAuth();
 
   const { theme } = useTheme();
 

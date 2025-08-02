@@ -3,12 +3,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Toaster } from "react-hot-toast";
-import { Provider } from "react-redux";
 import { RouterProvider } from "react-router";
 import { ToastContainer } from "react-toastify";
-import { store } from "./app/store";
-import AuthListener from "./features/auth/AuthListener.js";
 import "./index.css";
+import AuthProvider from "./providers/AuthProvider.jsx";
 import { ThemeProvider } from "./providers/ThemeProvider.jsx";
 import router from "./routes/router";
 
@@ -17,9 +15,8 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
-      <Provider store={store}>
+      <AuthProvider>
         <QueryClientProvider client={queryClient}>
-          <AuthListener />
           <RouterProvider router={router} />
           <ToastContainer
             position="top-right"
@@ -36,7 +33,7 @@ createRoot(document.getElementById("root")).render(
           <ReactQueryDevtools initialIsOpen={false} />
           <Toaster />
         </QueryClientProvider>
-      </Provider>
+      </AuthProvider>
     </ThemeProvider>
   </StrictMode>
 );
