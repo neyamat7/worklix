@@ -65,7 +65,7 @@ const WorkerHome = () => {
               </div>
             </div>
 
-            {/* Stats Cards */}
+            {/* Stats Cards  of buyer */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
               {/* Total Submissions */}
               <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl hover:scale-105 transition-all duration-300">
