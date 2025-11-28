@@ -15,17 +15,17 @@ const NotificationPopup = () => {
 
   const { data, isLoading } = useNotifications(user?.email);
 
-  // 2️⃣ Local state to hold notifications
+  //  Local state to hold notifications
   const [notifications, setNotifications] = useState([]);
 
-  // 3️⃣ Populate state when TanStack loads data
+  // Populate state when TanStack loads data
   useEffect(() => {
     if (data) {
       setNotifications(data);
     }
   }, [data]);
 
-  // 4️⃣ Subscribe to socket events
+  //  Subscribe to socket events
   // useEffect(() => {
   //   if (!user?.email) return;
 

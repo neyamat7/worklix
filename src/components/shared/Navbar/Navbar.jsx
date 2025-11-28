@@ -129,10 +129,7 @@ const Navbar = () => {
                       Coins: {userData?.coins}
                     </span>
                   </div>
-                  <a
-                    href="https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-neyamat7"
-                    target="_blank"
-                  >
+                  <a href="https://github.com/neyamat7" target="_blank">
                     <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105">
                       Join as Developer
                     </button>
